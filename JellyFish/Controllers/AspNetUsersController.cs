@@ -21,6 +21,7 @@ namespace JellyFish.Controllers
         // GET: AspNetUsers
         public async Task<IActionResult> Index()
         {
+            var a = "";
               return View(await _context.AspNetUsers.ToListAsync());
         }
 
