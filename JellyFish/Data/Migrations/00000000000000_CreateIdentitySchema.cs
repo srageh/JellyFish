@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace JellyFish.Data.Migrations
+namespace
+
+    JellyFish.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
