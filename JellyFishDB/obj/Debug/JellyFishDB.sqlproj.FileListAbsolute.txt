@@ -1,6 +1,0 @@
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\bin\Debug\JellyFishDB.dacpac
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\bin\Debug\JellyFishDB.dll
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\bin\Debug\JellyFishDB.pdb
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\JellyFishDB.sqlproj.AssemblyReference.cache
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\JellyFishDB.dll
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\JellyFishDB.pdb
