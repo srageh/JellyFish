@@ -4,7 +4,3 @@ C:\Users\srageh\source\repos\JellyFish\JellyFishDB\bin\Debug\JellyFishDB.pdb
 C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\JellyFishDB.sqlproj.AssemblyReference.cache
 C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\JellyFishDB.dll
 C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\JellyFishDB.pdb
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\Model.xml
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\refactor.xml
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\postdeploy.sql
-C:\Users\srageh\source\repos\JellyFish\JellyFishDB\obj\Debug\predeploy.sql
