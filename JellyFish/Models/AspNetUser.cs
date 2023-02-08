@@ -7,9 +7,12 @@ namespace JellyFish.Models
     {
         public AspNetUser()
         {
+            Addresses = new HashSet<Address>();
+            Applicants = new HashSet<Applicant>();
             AspNetUserClaims = new HashSet<AspNetUserClaim>();
             AspNetUserLogins = new HashSet<AspNetUserLogin>();
             AspNetUserTokens = new HashSet<AspNetUserToken>();
+            UserSkills = new HashSet<UserSkill>();
             Roles = new HashSet<AspNetRole>();
         }
 
@@ -29,9 +32,13 @@ namespace JellyFish.Models
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
 
+        public virtual Employer? Employer { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<Applicant> Applicants { get; set; }
         public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; }
+        public virtual ICollection<UserSkill> UserSkills { get; set; }
 
         public virtual ICollection<AspNetRole> Roles { get; set; }
     }
