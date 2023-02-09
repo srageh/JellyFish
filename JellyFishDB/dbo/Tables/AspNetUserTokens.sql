@@ -7,3 +7,6 @@
     CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[AspNetUsers] ([Id]) ON DELETE CASCADE
 );
 
+
+GO
+ALTER TABLE dbo.AspNetUserTokens ADD CONSTRAINT FKAspNetUser606856 FOREIGN KEY (UserId) REFERENCES dbo.AspNetUsers (Id);
