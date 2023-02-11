@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using JellyFish.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using JellyFish.Models;
 
 namespace JellyFish.Controllers
 {

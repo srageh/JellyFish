@@ -8,5 +8,3 @@
 );
 
 
-GO
-ALTER TABLE dbo.AspNetUserTokens ADD CONSTRAINT FKAspNetUser606856 FOREIGN KEY (UserId) REFERENCES dbo.AspNetUsers (Id);

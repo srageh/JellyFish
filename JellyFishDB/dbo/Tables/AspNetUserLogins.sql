@@ -13,5 +13,3 @@ CREATE NONCLUSTERED INDEX [IX_AspNetUserLogins_UserId]
     ON [dbo].[AspNetUserLogins]([UserId] ASC);
 
 
-GO
-ALTER TABLE dbo.AspNetUserLogins ADD CONSTRAINT FKAspNetUser755613 FOREIGN KEY (UserId) REFERENCES dbo.AspNetUsers (Id);
