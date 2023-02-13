@@ -8,10 +8,12 @@ builder.Services.AddDbContext<JellyFishContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<JellyFishContext>();
+	.AddRoles<IdentityRole>()
+	.AddEntityFrameworkStores<JellyFishContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -27,8 +29,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();;
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

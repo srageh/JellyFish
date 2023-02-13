@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "JellyFishDB", "JellyFishDB\JellyFishDB.sqlproj", "{9AA9AF02-9CC0-438F-8CEE-337D00C5F00C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JellyFish", "JellyFish\JellyFish.csproj", "{14B2F62D-58A3-4681-981C-A1562162CEBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JellyFish", "JellyFish\JellyFish.csproj", "{14B2F62D-58A3-4681-981C-A1562162CEBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

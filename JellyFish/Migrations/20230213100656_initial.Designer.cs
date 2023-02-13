@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JellyFish.Migrations
 {
     [DbContext(typeof(JellyFishContext))]
-    [Migration("20230210230130_initial")]
+    [Migration("20230213100656_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -37,12 +37,21 @@ namespace JellyFish.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -115,6 +124,29 @@ namespace JellyFish.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "919d93a8-3810-4ee4-8b51-a6b0a1605508",
+                            ConcurrencyStamp = "aea77803-e6d1-4281-b336-0f6c4a80e9e5",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "919d93a8-3810-4ee4-8b51-a6b0a1605509",
+                            ConcurrencyStamp = "a9263372-c98e-4932-95dc-762ed9c79236",
+                            Name = "JobSeeker",
+                            NormalizedName = "JOBSEEKER"
+                        },
+                        new
+                        {
+                            Id = "919d93a8-3810-4ee4-8b51-a6b0a1605510",
+                            ConcurrencyStamp = "55eebc6d-0624-4c69-afc0-1cfcc3be03ea",
+                            Name = "Employer",
+                            NormalizedName = "EMPLOYER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -15,6 +15,28 @@ public class JellyFishContext : IdentityDbContext<JellyFishUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<IdentityRole>().HasData(new IdentityRole
+        {
+            Id = "919d93a8-3810-4ee4-8b51-a6b0a1605508",
+            Name = "Administrator",
+            NormalizedName = "ADMINISTRATOR"
+        });
+
+        builder.Entity<IdentityRole>().HasData(new IdentityRole
+        {
+            Id = "919d93a8-3810-4ee4-8b51-a6b0a1605509",
+            Name = "JobSeeker",
+            NormalizedName = "JOBSEEKER"
+        });
+        builder.Entity<IdentityRole>().HasData(new IdentityRole
+        {
+            Id = "919d93a8-3810-4ee4-8b51-a6b0a1605510",
+            Name = "Employer",
+            NormalizedName = "EMPLOYER"
+        });
+
+
         // Customize the ASP.NET Identity model and override the defaults if needed.
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);

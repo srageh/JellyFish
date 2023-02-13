@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace JellyFish.Migrations
 {
     /// <inheritdoc />
@@ -30,6 +32,9 @@ namespace JellyFish.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -154,6 +159,16 @@ namespace JellyFish.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "919d93a8-3810-4ee4-8b51-a6b0a1605508", "aea77803-e6d1-4281-b336-0f6c4a80e9e5", "Administrator", "ADMINISTRATOR" },
+                    { "919d93a8-3810-4ee4-8b51-a6b0a1605509", "a9263372-c98e-4932-95dc-762ed9c79236", "JobSeeker", "JOBSEEKER" },
+                    { "919d93a8-3810-4ee4-8b51-a6b0a1605510", "55eebc6d-0624-4c69-afc0-1cfcc3be03ea", "Employer", "EMPLOYER" }
                 });
 
             migrationBuilder.CreateIndex(

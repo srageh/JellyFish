@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.Data;
 
 namespace JellyFish.Areas.Identity.Pages.Account
 {
@@ -125,11 +126,20 @@ namespace JellyFish.Areas.Identity.Pages.Account
       
      
 
-                user.UserType = Input.UserType;
-                
+         
 
+         
 
-
+                if(Input.UserType == 1)
+                {
+                    var rol = await _userManager.AddToRoleAsync(user, "JobSeeker");
+                }
+                    
+                if (Input.UserType == 2)
+                {
+                    var rol = await _userManager.AddToRoleAsync(user, "Employer");
+                }
+                   
 
 
 
