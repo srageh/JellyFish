@@ -7,8 +7,8 @@ namespace JellyFish.Models
     {
         public int CompanyId { get; set; }
         public string EmployerId { get; set; } = null!;
-        public int? Name { get; set; }
-        public int? Url { get; set; }
+        public string? Name { get; set; }
+        public string? Url { get; set; }
 
         public virtual Employer Employer { get; set; } = null!;
     }

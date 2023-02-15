@@ -129,7 +129,13 @@ namespace JellyFish.Models
                     .IsUnique()
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
+                entity.Property(e => e.DateOfBirth).HasMaxLength(256);
+
                 entity.Property(e => e.Email).HasMaxLength(256);
+
+                entity.Property(e => e.FirstName).HasMaxLength(256);
+
+                entity.Property(e => e.LastName).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
@@ -211,9 +217,13 @@ namespace JellyFish.Models
                     .HasMaxLength(450)
                     .HasColumnName("employer_id");
 
-                entity.Property(e => e.Name).HasColumnName("name");
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
 
-                entity.Property(e => e.Url).HasColumnName("url");
+                entity.Property(e => e.Url)
+                    .HasMaxLength(100)
+                    .HasColumnName("url");
 
                 entity.HasOne(d => d.Employer)
                     .WithMany(p => p.Companies)

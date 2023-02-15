@@ -12,30 +12,37 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using JellyFish.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using JellyFish.Models;
 
 namespace JellyFish.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<JellyFishUser> _signInManager;
+        private readonly UserManager<JellyFishUser> _userManager;
+        private readonly IUserStore<JellyFishUser> _userStore;
+        private readonly IUserEmailStore<JellyFishUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly JellyFish.Models.JellFishContext _context;
+
+
+
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<JellyFishUser> userManager,
+            IUserStore<JellyFishUser> userStore,
+            SignInManager<JellyFishUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            JellyFish.Models.JellFishContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +50,7 @@ namespace JellyFish.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -79,10 +87,7 @@ namespace JellyFish.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
-            [EmailAddress]
-            [Display(Name = "Test")]
-            public string Test { get; set; }
+
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -102,6 +107,10 @@ namespace JellyFish.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "User Type")]
+            public int UserType { get; set; }
         }
 
 
@@ -122,6 +131,30 @@ namespace JellyFish.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                if(user.UserType == 1)
+                {
+                    await _userManager.AddToRoleAsync(user, "JobSeeker");
+
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "Employeer");
+                    Employer emp = new Employer();
+                  
+
+
+                    emp.EmployerId = user.Id;
+                    emp.Title = "";
+                    _context.Employers.Add(emp);
+                    _context.SaveChanges();
+
+                    Company cmp = new Company();
+                    cmp.EmployerId = user.Id;
+                    cmp.Name = "";
+                    cmp.Url = "";
+                    _context.Companies.Add(cmp);
+                    _context.SaveChanges();
+                }
 
                 if (result.Succeeded)
                 {
@@ -137,7 +170,7 @@ namespace JellyFish.Areas.Identity.Pages.Account
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        $"Please confirm your account by <a href='{(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -159,27 +192,27 @@ namespace JellyFish.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private JellyFishUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<JellyFishUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(JellyFishUser)}'. " +
+                    $"Ensure that '{nameof(JellyFishUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<JellyFishUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<JellyFishUser>)_userStore;
         }
     }
 }

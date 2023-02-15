@@ -1,27 +1,22 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using JellyFish.Areas.Identity.Data;
+using JellyFish.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Data;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace JellyFish.Areas.Identity.Pages.Account.Manage
 {
-    public class IndexModel : PageModel
+    public class Index1Model : PageModel
     {
         private readonly UserManager<JellyFishUser> _userManager;
         private readonly SignInManager<JellyFishUser> _signInManager;
         private readonly JellyFish.Models.JellFishContext _context;
 
 
-        public IndexModel(
+        public Index1Model(
             UserManager<JellyFishUser> userManager,
             SignInManager<JellyFishUser> signInManager,
             JellyFish.Models.JellFishContext context)
@@ -64,25 +59,47 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Title { get; set; }
+            public string Name { get; set; }
+            public string Url { get; set; }
         }
 
         private async Task LoadAsync(JellyFishUser user)
         {
             var userMan = _userManager.GetUserId(HttpContext.User);
 
-            var a= _context.AspNetUsers.Where(x => x.Id == userMan);
 
 
+            var employerDetail = _context.Employers.Include(x=> x.EmployerNavigation).Include(x => x.Companies).Where(x => x.EmployerId == userMan).FirstOrDefault();
+
+
+
+
+            var employeeCompany = _context.Companies.Include(x => x.Employer).Where(x => x.EmployerId == userMan).FirstOrDefault();
 
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
+       
+
             Username = userName;
 
-            Input = new InputModel
+            if(employerDetail != null)
             {
-                PhoneNumber = phoneNumber
-            };
+                Input = new InputModel
+                {
+                    PhoneNumber = employerDetail.EmployerNavigation.PhoneNumber,
+                    FirstName = employerDetail.EmployerNavigation.FirstName,
+                    LastName = employerDetail.EmployerNavigation.LastName,
+                    Title = employerDetail.Title,
+                    Name = employeeCompany.Name,
+                    Url = employeeCompany.Url
+                };
+            }
+
+            
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -127,4 +144,6 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
     }
+    
 }
+
