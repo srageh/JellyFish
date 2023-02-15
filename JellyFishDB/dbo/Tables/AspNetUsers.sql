@@ -3,7 +3,7 @@
 	[FirstName] [nvarchar](25)  NULL,
 	[LastName] [nvarchar](25)  NULL,
 	[UserName]             NVARCHAR (256)     NULL,
-	[DateOfBirth] datetime2(7)  NULL,
+	[DateOfBirth] DATETIME2  NULL,
 	[HomeAddress] [nvarchar](50) NULL,
 	[ShippingAddress] [nvarchar](50) NULL,
 	[NormalizedUserName] [nvarchar](256) NULL,

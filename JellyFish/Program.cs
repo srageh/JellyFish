@@ -1,16 +1,36 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using JellyFish.Areas.Identity.Data;
+using JellyFish.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("JellyFishContextConnection") ?? throw new InvalidOperationException("Connection string 'JellyFishContextConnection' not found.");
 
 builder.Services.AddDbContext<JellyFishContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
-	.AddRoles<IdentityRole>()
-	.AddEntityFrameworkStores<JellyFishContext>();
+builder.Services.AddDbContext<JellyFishDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
+var lockoutOptions = new LockoutOptions()
+{
+    AllowedForNewUsers = true,
+    DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5),
+    MaxFailedAccessAttempts = 3
+};
+builder.Services.AddIdentity<JellyFishUser, IdentityRole>(options =>
+{
+    options.Lockout = lockoutOptions;
+    options.SignIn.RequireConfirmedEmail = true;
+})
+ .AddEntityFrameworkStores<JellyFishContext>()
+ .AddDefaultTokenProviders()
+ .AddDefaultUI();
+/*
+builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<JellyFishContext>();
+*/
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

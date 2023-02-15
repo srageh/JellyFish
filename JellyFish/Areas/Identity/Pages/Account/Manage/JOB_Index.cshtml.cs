@@ -1,63 +1,72 @@
 using JellyFish.Areas.Identity.Data;
+using JellyFish.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 {
     public class IndexModel : PageModel
     {
-		private readonly UserManager<JellyFishUser> _userManager;
-		private readonly SignInManager<JellyFishUser> _signInManager;
+        private readonly UserManager<JellyFishUser> _userManager;
+        private readonly SignInManager<JellyFishUser> _signInManager;
+        private readonly JellyFishDbContext _context;
 
-		public IndexModel(
-			UserManager<JellyFishUser> userManager,
-			SignInManager<JellyFishUser> signInManager)
-		{
-			_userManager = userManager;
-			_signInManager = signInManager;
-		}
+        public IndexModel(JellyFishDbContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _context = context;
 
-		/// <summary>
-		///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-		///     directly from your code. This API may change or be removed in future releases.
-		/// </summary>
-		public string Username { get; set; }
+        }
 
-		/// <summary>
-		///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-		///     directly from your code. This API may change or be removed in future releases.
-		/// </summary>
-		[TempData]
-		public string StatusMessage { get; set; }
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public string Username { get; set; }
 
-		/// <summary>
-		///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-		///     directly from your code. This API may change or be removed in future releases.
-		/// </summary>
-		[BindProperty]
-		public InputModel Input { get; set; }
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        [TempData]
+        public string StatusMessage { get; set; }
 
-		/// <summary>
-		///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-		///     directly from your code. This API may change or be removed in future releases.
-		/// </summary>
-		public class InputModel
-		{
-			/// <summary>
-			///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-			///     directly from your code. This API may change or be removed in future releases.
-			/// </summary>
-			[Phone]
-			[Display(Name = "Phone number")]
-			public string? PhoneNumber { get; set; }
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        [BindProperty]
+        public InputModel Input { get; set; }
 
-            [Display(Name = "Mailing Address")]
-            public string? MailingAddress { get; set; }
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public class InputModel
+        {
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
+            [Phone]
+            [Display(Name = "Phone number")]
+            public string? PhoneNumber { get; set; }
 
-            [Display(Name = "Shipping Address")]
-            public string? ShippingAddress { get; set; }
+            [Display(Name = "Street")]
+            public string? Street { get; set; }
+
+            [Display(Name = "City")]
+            public string? City { get; set; }
+
+            [Display(Name = "PostalCode")]
+            public string? PostalCode { get; set; }
+
+            [Display(Name = "Province")]
+            public string? Province { get; set; }
 
 
             [Display(Name = "First Name")]
@@ -67,64 +76,151 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
             public string? LastName { get; set; }
 
             [Display(Name = "Date Of Birth")]
-            public DateTime DateOfBirth { get; set; }
+            public DateOnly DateOfBirth { get; set; }
 
 
         }
 
         private async Task LoadAsync(JellyFishUser user)
-		{
-			var userName = await _userManager.GetUserNameAsync(user);
-			var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+        {
+            var userName = await _userManager.GetUserNameAsync(user);
+            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var userId = await _userManager.GetUserIdAsync(user);
 
-			Username = userName;
+            AspNetUser? AspUser = (AspNetUser?)_context.AspNetUsers.Where(n => n.Id == userId).FirstOrDefault();
 
-			Input = new InputModel
-			{
-				PhoneNumber = phoneNumber
-			};
-		}
+            Username = userName;
 
-		public async Task<IActionResult> OnGetAsync()
-		{
-			var user = await _userManager.GetUserAsync(User);
-			if (user == null)
-			{
-				return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-			}
 
-			await LoadAsync(user);
-			return Page();
-		}
+            Address? addres = (Address?)_context.Addresses.Include(f => f.User).Where(n => n.UserId == userId).FirstOrDefault();
+            if (addres != null)
+            {
+                Input = new InputModel
+                {
+                    FirstName = AspUser == null ? String.Empty : AspUser.FirstName,
+                    LastName = AspUser == null ? String.Empty : AspUser.LastName,
+                    PhoneNumber = phoneNumber,
+                    Street = addres.Street,
+                    City = addres.City,
+                    PostalCode = addres.PostalCode,
+                    Province = addres.Province,
+                };
+            }
+            else
+            {
+                Input = new InputModel
+                {
+                    FirstName = AspUser == null ? String.Empty : AspUser.FirstName,
+                    LastName = AspUser == null ? String.Empty : AspUser.LastName,
+                    PhoneNumber = phoneNumber,
+                    Street = "",
+                    City = "",
+                    PostalCode = "",
+                    Province = "",
+                };
+            }
 
-		public async Task<IActionResult> OnPostAsync()
-		{
-			var user = await _userManager.GetUserAsync(User);
-			if (user == null)
-			{
-				return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-			}
 
-			if (!ModelState.IsValid)
-			{
-				await LoadAsync(user);
-				return Page();
-			}
 
-			var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-			if (Input.PhoneNumber != phoneNumber)
-			{
-				var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-				if (!setPhoneResult.Succeeded)
-				{
-					StatusMessage = "Unexpected error when trying to set phone number.";
-					return RedirectToPage();
-				}
-			}
 
-			await _signInManager.RefreshSignInAsync(user);
-			StatusMessage = "Your profile has been updated";
-			return RedirectToPage();
-		}
-	}
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            await LoadAsync(user);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await LoadAsync(user);
+                return Page();
+            }
+
+            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            if (Input.PhoneNumber != phoneNumber)
+            {
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                if (!setPhoneResult.Succeeded)
+                {
+                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    return RedirectToPage();
+                }
+            }
+
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.PhoneNumber = Input.PhoneNumber;
+            await _userManager.UpdateAsync(user);
+
+
+
+
+
+
+            var userId = await _userManager.GetUserIdAsync(user);
+            Address? addres = (Address?)_context.Addresses.Include(f => f.User).Where(n => n.UserId == userId).FirstOrDefault();
+
+            if (addres == null)
+            {
+                addres = new Address();
+                if (Input.City != addres.City)
+                    addres.City = Input.City;
+
+                if (Input.Street != addres.Street)
+                    addres.Street = Input.Street;
+
+                if (Input.PostalCode != addres.PostalCode)
+                    addres.PostalCode = Input.PostalCode;
+
+                if (Input.Province != addres.Province)
+                    addres.Province = Input.Province;
+
+                addres.UserId = userId;
+
+                _context.Addresses.Add(addres);
+                _context.SaveChanges();
+            }
+            else
+            {
+                if (Input.City != addres.City)
+                    addres.City = Input.City;
+
+                if (Input.Street != addres.Street)
+                    addres.Street = Input.Street;
+
+                if (Input.PostalCode != addres.PostalCode)
+                    addres.PostalCode = Input.PostalCode;
+
+                if (Input.Province != addres.Province)
+                    addres.Province = Input.Province;
+
+                addres.UserId = userId;
+
+                _context.Addresses.Update(addres);
+                _context.SaveChanges();
+            }
+
+
+
+
+            await _signInManager.RefreshSignInAsync(user);
+            StatusMessage = "Your profile has been updated";
+            return RedirectToPage();
+        }
+    }
 }
