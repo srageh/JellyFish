@@ -31,7 +31,7 @@ namespace JellyFish.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<JellyFishUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly JellyFish.Models.JellFishContext _context;
+        private readonly JellyFish.Models.JellyFishDbContext _context;
 
 
 
@@ -42,7 +42,7 @@ namespace JellyFish.Areas.Identity.Pages.Account
             SignInManager<JellyFishUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            JellyFish.Models.JellFishContext context)
+            JellyFish.Models.JellyFishDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;

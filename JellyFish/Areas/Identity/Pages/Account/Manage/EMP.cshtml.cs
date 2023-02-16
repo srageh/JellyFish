@@ -13,13 +13,13 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<JellyFishUser> _userManager;
         private readonly SignInManager<JellyFishUser> _signInManager;
-        private readonly JellyFish.Models.JellFishContext _context;
+        private readonly JellyFish.Models.JellyFishDbContext _context;
 
 
         public EMP(
             UserManager<JellyFishUser> userManager,
             SignInManager<JellyFishUser> signInManager,
-            JellyFish.Models.JellFishContext context)
+            JellyFish.Models.JellyFishDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;

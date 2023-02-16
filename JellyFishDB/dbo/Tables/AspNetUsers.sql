@@ -4,7 +4,6 @@
     FirstName             NVARCHAR (256)     NULL,
     LastName             NVARCHAR (256)     NULL,
     DateOfBirth             NVARCHAR (256)     NULL,
-    UserType             int     NULL,
     [NormalizedUserName]   NVARCHAR (256)     NULL,
     [Email]                NVARCHAR (256)     NULL,
     [NormalizedEmail]      NVARCHAR (256)     NULL,

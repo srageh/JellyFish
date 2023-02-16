@@ -14,9 +14,9 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
     {
         private readonly UserManager<JellyFishUser> _userManager;
         private readonly SignInManager<JellyFishUser> _signInManager;
-        private readonly JellFishContext _context;
+        private readonly Models.JellyFishDbContext _context;
 
-        public IndexModel(JellFishContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager)
+        public IndexModel(Models.JellyFishDbContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -90,7 +90,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
 
-            AspNetUser? AspUser = _context.AspNetUsers.Where(n => n.Id == userId).FirstOrDefault();
+            AspNetUser? _AspUser = _context.AspNetUsers.Where(n => n.Id == userId).FirstOrDefault();
 
             Username = userName;
 
@@ -100,27 +100,30 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
             {
                 Input = new InputModel
                 {
-                    FirstName = AspUser == null ? String.Empty : AspUser.FirstName,
-                    LastName = AspUser == null ? String.Empty : AspUser.LastName,
+                    FirstName = _AspUser == null ? String.Empty : _AspUser.FirstName,
+                    LastName = _AspUser == null ? String.Empty : _AspUser.LastName,
                     PhoneNumber = phoneNumber,
                     Street = addres.Street,
                     City = addres.City,
                     PostalCode = addres.PostalCode,
                     Province = addres.Province,
+                    DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null? (DateTime)DateTime.Now: (DateTime)_AspUser.DateOfBirth)
+
                 };
             }
             else
             {
                 Input = new InputModel
                 {
-                    FirstName = AspUser == null ? String.Empty : AspUser.FirstName,
-                    LastName = AspUser == null ? String.Empty : AspUser.LastName,
+                    FirstName = _AspUser == null ? String.Empty : _AspUser.FirstName,
+                    LastName = _AspUser == null ? String.Empty : _AspUser.LastName,
                     PhoneNumber = phoneNumber,
                     Street = "",
                     City = "",
                     PostalCode = "",
                     Province = "",
-                };
+					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth)
+				};
             }
 
 
@@ -144,18 +147,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 		}
 
-		[HttpPost("/JOB_Index/add")]
-		public async Task<IActionResult> add()
-		{
-			var user = await _userManager.GetUserAsync(User);
-			if (user == null)
-			{
-				return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-			}
 
-			await LoadAsync(user);
-			return Page();
-		}
 
 
 		public async Task<IActionResult> OnGetAsync()
@@ -195,7 +187,8 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
                 }
             }
 
-            user.FirstName = Input.FirstName;
+            user.DateOfBirth = Input.DateOfBirth.ToDateTime(TimeOnly.Parse("10:00 PM"));
+			user.FirstName = Input.FirstName;
             user.LastName = Input.LastName;
             user.PhoneNumber = Input.PhoneNumber;
             await _userManager.UpdateAsync(user);
@@ -254,14 +247,14 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
                 {
                     bool notFound = true;
 
-                    foreach(var t in skillstable)
+                    foreach(var skil in skillstable)
                     {
-                        if (t.Name.Equals(Input.Skill))
+                        if (skil.Name.Equals(Input.Skill))
                         {
 							UserSkill userSkill = new UserSkill()
 							{
-								Skill = t,
-								SkillId = t.SkillId,
+								Skill = skil,
+								SkillId = skil.SkillId,
 								UserId = userId
 							};
 							_context.UserSkills.Add(userSkill);
@@ -311,7 +304,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 					_context.UserSkills.Add(userSkill);
 					_context.SaveChanges();
 				}
-                //_context.Skills.Include(ss => ss.UserSkills)
+               
             }
 
 
