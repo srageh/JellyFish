@@ -37,6 +37,8 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<Employer> Employers { get; set; }
 
+    public virtual DbSet<IdentityRole> IdentityRoles { get; set; }
+
     public virtual DbSet<Job> Jobs { get; set; }
 
     public virtual DbSet<JobCategory> JobCategories { get; set; }
@@ -59,6 +61,8 @@ public partial class JellyFishDbContext : DbContext
 
             entity.ToTable("Address");
 
+            entity.HasIndex(e => e.UserId, "IX_Address_user_id");
+
             entity.Property(e => e.AddressId).HasColumnName("address_id");
             entity.Property(e => e.City)
                 .HasMaxLength(255)
@@ -72,9 +76,7 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.Street)
                 .HasMaxLength(255)
                 .HasColumnName("street");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .HasColumnName("user_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.Addresses)
                 .HasForeignKey(d => d.UserId)
@@ -88,11 +90,13 @@ public partial class JellyFishDbContext : DbContext
 
             entity.ToTable("Applicant");
 
+            entity.HasIndex(e => e.JobId, "IX_Applicant_job_id");
+
+            entity.HasIndex(e => e.UserId, "IX_Applicant_user_id");
+
             entity.Property(e => e.ApplicantId).HasColumnName("applicant_id");
             entity.Property(e => e.JobId).HasColumnName("job_id");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .HasColumnName("user_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Job).WithMany(p => p.Applicants)
                 .HasForeignKey(d => d.JobId)
@@ -148,6 +152,7 @@ public partial class JellyFishDbContext : DbContext
                     j =>
                     {
                         j.HasKey("UserId", "RoleId");
+                        j.ToTable("AspNetUserRole");
                         j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
                     });
         });
@@ -199,10 +204,10 @@ public partial class JellyFishDbContext : DbContext
 
             entity.ToTable("Company");
 
+            entity.HasIndex(e => e.EmployerId, "IX_Company_employer_id");
+
             entity.Property(e => e.CompanyId).HasColumnName("company_id");
-            entity.Property(e => e.EmployerId)
-                .HasMaxLength(450)
-                .HasColumnName("employer_id");
+            entity.Property(e => e.EmployerId).HasColumnName("employer_id");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Url).HasColumnName("url");
 
@@ -229,6 +234,11 @@ public partial class JellyFishDbContext : DbContext
                 .HasConstraintName("FKEmployer37240");
         });
 
+        modelBuilder.Entity<IdentityRole>(entity =>
+        {
+            entity.ToTable("IdentityRole");
+        });
+
         modelBuilder.Entity<Job>(entity =>
         {
             entity.HasKey(e => e.JobId).HasName("PK__Job__6E32B6A5B726C77F");
@@ -250,6 +260,10 @@ public partial class JellyFishDbContext : DbContext
             entity.HasKey(e => e.JobCategoryId).HasName("PK__JobCateg__73D531883C88A373");
 
             entity.ToTable("JobCategory");
+
+            entity.HasIndex(e => e.CategoryId, "IX_JobCategory_category_id");
+
+            entity.HasIndex(e => e.JobId, "IX_JobCategory_job_id");
 
             entity.Property(e => e.JobCategoryId).HasColumnName("job_category_id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
@@ -284,11 +298,13 @@ public partial class JellyFishDbContext : DbContext
 
             entity.ToTable("UserSkill");
 
+            entity.HasIndex(e => e.SkillId, "IX_UserSkill_skill_id");
+
+            entity.HasIndex(e => e.UserId, "IX_UserSkill_user_id");
+
             entity.Property(e => e.UserSkillId).HasColumnName("user_skill_id");
             entity.Property(e => e.SkillId).HasColumnName("skill_id");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .HasColumnName("user_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Skill).WithMany(p => p.UserSkills)
                 .HasForeignKey(d => d.SkillId)

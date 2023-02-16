@@ -17,8 +17,8 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<JellyFishUser> _userManager;
         private readonly SignInManager<JellyFishUser> _signInManager;
-		
-		public IndexModel(
+
+        public IndexModel(
             UserManager<JellyFishUser> userManager,
             SignInManager<JellyFishUser> signInManager)
         {

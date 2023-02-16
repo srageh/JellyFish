@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 {
@@ -77,9 +79,10 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
             [Display(Name = "Date Of Birth")]
             public DateOnly DateOfBirth { get; set; }
-
-
-        }
+			
+			[Display(Name = "Add a Skill")]
+			public string? Skill { get; set; }
+		}
 
         private async Task LoadAsync(JellyFishUser user)
         {
@@ -123,9 +126,39 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 
 
-        }
 
-        public async Task<IActionResult> OnGetAsync()
+
+			List<UserSkill> list =  _context.UserSkills.Include(s => s.Skill).Where(s => s.UserId == userId).ToList<UserSkill>();
+            ViewData["sklist"] = list;
+
+
+
+
+
+
+
+			//List<UserSkill> list2 = _context.UserSkills.Include(s => s.Skill).ThenInclude(s => s.user) Where(s => s.UserId == userId)
+
+			//_context.AspNetUsers.Include(s => s.UserSkills).ThenInclude(u => u.Skill).Where(y => y.Id == userId).ToList<UserSkill>();
+
+
+		}
+
+		[HttpPost("/JOB_Index/add")]
+		public async Task<IActionResult> add()
+		{
+			var user = await _userManager.GetUserAsync(User);
+			if (user == null)
+			{
+				return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+			}
+
+			await LoadAsync(user);
+			return Page();
+		}
+
+
+		public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -178,18 +211,10 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
             if (addres == null)
             {
                 addres = new Address();
-                if (Input.City != addres.City)
-                    addres.City = Input.City;
-
-                if (Input.Street != addres.Street)
-                    addres.Street = Input.Street;
-
-                if (Input.PostalCode != addres.PostalCode)
-                    addres.PostalCode = Input.PostalCode;
-
-                if (Input.Province != addres.Province)
-                    addres.Province = Input.Province;
-
+                addres.City = Input.City;
+                addres.Street = Input.Street;
+                addres.PostalCode = Input.PostalCode;
+                addres.Province = Input.Province;
                 addres.UserId = userId;
 
                 _context.Addresses.Add(addres);
@@ -214,6 +239,87 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
                 _context.Addresses.Update(addres);
                 _context.SaveChanges();
             }
+
+
+
+
+
+
+
+            if (Input.Skill != null)
+            {
+
+				List<Skill> skillstable = (List<Skill>) _context.Skills.ToList<Skill>();
+                if(skillstable.Count != 0)
+                {
+                    bool notFound = true;
+
+                    foreach(var t in skillstable)
+                    {
+                        if (t.Name.Equals(Input.Skill))
+                        {
+							UserSkill userSkill = new UserSkill()
+							{
+								Skill = t,
+								SkillId = t.SkillId,
+								UserId = userId
+							};
+							_context.UserSkills.Add(userSkill);
+							_context.SaveChanges();
+
+							notFound = false;
+
+							break;
+						}
+                    }
+
+                    if (notFound)
+					{
+						Skill sk = new Skill()
+						{
+							Name = Input.Skill
+						};
+						_context.Skills.Add(sk);
+						_context.SaveChanges();
+
+						UserSkill userSkill = new UserSkill()
+						{
+							Skill = sk,
+							SkillId = sk.SkillId,
+							UserId = userId
+						};
+						_context.UserSkills.Add(userSkill);
+						_context.SaveChanges();
+					}
+
+                }
+                else
+                {
+                    Skill sk = new Skill()
+                    {
+                        Name = Input.Skill
+                    };
+                    _context.Skills.Add(sk);
+					_context.SaveChanges();
+
+                    UserSkill userSkill = new UserSkill()
+                    {
+                        Skill = sk,
+                        SkillId = sk.SkillId,
+                        UserId = userId
+                    };
+					_context.UserSkills.Add(userSkill);
+					_context.SaveChanges();
+				}
+                //_context.Skills.Include(ss => ss.UserSkills)
+            }
+
+
+
+
+
+
+
 
 
 
