@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("JellyFishContextConnection") ?? throw new InvalidOperationException("Connection string 'JellyFishContextConnection' not found."); 
-builder.Services.AddDbContext<JellyFish.Models.JellFishContext>(options =>
+
+
+builder.Services.AddDbContext<JellyFish.Models.JellyFishDbContext>(options =>
  options.UseSqlServer(connectionString));
+
 builder.Services.AddDbContext<JellyFishContext>(options =>
  options.UseSqlServer(connectionString));
+
 builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
  .AddRoles<IdentityRole>()
  .AddEntityFrameworkStores<JellyFishContext>(); // Add services to the container.
