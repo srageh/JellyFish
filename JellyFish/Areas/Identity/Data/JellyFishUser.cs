@@ -9,9 +9,9 @@ namespace JellyFish.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the JellyFishUser class
 public class JellyFishUser : IdentityUser
 {
-    public string? DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
-    public int? UserType { get; set; }
+    
 }
 
