@@ -61,7 +61,9 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
+            [Display(Name = "Job Title")]
             public string Title { get; set; }
+            [Display(Name = "Company Name")]
             public string Name { get; set; }
             public string Url { get; set; }
         }
