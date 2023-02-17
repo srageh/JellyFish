@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 
 namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
@@ -54,7 +55,10 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 			///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
 			///     directly from your code. This API may change or be removed in future releases.
 			/// </summary>
-			[Phone]
+	
+			[Required(ErrorMessage = "You must provide a phone number")]
+			[DataType(DataType.PhoneNumber)]
+			[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
 			[Display(Name = "Phone number")]
 			public string? PhoneNumber { get; set; }
 
@@ -79,6 +83,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 			[Display(Name = "Date Of Birth")]
 			public DateOnly DateOfBirth { get; set; }
+
 
 			[Display(Name = "Add a Skill")]
 			public string? Skill { get; set; }
@@ -133,8 +138,6 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 			List<UserSkill> list = _context.UserSkills.Include(s => s.Skill).Where(s => s.UserId == userId).ToList<UserSkill>();
 			ViewData["sklist"] = list;
-
-
 
 
 
