@@ -1,5 +1,4 @@
-﻿using JellyFish.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,8 +29,8 @@ public class JellyFishContext : IdentityDbContext<JellyFishUser>
         builder.Entity<IdentityRole>().HasData(new IdentityRole
         {
             Id = "919d93a8-3810-4ee4-8b51-a6b0a1605510",
-            Name = "Employeer",
-            NormalizedName = "EMPLOYEER"
+            Name = "Employer",
+            NormalizedName = "EMPLOYER"
         });
     }
 }

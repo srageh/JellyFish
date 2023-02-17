@@ -131,14 +131,14 @@ namespace JellyFish.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                if(user.UserType == 1)
+                if(Input.UserType == 1)
                 {
                     await _userManager.AddToRoleAsync(user, "JobSeeker");
 
                 }
                 else
                 {
-                    await _userManager.AddToRoleAsync(user, "Employeer");
+                    await _userManager.AddToRoleAsync(user, "Employer");
                     Employer emp = new Employer();
                   
 

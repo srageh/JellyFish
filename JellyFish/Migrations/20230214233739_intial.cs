@@ -171,7 +171,7 @@ namespace JellyFish.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "919d93a8-3810-4ee4-8b51-a6b0a1605510", "8e001cbc-011b-4268-a5a4-e7cf7e8e264c", "Employeer", "EMPLOYEER" });
+                values: new object[] { "919d93a8-3810-4ee4-8b51-a6b0a1605510", "8e001cbc-011b-4268-a5a4-e7cf7e8e264c", "Employer", "EMPLOYER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
