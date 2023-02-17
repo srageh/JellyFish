@@ -44,6 +44,85 @@ namespace JellyFishTest
             Assert.Pass();
         }
 
+
+
+        //[Test]
+        //public void ManageApplicantProfile()
+        //{
+
+        //    driver.Url = "https://localhost:7143/Identity/Account/Login";
+        //    LoginApplicant();
+        //    GetHref("Manage");
+        //    Assert.Pass();
+        //}
+
+        [Test]
+        public void UpdateFirstNameEmployerProfile()
+        {
+
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsEmployer();
+            GetHref("manageEmployer");
+            driver.FindElement(By.Id("Input_FirstName")).Clear();
+            driver.FindElement(By.Id("Input_FirstName")).SendKeys("Dave");
+            driver.FindElement(By.Id("update-profile-button")).Click();
+
+            string a = driver.FindElement(By.Id("message")).GetAttribute("innerHTML");
+            Console.WriteLine(a);
+            Assert.AreEqual("Your profile has been updated", a);
+        }
+
+        [Test]
+        public void UpdateCompanyNameEmployerProfile()
+        {
+
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsEmployer();
+            GetHref("manageEmployer");
+            driver.FindElement(By.Id("Input_Name")).Clear();
+            driver.FindElement(By.Id("Input_Name")).SendKeys("Google");
+            driver.FindElement(By.Id("update-profile-button")).Click();
+
+            string a = driver.FindElement(By.Id("message")).GetAttribute("innerHTML");
+            Console.WriteLine(a);
+            Assert.AreEqual("Your profile has been updated", a);
+        }
+
+        [Test]
+        public void UpdateLastNameEmployerProfile()
+        {
+
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsEmployer();
+            GetHref("manageEmployer");
+            driver.FindElement(By.Id("Input_LastName")).Clear();
+            driver.FindElement(By.Id("Input_LastName")).SendKeys("");
+            driver.FindElement(By.Id("update-profile-button")).Click();
+
+
+
+            string a = driver.FindElement(By.Id("Input_LastName-error")).GetAttribute("innerHTML");
+            Assert.AreEqual("The Last Name field is required.", a);
+        }
+
+        [Test]
+        public void UpdatePhoneEmployerProfile()
+        {
+
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsEmployer();
+            GetHref("manageEmployer");
+            driver.FindElement(By.Id("Input_PhoneNumber")).Clear();
+            driver.FindElement(By.Id("Input_PhoneNumber")).SendKeys("");
+            driver.FindElement(By.Id("update-profile-button")).Click();
+
+
+
+            string a = driver.FindElement(By.Id("Input_PhoneNumber-error")).GetAttribute("innerHTML");
+            Assert.AreEqual("The Phone number field is required.", a);
+        }
+
+
         [OneTimeTearDown]
         public void CloseTest()
         {
@@ -95,6 +174,11 @@ namespace JellyFishTest
             driver.FindElement(By.Id("Input_Email")).SendKeys("ragehsuhaib@gmail.com");
             driver.FindElement(By.Id("Input_Password")).SendKeys("Test123@");
             driver.FindElement(By.Id("login-submit")).Click();
+        }
+
+        private void GetHref(string id)
+        {
+            driver.Url = driver.FindElement(By.Id(id)).GetAttribute("href");
         }
     }
 }
