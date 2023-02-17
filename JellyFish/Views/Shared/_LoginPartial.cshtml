@@ -13,11 +13,11 @@
 
                 @if (User.IsInRole("JobSeeker"))
                 {
-                    <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/JOB">Manage</a></li>
+                    <li class="nav-item"><a id="manageJobSeeker" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/JOB">Manage</a></li>
                 }
                 @if (User.IsInRole("Employer"))
                 {
-                    <li class="nav-item"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/EMP">Manage</a></li>
+                    <li class="nav-item"><a id="manageEmployer" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/EMP">Manage</a></li>
 
                 }
 
