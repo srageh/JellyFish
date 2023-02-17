@@ -13,5 +13,3 @@ CREATE NONCLUSTERED INDEX [IX_AspNetRoleClaims_RoleId]
     ON [dbo].[AspNetRoleClaims]([RoleId] ASC);
 
 
-GO
-ALTER TABLE dbo.AspNetRoleClaims ADD CONSTRAINT FKAspNetRole88403 FOREIGN KEY (RoleId) REFERENCES dbo.AspNetRoles (Id);

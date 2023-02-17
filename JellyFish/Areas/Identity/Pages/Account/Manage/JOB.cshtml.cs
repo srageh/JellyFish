@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 
 namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
@@ -54,7 +55,10 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 			///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
 			///     directly from your code. This API may change or be removed in future releases.
 			/// </summary>
-			[Phone]
+
+			[Required(ErrorMessage = "You must provide a phone number")]
+			[DataType(DataType.PhoneNumber)]
+			[RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
 			[Display(Name = "Phone number")]
 			public string? PhoneNumber { get; set; }
 
@@ -79,6 +83,10 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 			[Display(Name = "Date Of Birth")]
 			public DateOnly DateOfBirth { get; set; }
+
+
+
+
 
 			[Display(Name = "Add a Skill")]
 			public string? Skill { get; set; }
@@ -133,8 +141,6 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 			List<UserSkill> list = _context.UserSkills.Include(s => s.Skill).Where(s => s.UserId == userId).ToList<UserSkill>();
 			ViewData["sklist"] = list;
-
-
 
 
 
@@ -237,7 +243,8 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 
 
-
+			bool notFound = true;
+			bool UserSkillsnotFound = true;
 
 			if (Input.Skill != null)
 			{
@@ -245,8 +252,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 				List<Skill> skillstable = (List<Skill>)_context.Skills.ToList<Skill>();
 				if (skillstable.Count != 0)
 				{
-					bool notFound = true;
-					bool UserSkillsnotFound = true;
+
 					foreach (var skil in skillstable)
 					{
 						if (skil.Name.Equals(Input.Skill))
@@ -254,13 +260,13 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 							notFound = false;
 
 							List<UserSkill> userSkillstable = (List<UserSkill>)_context.UserSkills.Where(w => w.UserId == userId).ToList<UserSkill>();
-							foreach (var skilUser in userSkillstable)							
+							foreach (var skilUser in userSkillstable)
 								if (skilUser.SkillId == skil.SkillId)
 								{
 									UserSkillsnotFound = false;
 									break;
 								}
-							
+
 
 							if (UserSkillsnotFound)
 							{
@@ -273,7 +279,11 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 								_context.UserSkills.Add(userSkill);
 								_context.SaveChanges();
 							}
-							
+
+
+
+							StatusMessage = "Skill is already exist!";
+
 							break;
 						}
 					}
@@ -327,12 +337,15 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 
 
-
+			if (notFound == true)
+			{
+				StatusMessage = "Your profile has been updated";
+			}
 
 
 
 			await _signInManager.RefreshSignInAsync(user);
-			StatusMessage = "Your profile has been updated";
+
 			return RedirectToPage();
 		}
 	}
