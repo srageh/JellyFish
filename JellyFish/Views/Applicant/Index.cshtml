@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Job>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Search for Jobs</h1>
+<br />
+
+<form asp-action="Index" method="get" class="row g-3">
+    <div class="col-auto">
+        <input type="text" class="form-control" name="searchQuery" value="@ViewData["searchQuery"]" placeholder="Enter keywords...">
+    </div>
+    <div class="col-auto">
+        <input type="submit" value="Search" class="btn btn-primary mb-3" />
+    </div>
+</form>
+
+@Html.Raw(@TempData["AddItemToCartSuccess"])
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JobCategories)
+            </th>
+        
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobCategories.Count)
+                </td>
+              
+               @* <td>
+                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.GameId">Add to Cart</a> |
+                    <a asp-action="Details" asp-route-id="@item.GameId">Details</a>
+                </td>*@
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="Index">Go back</a>

@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace JellyFish.Models
-{
-    public partial class Applicant
-    {
-        public int ApplicantId { get; set; }
-        public int JobId { get; set; }
-        public string UserId { get; set; } = null!;
+namespace JellyFish.Models;
 
-        public virtual Job Job { get; set; } = null!;
-        public virtual AspNetUser User { get; set; } = null!;
-    }
+public partial class Applicant
+{
+    public int ApplicantId { get; set; }
+
+    public int JobId { get; set; }
+
+    public string UserId { get; set; } = null!;
+
+    public virtual Job Job { get; set; } = null!;
+
+    public virtual AspNetUser User { get; set; } = null!;
 }
