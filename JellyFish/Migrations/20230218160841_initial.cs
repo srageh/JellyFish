@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace JellyFish.Migrations
 {
-    public partial class intial : Migration
+    /// <inheritdoc />
+    public partial class initial : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -28,9 +32,9 @@ namespace JellyFish.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateOfBirth = table.Column<string>(type: "datetime2", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),                   
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -160,17 +164,12 @@ namespace JellyFish.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "919d93a8-3810-4ee4-8b51-a6b0a1605508", "573b1838-c1b2-4b3d-a70e-ce0f914157a8", "Administrator", "ADMINISTRATOR" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "919d93a8-3810-4ee4-8b51-a6b0a1605509", "6c40f714-a704-46ef-873d-fcb2a5512018", "JobSeeker", "JOBSEEKER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "919d93a8-3810-4ee4-8b51-a6b0a1605510", "8e001cbc-011b-4268-a5a4-e7cf7e8e264c", "Employer", "EMPLOYER" });
+                values: new object[,]
+                {
+                    { "919d93a8-3810-4ee4-8b51-a6b0a1605508", null, "Administrator", "ADMINISTRATOR" },
+                    { "919d93a8-3810-4ee4-8b51-a6b0a1605509", null, "JobSeeker", "JOBSEEKER" },
+                    { "919d93a8-3810-4ee4-8b51-a6b0a1605510", null, "Employer", "EMPLOYER" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -212,6 +211,7 @@ namespace JellyFish.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
