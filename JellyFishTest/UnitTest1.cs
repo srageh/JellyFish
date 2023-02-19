@@ -119,7 +119,7 @@ namespace JellyFishTest
 
 
 			string a = driver.FindElement(By.Id("Input_PhoneNumber-error")).GetAttribute("innerHTML");
-			Assert.AreEqual("The Phone number field is required.", a);
+			Assert.AreEqual("You must provide a phone number", a);
 		}
 
 

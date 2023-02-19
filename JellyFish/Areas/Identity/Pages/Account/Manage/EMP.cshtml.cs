@@ -56,18 +56,20 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Phone]
+            //[Required(ErrorMessage = "You must provide a phone number")]
+            [DataType(DataType.PhoneNumber)]
+            [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
             [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            public string? PhoneNumber { get; set; }
             [Display(Name = "First Name")]
-            public string FirstName { get; set; }
+            public string? FirstName { get; set; }
             [Display(Name = "Last Name")]
-            public string LastName { get; set; }
+            public string? LastName { get; set; }
             [Display(Name = "Job Title")]
-            public string Title { get; set; }
+            public string? Title { get; set; }
             [Display(Name = "Company Name")]
-            public string Name { get; set; }
-            public string Url { get; set; }
+            public string? Name { get; set; }
+            public string? Url { get; set; }
         }
 
         private async Task LoadAsync(JellyFishUser user)
