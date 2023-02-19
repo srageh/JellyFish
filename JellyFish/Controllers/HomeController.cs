@@ -1,21 +1,49 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using JellyFish.Models;
+using JellyFish.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace JellyFish.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+		private readonly UserManager<JellyFishUser> _userManager;
+		private readonly SignInManager<JellyFishUser> _signInManager;
+		private readonly Models.JellyFishDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
+
+		public HomeController(ILogger<HomeController> logger, JellyFishDbContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager)
+		{
             _logger = logger;
-        }
+			_userManager = userManager;
+			_signInManager = signInManager;
+			_context = context;
 
-        public IActionResult Index()
+		}
+
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+
+
+			var user = await _userManager.GetUserAsync(User);
+
+
+			//var userId = await _userManager.GetUserAsync(user);
+
+			if (User.IsInRole("JobSeeker"))
+            {
+				return View("Index_Appl");
+			}
+
+
+			if (User.IsInRole("Employer"))
+			{
+				return View("Index_Emp");
+			}
+
+			return View();
         }
 
         public IActionResult Privacy()
