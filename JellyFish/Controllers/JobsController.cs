@@ -44,11 +44,21 @@ namespace JellyFish.Controllers
                 return View("Index_Appl", await jobs.ToListAsync());
 
             }
+			if (User.IsInRole("Employer"))
+			{
+				var jobs = from g in _context.Jobs.
+					 Include(d => d.JobCategories).
+					 ThenInclude(g => g.Category)
+						   select g;
+
+				return View("Index_Emp", await jobs.ToListAsync());
+
+			}
 
 
 
 
-            return View();
+			return View();
 
             //return _context.Jobs != null ?
             //			  View(await _context.Jobs.ToListAsync()) :
@@ -95,8 +105,27 @@ namespace JellyFish.Controllers
 			return View(job);
 		}
 
-		// GET: Jobs/Edit/5
-		public async Task<IActionResult> Edit(int? id)
+        // GET: Jobs/Edit/5
+        public async Task<IActionResult> Apply(int? id)
+        {
+            if (id == null || _context.Jobs == null)
+            {
+                return NotFound();
+            }
+
+            var job = await _context.Jobs.FindAsync(id);
+            if (job == null)
+            {
+                return NotFound();
+            }
+            return View(job);
+        }
+
+
+
+
+        // GET: Jobs/Edit/5
+        public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null || _context.Jobs == null)
 			{
