@@ -16,16 +16,16 @@ builder.Services.AddDbContext<JellyFishContext>(options =>
 
 builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
  .AddRoles<IdentityRole>()
- .AddEntityFrameworkStores<JellyFishContext>(); // Add services to the container.
+ .AddEntityFrameworkStores<JellyFishContext>();// Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-var app = builder.Build(); // Configure the HTTP request pipeline.
+var app = builder.Build();// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+ // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+ app.UseHsts();
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles(); app.UseRouting(); app.UseAuthentication();
