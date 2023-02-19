@@ -27,8 +27,8 @@ namespace JellyFish.Controllers
 			{
                 var jobs = from g in _context.Jobs.
                     Include(d => d.JobCategories).
-                    ThenInclude(g => g.Category)
-                           select g;
+                    ThenInclude(g => g.Category).Include(j => j.Applicants)
+				select g;
 
 
                 if (!string.IsNullOrEmpty(searchQuery))
@@ -73,12 +73,18 @@ namespace JellyFish.Controllers
 				return NotFound();
 			}
 
-			var job = await _context.Jobs
-				.FirstOrDefaultAsync(m => m.JobId == id);
+			var job = await _context.Jobs.Include(j => j.Applicants).FirstOrDefaultAsync(m => m.JobId == id);
 			if (job == null)
 			{
 				return NotFound();
 			}
+
+			ViewData["already"] = false;
+			if(job.Applicants.Count != 0)
+			{
+                ViewData["already"] = true;
+            }
+
 
 			return View(job);
 		}
@@ -105,21 +111,6 @@ namespace JellyFish.Controllers
 			return View(job);
 		}
 
-        // GET: Jobs/Edit/5
-        public async Task<IActionResult> Apply(int? id)
-        {
-            if (id == null || _context.Jobs == null)
-            {
-                return NotFound();
-            }
-
-            var job = await _context.Jobs.FindAsync(id);
-            if (job == null)
-            {
-                return NotFound();
-            }
-            return View(job);
-        }
 
 
 

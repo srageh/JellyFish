@@ -26,7 +26,17 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Apply" asp-route-id="@Model?.JobId">Apply</a> |
+    @if ((bool)ViewBag.already)
+    {
+
+        <p>Already applied !</p>
+    }
+    else
+    {
+        <a asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
+    }
+
+   
    
     <a asp-action="Index">Back to List</a>
 </div>
