@@ -17,10 +17,10 @@ namespace JellyFish.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.13")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("JellyFish.Areas.Identity.Data.JellyFishUser", b =>
                 {
@@ -34,8 +34,8 @@ namespace JellyFish.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DateOfBirth")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -83,9 +83,6 @@ namespace JellyFish.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("UserType")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -129,23 +126,20 @@ namespace JellyFish.Migrations
                         new
                         {
                             Id = "919d93a8-3810-4ee4-8b51-a6b0a1605508",
-                            ConcurrencyStamp = "573b1838-c1b2-4b3d-a70e-ce0f914157a8",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "919d93a8-3810-4ee4-8b51-a6b0a1605509",
-                            ConcurrencyStamp = "6c40f714-a704-46ef-873d-fcb2a5512018",
                             Name = "JobSeeker",
                             NormalizedName = "JOBSEEKER"
                         },
                         new
                         {
                             Id = "919d93a8-3810-4ee4-8b51-a6b0a1605510",
-                            ConcurrencyStamp = "8e001cbc-011b-4268-a5a4-e7cf7e8e264c",
-                            Name = "Employeer",
-                            NormalizedName = "EMPLOYEER"
+                            Name = "Employer",
+                            NormalizedName = "EMPLOYER"
                         });
                 });
 
@@ -155,7 +149,7 @@ namespace JellyFish.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -180,7 +174,7 @@ namespace JellyFish.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
