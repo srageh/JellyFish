@@ -23,29 +23,37 @@ namespace JellyFish.Controllers
 		{
 			ViewData["searchQuery"] = searchQuery;
 
-			var jobs = from g in _context.Jobs.
-						Include(d => d.JobCategories).
-						ThenInclude(g => g.Category)
-					   select g;
-
-
-			if (!string.IsNullOrEmpty(searchQuery))
+			if (User.IsInRole("JobSeeker"))
 			{
-				jobs = jobs.Where(g => g.Title.Contains(searchQuery));
-				/*||
-					g.Developer.Name.Contains(searchQuery) ||
-					g.Publisher.Name.Contains(searchQuery) ||
-					g.Genre.Type.Contains(searchQuery));*/
-
-			}
-
-			return View(await jobs.ToListAsync());
+                var jobs = from g in _context.Jobs.
+                    Include(d => d.JobCategories).
+                    ThenInclude(g => g.Category)
+                           select g;
 
 
-			//return _context.Jobs != null ?
-			//			  View(await _context.Jobs.ToListAsync()) :
-			//			  Problem("Entity set 'JellyFishDbContext.Jobs'  is null.");
-		}
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    jobs = jobs.Where(g => g.Title.Contains(searchQuery));
+                    /*||
+                        g.Developer.Name.Contains(searchQuery) ||
+                        g.Publisher.Name.Contains(searchQuery) ||
+                        g.Genre.Type.Contains(searchQuery));*/
+
+                }
+
+                return View("Index_Appl", await jobs.ToListAsync());
+
+            }
+
+
+
+
+            return View();
+
+            //return _context.Jobs != null ?
+            //			  View(await _context.Jobs.ToListAsync()) :
+            //			  Problem("Entity set 'JellyFishDbContext.Jobs'  is null.");
+        }
 
 		// GET: Jobs/Details/5
 		public async Task<IActionResult> Details(int? id)
