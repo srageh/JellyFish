@@ -9,7 +9,11 @@ public partial class Employer
 
     public string Title { get; set; } = null!;
 
-    public virtual ICollection<Company> Companies { get; } = new List<Company>();
+    public int CompanyId { get; set; }
+
+    public virtual Company Company { get; set; } = null!;
 
     public virtual AspNetUser EmployerNavigation { get; set; } = null!;
+
+    public virtual ICollection<Job> Jobs { get; } = new List<Job>();
 }

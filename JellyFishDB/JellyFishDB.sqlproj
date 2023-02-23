@@ -79,5 +79,6 @@
     <Build Include="dbo\Tables\JobCategory.sql" />
     <Build Include="dbo\Tables\Skill.sql" />
     <Build Include="dbo\Tables\UserSkill.sql" />
+    <Build Include="dbo\Tables\JobType.sql" />
   </ItemGroup>
 </Project>

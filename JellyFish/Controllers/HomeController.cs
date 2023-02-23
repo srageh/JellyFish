@@ -3,6 +3,7 @@ using System.Diagnostics;
 using JellyFish.Models;
 using JellyFish.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace JellyFish.Controllers
 {
@@ -28,13 +29,18 @@ namespace JellyFish.Controllers
 
 
 			var user = await _userManager.GetUserAsync(User);
+			var jobs = _context.Jobs.Include(x=> x.Category).Include(x=> x.JobType).Include(x=> x.Employer.Company).ToList();
 
 
 			//var userId = await _userManager.GetUserAsync(user);
 
+
+
+
 			if (User.IsInRole("JobSeeker"))
             {
-				return View("Index_Appl");
+				return View("Index_Appl", jobs);
+				//return View( "Index_Appl");
 			}
 
 

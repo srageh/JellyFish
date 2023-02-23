@@ -17,7 +17,7 @@ builder.Services.AddDbContext<JellyFishContext>(options =>
 builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
  .AddRoles<IdentityRole>()
  .AddEntityFrameworkStores<JellyFishContext>();// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 var app = builder.Build();// Configure the HTTP request pipeline.

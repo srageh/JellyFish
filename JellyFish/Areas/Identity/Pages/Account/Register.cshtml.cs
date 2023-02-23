@@ -140,20 +140,20 @@ namespace JellyFish.Areas.Identity.Pages.Account
                 {
                     await _userManager.AddToRoleAsync(user, "Employer");
                     Employer emp = new Employer();
-                  
-
-
-                    emp.EmployerId = user.Id;
-                    emp.Title = "";
-                    _context.Employers.Add(emp);
-                    _context.SaveChanges();
 
                     Company cmp = new Company();
-                    cmp.EmployerId = user.Id;
                     cmp.Name = "";
                     cmp.Url = "";
                     _context.Companies.Add(cmp);
                     _context.SaveChanges();
+
+                    emp.EmployerId = user.Id;
+                    emp.CompanyId = cmp.CompanyId;
+                    emp.Title = "";
+                    _context.Employers.Add(emp);
+                    _context.SaveChanges();
+
+                    
                 }
 
                 if (result.Succeeded)
