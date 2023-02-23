@@ -35,28 +35,29 @@
 						<li class="nav-item">
 							@if (User.IsInRole("JobSeeker"))
 							{
-								<a class="nav-link text-dark" asp-area="" asp-controller="Applicants" asp-action="Index">Home</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 
 							}
 							@if (User.IsInRole("Employer"))
 							{
-								<a class="nav-link text-dark" asp-area="" asp-controller="Employer" asp-action="Index">Home</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 
 							}
 							@if (User.IsInRole("Administrator"))
 							{
-								<a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Home</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 
 							}
 
 
 						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Jobs</a>
+					@if (User.IsInRole("JobSeeker"))
+						{
+							<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Companies</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Companies</a>
-						</li>
+						}
+						
 						@if (User.IsInRole("Employer"))
 						{
 							<li class="nav-item">
