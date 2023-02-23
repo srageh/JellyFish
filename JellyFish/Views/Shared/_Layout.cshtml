@@ -7,18 +7,31 @@
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/JellyFish.styles.css" asp-append-version="true" />
+@*	<link rel="stylesheet" href="/lib/fontawesome-free-6.3.0-web/css/all.css" />*@
+	<script src="https://kit.fontawesome.com/c727c6872d.js" crossorigin="anonymous"></script>
+
+        
 </head>
 <body>
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">JellyFish</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+				@*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+					<img height="70" width="180" src="./images/Logo.png" />
+				</a>*@
+			@*	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
+				</button>*@
+				<div style="padding:0 6em;" class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+					<div>
+						<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+							<img height="70" width="180" src="./images/Logo.png" />
+						</a>
+					</div>
+			
+
+					<ul class="navbar-nav">
 						<li class="nav-item">
 							@if (User.IsInRole("JobSeeker"))
 							{
@@ -39,10 +52,24 @@
 
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Jobs</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Companies</a>
+						</li>
+						<li class="nav-item">
+							<a style="background-color: #3b5e9c;padding: 10px 10px;color: white;" class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Post a Job</a>
+						</li>
+						<li class="nav-item">
+							<partial name="_LoginPartial" />
+
+						</li>
+						<li>
+
+						</li>
+
+						
 					</ul>
-					<partial name="_LoginPartial" />
 				</div>
 			</div>
 		</nav>

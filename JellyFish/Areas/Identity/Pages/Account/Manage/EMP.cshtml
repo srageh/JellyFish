@@ -46,6 +46,11 @@
                 <label asp-for="Input.Url" class="form-label"></label>
                 <span asp-validation-for="Input.Url" class="text-danger"></span>
             </div>
+            <div class="form-floating">
+                <input type="file" asp-for="Input.Logo" class="form-control" />
+                <label asp-for="Input.Logo" class="form-label"></label>
+                <span asp-validation-for="Input.Logo" class="text-danger"></span>
+            </div>
  
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>

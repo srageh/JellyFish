@@ -70,6 +70,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Company Name")]
             public string? Name { get; set; }
             public string? Url { get; set; }
+            public string? Logo { get; set; }
         }
 
         private async Task LoadAsync(JellyFishUser user)
@@ -78,12 +79,12 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
 
 
 
-            var employerDetail = _context.Employers.Include(x=> x.EmployerNavigation).Include(x => x.Companies).Where(x => x.EmployerId == userMan).FirstOrDefault();
+            var employerDetail = _context.Employers.Include(x=> x.EmployerNavigation).Include(x => x.Company).Where(x => x.EmployerId == userMan).FirstOrDefault();
 
 
 
 
-            var employeeCompany = _context.Companies.Include(x => x.Employer).Where(x => x.EmployerId == userMan).FirstOrDefault();
+            //var employeeCompany = _context.Employers.Include(x => x.Company).Where(x => x.EmployerId == userMan).FirstOrDefault();
 
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -100,8 +101,9 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
                     FirstName = employerDetail.EmployerNavigation.FirstName,
                     LastName = employerDetail.EmployerNavigation.LastName,
                     Title = employerDetail.Title,
-                    Name = employeeCompany.Name,
-                    Url = employeeCompany.Url
+                    Name = employerDetail.Company.Name,
+                    Url = employerDetail.Company.Url,
+                    Logo = employerDetail.Company.Logo
                 };
             }
 
@@ -123,7 +125,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
-            var employerCompany = _context.Companies.Include(x => x.Employer).Where(x => x.EmployerId == user.Id).FirstOrDefault();
+            var employerCompany = _context.Employers.Include(x => x.Company).Where(x => x.EmployerId == user.Id).FirstOrDefault();
             bool companyUpdated = false;
             bool employerUpdated = false;
             if (user == null)
@@ -158,28 +160,33 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
                 user.LastName = Input.LastName;
                 employerUpdated = true;
             }
-            if (Input.Name != "" && employerCompany.Name != Input.Name)
+            if (Input.Name != "" && employerCompany.Company.Name != Input.Name)
             {
-                employerCompany.Name = Input.Name;
+                employerCompany.Company.Name = Input.Name;
                 companyUpdated = true;
 
 
             }
-            if (Input.Url != "" && employerCompany.Url != Input.Url)
+            if (Input.Url != "" && employerCompany.Company.Url != Input.Url)
             {
-                employerCompany.Url = Input.Url;
+                employerCompany.Company.Url = Input.Url;
                 companyUpdated = true;
 
             }
-            if (Input.Title != "" && employerCompany.Employer.Title != Input.Title)
+            if (Input.Title != "" && employerCompany.Title != Input.Title)
             {
-                employerCompany.Employer.Title = Input.Title;
+                employerCompany.Title = Input.Title;
+                companyUpdated = true;
+            }
+            if (Input.Logo != "" && employerCompany.Company.Logo != Input.Logo)
+            {
+                employerCompany.Company.Logo = Input.Logo;
                 companyUpdated = true;
             }
 
             if (companyUpdated)
             {
-                _context.Companies.Update(employerCompany);
+                _context.Employers.Update(employerCompany);
                 _context.SaveChanges();
             }
 

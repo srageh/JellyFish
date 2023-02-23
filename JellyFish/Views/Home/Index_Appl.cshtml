@@ -1,9 +1,162 @@
-﻿
+﻿@using JellyFish.Models;
+@model List<Job>
 @{
     ViewData["Title"] = "ApplicantIndex";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Appl.  Index</h1>
+<style>
+    #call-to-action {
+        text-align: center;
+        margin: 2em 0;
+    }
 
-<a asp-action="Index" asp-controller="Jobs" >View Jobs</a>
+        #call-to-action h1 {
+            font-size: 4em;
+            margin-bottom: 0.5em;
+            color: #3b5e9c;
+        }
+
+        #call-to-action p {
+            font-size: 1.8em;
+            max-width: 790px;
+            margin: 0 auto;
+            color: #555;
+        }
+
+    jobs-search {
+        display: flex;
+        justify-content: center;
+    }
+
+    #jobs-search input {
+        padding: 0.9em;
+    }
+
+    #jobs-search [type=text] {
+        width: 22em;
+        border: 1px solid rgb(119, 119, 119);
+    }
+
+
+    #jobs-search #searchBtn {
+        background-color: #3b5e9c;
+        color: white;
+        font-weight: 600;
+        padding: 1em;
+        width: 8em;
+        border: none;
+    }
+
+    /* JOBS FILTER */
+
+    #filter-select {
+        padding: 0.5em 1em;
+        text-align: center;
+        background-color: rgb(213, 213, 213);
+        border-radius: 5px;
+    }
+
+    #job-container {
+        font-size: 1.2rem;
+        padding: 18px 1em;
+        border: 1px solid rgba(144,146,148,0.2);
+        position: relative;
+        margin-bottom: 8px;
+        box-shadow: 1px 1px 2px #ccc;
+    }
+
+
+
+
+    #appyBtn {
+        float: right;
+        /* background-color: #3b5e9c; */
+        color: #3b5e9c;
+        font-weight: 600;
+        padding: 1em;
+        width: 8em;
+        border: 0.5px solid #3b5e9c;
+        margin-right: 20px;
+    }
+</style>
+
+
+
+
+<section id="call-to-action">
+    <h1>
+        The #1 Job Board for
+        <br />
+        <span>IT Professionals</span>
+    </h1>
+    <p>
+        Find the companies
+        looking to hire or post a job if you are hiring
+    </p>
+</section>
+<section id="jobs-search">
+
+    <form>
+        <input type="text" placeholder="Job Title" />
+        <input type="text" placeholder="Location" />
+        <input id="searchBtn" type="button" value="Seach Job" />
+    </form>
+</section>
+<section id="call-to-action">
+    <select id="filter-select">
+        <option selected disabled>Category</option>
+        <option>Front-end</option>
+        <option>Back-end</option>
+        <option>Full-stack</option>
+    </select>
+    <select id="filter-select">
+        <option selected disabled>Remote</option>
+        <option>Yes</option>
+        <option>No</option>
+    </select>
+    <select id="filter-select">
+        <option selected disabled>Job Type</option>
+        <option>Full-time</option>
+        <option>Part-time</option>
+        <option>Contract</option>
+    </select>
+</section>
+<section id="jobs">
+
+
+    
+        @{
+            foreach (var item in Model)
+            {
+            <div id="job-container">
+
+                
+                <img width="40px"
+                 height="40px" src="Prof.png" alt="company logo" />
+                <button id="appyBtn">Apply</button>
+                <button id="appyBtn">Save</button>
+                <h4>@item.Employer.Company.Name</h4>
+                <h3>@item.Title</h3>
+                <p>@item.JobType.Name</p>
+            </div>
+
+            }
+        }
+
+</section>
+@*
+<h1>Appl.  Index</h1>
+<section id="call-to-action">
+      <h1>
+        The #1 Job Board for
+        <br />
+        <span>IT Professionals</span>
+      </h1>
+      <p>
+Find the companies
+        looking to hire or post a job if you are hiring
+      </p>
+    </section>
+
+<a asp-action="Index" asp-controller="Jobs" >View Jobs</a>*@

@@ -41,22 +41,19 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<JobCategory> JobCategories { get; set; }
 
+    public virtual DbSet<JobType> JobTypes { get; set; }
+
     public virtual DbSet<Skill> Skills { get; set; }
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
 
 
-
-
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
-
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C8B4BD2AE0");
+            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C812A5477F");
 
             entity.ToTable("Address");
 
@@ -85,15 +82,15 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Applicant>(entity =>
         {
-            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C1FF02BFE0");
+            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C1F8144AA4");
 
             entity.ToTable("Applicant");
 
+            entity.HasIndex(e => new { e.JobId, e.UserId }, "IX_NoDublicate").IsUnique();
+
             entity.Property(e => e.ApplicantId).HasColumnName("applicant_id");
             entity.Property(e => e.JobId).HasColumnName("job_id");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .HasColumnName("user_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.Job).WithMany(p => p.Applicants)
                 .HasForeignKey(d => d.JobId)
@@ -182,7 +179,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B459539382");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B47F115340");
 
             entity.ToTable("Category");
 
@@ -194,37 +191,35 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E26723594BFA147");
+            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E267235E6E1986C");
 
             entity.ToTable("Company");
 
             entity.Property(e => e.CompanyId).HasColumnName("company_id");
-            entity.Property(e => e.EmployerId)
-                .HasMaxLength(450)
-                .HasColumnName("employer_id");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
             entity.Property(e => e.Url)
                 .HasMaxLength(100)
                 .HasColumnName("url");
-
-            entity.HasOne(d => d.Employer).WithMany(p => p.Companies)
-                .HasForeignKey(d => d.EmployerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FKCompany237877");
         });
 
         modelBuilder.Entity<Employer>(entity =>
         {
-            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E7C7A82635");
+            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E75656F05F");
 
             entity.ToTable("Employer");
 
             entity.Property(e => e.EmployerId).HasColumnName("employer_id");
+            entity.Property(e => e.CompanyId).HasColumnName("company_id");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
+
+            entity.HasOne(d => d.Company).WithMany(p => p.Employers)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_company");
 
             entity.HasOne(d => d.EmployerNavigation).WithOne(p => p.Employer)
                 .HasForeignKey<Employer>(d => d.EmployerId)
@@ -234,22 +229,48 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__Job__6E32B6A5838D7807");
+            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A57CE1F07C");
 
             entity.ToTable("Job");
 
             entity.Property(e => e.JobId).HasColumnName("job_id");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
+            entity.Property(e => e.EmployerId)
+                .HasMaxLength(450)
+                .HasColumnName("employer_id");
+            entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
+            entity.Property(e => e.Salary)
+                .HasColumnType("numeric(10, 2)")
+                .HasColumnName("salary");
+            entity.Property(e => e.Status)
+                .HasMaxLength(255)
+                .HasColumnName("status");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Jobs)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_category");
+
+            entity.HasOne(d => d.Employer).WithMany(p => p.Jobs)
+                .HasForeignKey(d => d.EmployerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_employer");
+
+            entity.HasOne(d => d.JobType).WithMany(p => p.Jobs)
+                .HasForeignKey(d => d.JobTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_job_type");
         });
 
         modelBuilder.Entity<JobCategory>(entity =>
         {
-            entity.HasKey(e => e.JobCategoryId).HasName("PK__JobCateg__73D53188B62E7DCC");
+            entity.HasKey(e => e.JobCategoryId).HasName("PK__JobCateg__73D53188770B9BE8");
 
             entity.ToTable("JobCategory");
 
@@ -268,9 +289,21 @@ public partial class JellyFishDbContext : DbContext
                 .HasConstraintName("FKJobCategor238289");
         });
 
+        modelBuilder.Entity<JobType>(entity =>
+        {
+            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7FF563A6DA");
+
+            entity.ToTable("JobType");
+
+            entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
+            entity.Property(e => e.Name)
+                .HasMaxLength(255)
+                .HasColumnName("name");
+        });
+
         modelBuilder.Entity<Skill>(entity =>
         {
-            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA8379A6A30F0B");
+            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA83795E18D450");
 
             entity.ToTable("Skill");
 
@@ -282,7 +315,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
-            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B0747BE5F");
+            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B02A92038");
 
             entity.ToTable("UserSkill");
 

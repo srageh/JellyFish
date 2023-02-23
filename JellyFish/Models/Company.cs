@@ -7,11 +7,11 @@ public partial class Company
 {
     public int CompanyId { get; set; }
 
-    public string EmployerId { get; set; } = null!;
-
     public string? Name { get; set; }
 
     public string? Url { get; set; }
 
-    public virtual Employer Employer { get; set; } = null!;
+    public string? Logo { get; set; }
+
+    public virtual ICollection<Employer> Employers { get; } = new List<Employer>();
 }
