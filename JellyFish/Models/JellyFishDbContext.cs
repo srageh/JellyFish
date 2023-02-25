@@ -43,11 +43,15 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<JobType> JobTypes { get; set; }
 
+    public virtual DbSet<Level> Levels { get; set; }
+
     public virtual DbSet<Skill> Skills { get; set; }
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS19;Database=JellyFishDB;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -196,6 +200,9 @@ public partial class JellyFishDbContext : DbContext
             entity.ToTable("Company");
 
             entity.Property(e => e.CompanyId).HasColumnName("company_id");
+            entity.Property(e => e.Logo)
+                .HasMaxLength(255)
+                .HasColumnName("logo");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
@@ -229,7 +236,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A57CE1F07C");
+            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A54866493A");
 
             entity.ToTable("Job");
 
@@ -242,6 +249,7 @@ public partial class JellyFishDbContext : DbContext
                 .HasMaxLength(450)
                 .HasColumnName("employer_id");
             entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
+            entity.Property(e => e.LevelId).HasColumnName("level_id");
             entity.Property(e => e.Salary)
                 .HasColumnType("numeric(10, 2)")
                 .HasColumnName("salary");
@@ -266,6 +274,11 @@ public partial class JellyFishDbContext : DbContext
                 .HasForeignKey(d => d.JobTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_job_type");
+
+            entity.HasOne(d => d.Level).WithMany(p => p.Jobs)
+                .HasForeignKey(d => d.LevelId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_level");
         });
 
         modelBuilder.Entity<JobCategory>(entity =>
@@ -299,6 +312,17 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Level>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC07D01713BD");
+
+            entity.ToTable("Level");
+
+            entity.Property(e => e.Level1)
+                .HasMaxLength(255)
+                .HasColumnName("level");
         });
 
         modelBuilder.Entity<Skill>(entity =>

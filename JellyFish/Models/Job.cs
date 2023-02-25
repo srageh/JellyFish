@@ -17,6 +17,8 @@ public partial class Job
 
     public int JobTypeId { get; set; }
 
+    public int LevelId { get; set; }
+
     public string EmployerId { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -30,4 +32,6 @@ public partial class Job
     public virtual ICollection<JobCategory> JobCategories { get; } = new List<JobCategory>();
 
     public virtual JobType JobType { get; set; } = null!;
+
+    public virtual Level Level { get; set; } = null!;
 }

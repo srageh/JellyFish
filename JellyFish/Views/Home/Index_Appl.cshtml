@@ -58,6 +58,8 @@
     }
 
     #job-container {
+        gap:1em;
+        display:flex;
         font-size: 1.2rem;
         padding: 18px 1em;
         border: 1px solid rgba(144,146,148,0.2);
@@ -97,10 +99,10 @@
 </section>
 <section id="jobs-search">
 
-    <form>
-        <input type="text" placeholder="Job Title" />
+    <form asp-action="Index" >
+        <input name="jobTitle" type="text" placeholder="Job Title" />
         <input type="text" placeholder="Location" />
-        <input id="searchBtn" type="button" value="Seach Job" />
+        <input id="searchBtn" type="submit" value="Seach Job" />
     </form>
 </section>
 <section id="call-to-action">
@@ -123,26 +125,34 @@
     </select>
 </section>
 <section id="jobs">
-
+    @if(Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+        <a style="text-decoration:none; color:black" asp-controller="Jobs" asp-action="Details" asp-route-id="@item.JobId">
+            <div id="job-container">
+                <img style="object-fit:contain" height="100" width="100" alt="company Logo" src="@item.Employer.Company.Logo" />
+                <div>
+                    <h4>@item.Title</h4>
+                    @*<button id="appyBtn">Apply</button>
+                    <button id="appyBtn">Save</button>*@
+                    <h5>@item.Employer.Company.Name</h5>
+                    <div style="display:flex; gap:0.5em; margin-top:15px">
+                        <p style="font-size:medium; font-weight:600; background-color:#f3f4f6; padding:0.2em 0.5em; border-radius:5px">@item.JobType.Name</p>
+                        <p style="font-size:medium; font-weight:600; background-color:#f3f4f6; padding:0.2em 0.5em; border-radius:5px">@item.Level.Level1</p>
+                    </div>
+                </div>
+            </div>
+            </a>
+        }
+    }
+    else
+    {
+        <p>No Jobs Foudn</p>
+    }
 
     
-        @{
-            foreach (var item in Model)
-            {
-            <div id="job-container">
-
-                
-                <img width="40px"
-                 height="40px" src="Prof.png" alt="company logo" />
-                <button id="appyBtn">Apply</button>
-                <button id="appyBtn">Save</button>
-                <h4>@item.Employer.Company.Name</h4>
-                <h3>@item.Title</h3>
-                <p>@item.JobType.Name</p>
-            </div>
-
-            }
-        }
+       
 
 </section>
 @*
