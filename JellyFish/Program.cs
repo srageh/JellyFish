@@ -19,7 +19,7 @@ builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.Req
  .AddEntityFrameworkStores<JellyFishContext>();// Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddRazorPages();
-builder.Services.AddTransient<IEmailSender, EmailSender>();
+///builder.Services.AddTransient<IEmailSender, EmailSender>();
 var app = builder.Build();// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
