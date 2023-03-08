@@ -89,28 +89,57 @@ namespace JellyFish.Controllers
 			return View(job);
 		}
 
-		// GET: Jobs/Create
-		public IActionResult Create()
-		{
-			return View();
-		}
+        // GET: Jobs/Create
+        //public IActionResult Create()
+        //{
+        //	return View();
+        //}
 
-		// POST: Jobs/Create
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("JobId,Title,Description")] Job job)
-		{
-			if (ModelState.IsValid)
-			{
-				_context.Add(job);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			return View(job);
-		}
+        //// POST: Jobs/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("JobId,Title,Description")] Job job)
+        //{
+        //	if (ModelState.IsValid)
+        //	{
+        //		_context.Add(job);
+        //		await _context.SaveChangesAsync();
+        //		return RedirectToAction(nameof(Index));
+        //	}
+        //	return View(job);
+        //}
+        public IActionResult Create()
+        {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
+            ViewData["EmployerId"] = new SelectList(_context.Employers, "EmployerId", "EmployerId");
+            ViewData["JobTypeId"] = new SelectList(_context.JobTypes, "JobTypeId", "JobTypeId");
+            ViewData["LevelId"] = new SelectList(_context.Levels, "Id", "Id");
+            return View();
+        }
 
+        // POST: Jobs1/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(job);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", job.CategoryId);
+            ViewData["EmployerId"] = new SelectList(_context.Employers, "EmployerId", "EmployerId", job.EmployerId);
+            ViewData["JobTypeId"] = new SelectList(_context.JobTypes, "JobTypeId", "JobTypeId", job.JobTypeId);
+            ViewData["LevelId"] = new SelectList(_context.Levels, "Id", "Id", job.LevelId);
+            return View(job);
+        }
+
+        
 
 
 
