@@ -49,7 +49,7 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-   
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
