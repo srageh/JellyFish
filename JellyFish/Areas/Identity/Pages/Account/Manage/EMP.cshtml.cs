@@ -14,16 +14,19 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<JellyFishUser> _userManager;
         private readonly SignInManager<JellyFishUser> _signInManager;
         private readonly JellyFish.Models.JellyFishDbContext _context;
+		private readonly IWebHostEnvironment _webHostEnvironment;
 
 
-        public EMP(
+
+		public EMP(
             UserManager<JellyFishUser> userManager,
             SignInManager<JellyFishUser> signInManager,
-            JellyFish.Models.JellyFishDbContext context)
+            JellyFish.Models.JellyFishDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -70,6 +73,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Company Name")]
             public string? Name { get; set; }
             public string? Url { get; set; }
+            public IFormFile LogoFile  { get; set; }
             public string? Logo { get; set; }
         }
 
@@ -103,7 +107,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
                     Title = employerDetail.Title,
                     Name = employerDetail.Company.Name,
                     Url = employerDetail.Company.Url,
-                    Logo = employerDetail.Company.Logo
+                    Logo = ""
                 };
             }
 
@@ -180,7 +184,13 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
             }
             if (Input.Logo != "" && employerCompany.Company.Logo != Input.Logo)
             {
-                employerCompany.Company.Logo = Input.Logo;
+                var folder = "/images/" + Input.LogoFile.FileName;
+               var logoPath =  Path.Combine(_webHostEnvironment.WebRootPath, "images", Input.LogoFile.FileName);
+
+                var stream = new FileStream(logoPath, FileMode.Create);
+                Input.LogoFile.CopyToAsync(stream);
+
+                employerCompany.Company.Logo = folder;
                 companyUpdated = true;
             }
 

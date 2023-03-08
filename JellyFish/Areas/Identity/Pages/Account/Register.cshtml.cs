@@ -144,6 +144,7 @@ namespace JellyFish.Areas.Identity.Pages.Account
                     Company cmp = new Company();
                     cmp.Name = "";
                     cmp.Url = "";
+                    cmp.Logo = "";
                     _context.Companies.Add(cmp);
                     _context.SaveChanges();
 

@@ -2,7 +2,9 @@
 {
     public class JobViewModel
     {
-        public Job Job { get; set; }
-        public IFormFile? Image { get; set; }
+        public List<Job> Jobs { get; set; }  
+        public int? JobTypeFilterId { get; set; }
+        public int? CategoryFilterId { get; set; }
+        public int? LevelFilterId { get; set; }
     }
 }

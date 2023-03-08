@@ -4,12 +4,121 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <a asp-action="Index">Back to List</a>
+<div style="display:flex; gap:4em; border-radius: 10px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 20%); padding: 1em 3em;">
+	<div>
+        <div style="text-align: center;">
+            
+            <img style="object-fit:contain; border-radius:10px" height="100" width="100" src="@Model.Employer.Company.Logo"/>
+            
 
-<h1>Details</h1>
+            <h2>@Model.Title</h2>
+           
+            <div style="padding:2em 0; display:flex; gap:1em; justify-content:center; align-content:center">
+                
+                <div>
+           
+                    <h5 style="color: #3b5e9c">
+                        <i class="fa-solid fa-location-dot"></i>
+                        Location
+                    </h5>
+                    <p style="font-weight:600">Remote</p>
 
+                    @*<h4 style="color: #3b5e9c">Date Posted</h4>*@
+
+                </div>
+
+                <div>
+                    <h5 style="color: #3b5e9c">
+                        <i class="fa-solid fa-clock"></i>
+                        Type
+                    </h5>
+                    <p style="font-weight:600">@Model.JobType.Name</p>
+
+
+                </div>
+                <div>
+                    <h5 style="color: #3b5e9c">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        Level
+                    </h5>
+                    <p style="font-weight:600">@Model.Level.Level1</p>
+
+
+                </div>
+                <div>
+                    <h5 style="color: #3b5e9c"><i class="fa-solid fa-suitcase"></i>
+                        Category</h5>
+                    <p style="font-weight:600">@Model.Category.Name</p>
+                </div>
+
+                <div >
+
+
+                    <h5 style="color: #3b5e9c"><i class="fa-solid fa-sack-dollar"></i>
+                        Salary</h5>
+
+
+                    <p style="font-weight:600">$@Model.Salary</p>
+
+           @*     <p>@{
+                        var date = DateTime.Today;
+                    } @date</p>*@
+                </div>
+                
+            </div>
+            <div>
+                @if ((bool)ViewBag.already)
+                {
+
+                    <p>Already applied !</p>
+                }
+                else
+                {
+                    <a class="btn btn-primary" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
+                    <a class="btn btn-success" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Save</a>
+                }
+
+
+
+
+            </div>
+        </div>
+    <div class="font-display font-bold text-3xl">Job description </div>
+			    <h3 id="responsibilities">Responsibilities</h3>
+			    <ul>
+				    <li>Demonstrate and apply software engineering skills in full stack development on a .NET/C# web platform.</li>
+				    <li>Utilize independent problem-solving skills to drive solutions and lead efforts in production support</li>
+				    <li>Integrate purchased applications and maintain existing software</li>
+				    <li>Participate in activities related to Agile software development methodologies</li>
+				    <li>Mentor team members and share technical knowledge, best practices, and standard procedures</li>
+				    <li>Collaborate with Key Stakeholders from the business, working closely with Product Owners and</li>
+				    <li>Product Managers to deliver value against roadmap.</li>
+				    <li>Apply lean thinking and tools to identify and eliminate waste in all areas of the position</li>
+			    </ul>
+			    <h3 id="qualifications">Qualifications</h3>
+			    <ul>
+				    <li>Bachelor’s degree in computer science or related field</li>
+				    <li>5+ years of proven software development experience</li>
+				    <li>Microsoft .NET full stack and C# skills</li>
+				    <li>.NET and .Core web framework</li>
+				    <li>REACT</li>
+				    <li>Microservice architecture / APIs</li>
+				    <li>Experience in Agile environment</li>
+				    <li>Leadership skills &amp; desire to mentor junior developers</li>
+			    </ul>
+			    <p>LRS is an equal opportunity employer. Applicants for employment will receive consideration without unlawful discrimination based on race, color, religion, creed, national origin, sex, age, disability, marital status, gender identity, domestic partner status, sexual orientation, genetic information, citizenship status or protected veteran status.</p>
+
+		    </div>
+    
+</div>
+
+@*
 <div>
-    <h4>Job</h4>
-    <hr />
+
+
+  
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
@@ -23,20 +132,13 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-    </dl>
-</div>
-<div>
-    @if ((bool)ViewBag.already)
-    {
+         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Employer.Company.Logo)
+        </dt>
+        <dd class = "col-sm-10">
+           
+      </dd>
+    </dl>*
+</div>*@
 
-        <p>Already applied !</p>
-    }
-    else
-    {
-        <a asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
-    }
 
-   
-   
-    <a asp-action="Index">Back to List</a>
-</div>

@@ -73,7 +73,7 @@ namespace JellyFish.Controllers
 				return NotFound();
 			}
 
-			var job = await _context.Jobs.Include(j => j.Applicants).FirstOrDefaultAsync(m => m.JobId == id);
+			var job = await _context.Jobs.Include(j => j.Applicants).Include(x=>x.Employer.Company).Include(x=> x.JobType).Include(x=> x.Level).Include(x=> x.Category).FirstOrDefaultAsync(m => m.JobId == id);
 			if (job == null)
 			{
 				return NotFound();
