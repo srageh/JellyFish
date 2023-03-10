@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using JellyFish.Models;
-using Microsoft.AspNetCore.Identity;
 using JellyFish.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace JellyFish.Areas.Identity.Pages.Account.Manage
 {
@@ -15,7 +15,6 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
     {
         private readonly JellyFish.Models.JellyFishDbContext _context;
         private readonly UserManager<JellyFishUser> _userManager;
-
         public MyJobsModel(JellyFish.Models.JellyFishDbContext context, UserManager<JellyFishUser> userManager)
         {
             _context = context;
@@ -26,9 +25,12 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage
 
         public async Task OnGetAsync()
         {
+            var user = _userManager.GetUserId(User);
             if (_context.Applicants != null)
             {
-                Applicant = _context.Applicants.Include(x => x.Job).ToList();
+                Applicant = await _context.Applicants
+                .Include(a => a.Job)
+                .Include(a => a.User).Include(x=> x.Job.Employer.Company).Where(x=> x.UserId == user).ToListAsync();
             }
         }
     }

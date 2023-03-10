@@ -6,43 +6,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>MyJobs</h1>
+<h1>My Jobs</h1>
 
-
+@*<p>
+    <a asp-page="Create">Create New</a>
+</p>*@
 <table class="table">
     <thead>
         <tr>
-           
-           
-
-             <th>
+            <th>
                 @Html.DisplayNameFor(model => model.Applicant[0].Job.Title)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.Applicant[0].Job.Employer.Company.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Applicant[0].Job.Description)
             </th>
-             <th>
+            <th>
                 @Html.DisplayNameFor(model => model.Applicant[0].Job.Salary)
             </th>
-
-
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Applicant) {
         <tr>
-            
-            
+            <td>
+                @Html.DisplayFor(modelItem => item.Job.Title)
+            </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Job.Title)
+                    @Html.DisplayFor(model => item.Job.Employer.Company.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Job.Description)
+                    @Html.DisplayFor(model => item.Job.Description)
                 </td>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.Job.Salary)
-                    </td>
+                 <td>
+                    @Html.DisplayFor(model => item.Job.Salary)
+                </td>
             @*<td>
                 <a asp-page="./Edit" asp-route-id="@item.ApplicantId">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ApplicantId">Details</a> |

@@ -146,13 +146,13 @@ input[type="text"]:focus {
             <select class="form-select form-select-lg mb-3" style="width:auto; border-radius:5px; box-shadow: 1px 1px 2px #ccc;" asp-for="@Model.JobTypeFilterId" name="types.JobTypeFilterId" asp-items="ViewBag.Types" onchange="this.form.submit();">
                 <option value="" selected>Types</option>
             </select>
-            <select class="form-select form-select-lg mb-3" style="width:auto;" asp-for="@Model.CategoryFilterId" name="types.CategoryFilterId" asp-items="ViewBag.Categories" onchange="this.form.submit();">
-                <option value="" selected>Categoreis</option>
+            <select class="form-select form-select-lg mb-3" style="width:auto; border-radius:5px; box-shadow: 1px 1px 2px #ccc;" asp-for="@Model.CategoryFilterId" name="types.CategoryFilterId" asp-items="ViewBag.Categories" onchange="this.form.submit();">
+                <option value="" selected>Categories</option>
             </select>
-            <select class="form-select form-select-lg mb-3" style="width:auto;" asp-for="@Model.LevelFilterId" name="types.LevelFilterId" asp-items="ViewBag.Level" onchange="this.form.submit();">
+            <select class="form-select form-select-lg mb-3" style="width:auto; border-radius:5px; box-shadow: 1px 1px 2px #ccc;" asp-for="@Model.LevelFilterId" name="types.LevelFilterId" asp-items="ViewBag.Level" onchange="this.form.submit();">
                 <option value="" selected>Level</option>
             </select>
-            <select class="form-select form-select-lg mb-3" style="width:auto;">
+            <select class="form-select form-select-lg mb-3" style="width:auto; border-radius:5px; box-shadow: 1px 1px 2px #ccc;">
                 <option selected>Remote</option>
                 <option>Yes</option>
                 <option>No</option>
@@ -203,7 +203,7 @@ input[type="text"]:focus {
     {
         foreach (var item in Model.Jobs)
         {
-        <a style="text-decoration:none; color:black" asp-controller="Jobs" asp-action="Details" asp-route-id="@item.JobId">
+        <a id="ind-job" style="text-decoration:none; color:black" asp-controller="Jobs" asp-action="Details" asp-route-id="@item.JobId">
             <div id="job-container">
                 <img style="object-fit:contain" height="100" width="100" alt="company Logo" src="@item.Employer.Company.Logo" />
                 <div>

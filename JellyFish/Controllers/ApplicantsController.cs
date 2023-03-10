@@ -44,38 +44,53 @@ namespace JellyFish.Controllers
                     job_title = job[0].Title,
                     job_desc = job[0].Description
                 };
+                Applicant appl = new Applicant()
+                {
+                    JobId = vm.job_ID,
+                    UserId = vm.user_ID
+                };
+                try
+                {
+                    await _context.Applicants.AddAsync(appl);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
+                }
+                return RedirectToAction("Details","Jobs", new { id =  vm.job_ID});
                 
-                return View("Index_Appl", vm);
+                //return View("Index_Appl", vm);
             }
 
             var appl2 = _context.Applicants.Include(a => a.Job).Include(a => a.User);
             return View(await appl2.ToListAsync());
         }
 
-		[HttpPost("/Applicants/ApplyForJob/"), ActionName("ApplyForJob")]
-		public async Task<IActionResult> ApplyForJob( [Bind("job_ID,job_title,user_ID,job_desc")] ApplyJobsViewModel vm)
-		{
+		//[HttpPost("/Applicants/ApplyForJob/"), ActionName("ApplyForJob")]
+		//public async Task<IActionResult> ApplyForJob( [Bind("job_ID,job_title,user_ID,job_desc")] ApplyJobsViewModel vm)
+		//{
             
      
-            Applicant appl = new Applicant()
-            {
-                JobId = vm.job_ID,
-                UserId = vm.user_ID
-			};
-            try
-            {
-				await _context.Applicants.AddAsync(appl);
-				await _context.SaveChangesAsync();
-			}
-            catch(Exception ex) 
-            {
+   //         Applicant appl = new Applicant()
+   //         {
+   //             JobId = vm.job_ID,
+   //             UserId = vm.user_ID
+			//};
+   //         try
+   //         {
+			//	await _context.Applicants.AddAsync(appl);
+			//	await _context.SaveChangesAsync();
+			//}
+   //         catch(Exception ex) 
+   //         {
 
-            }
+   //         }
            
 
 
-            return RedirectToAction("Index", "Jobs");
-        }
+   //         return RedirectToAction("Index", "Jobs");
+       // }
 
 
 

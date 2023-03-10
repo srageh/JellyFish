@@ -94,7 +94,7 @@ namespace JellyFishTest
 
 			driver.Url = "https://localhost:7143/Identity/Account/Login";
 			loginAsEmployer();
-			GetHref("manageEmployer");
+			GetHref ("manageEmployer");
 			driver.FindElement(By.Id("Input_LastName")).Clear();
 			driver.FindElement(By.Id("Input_LastName")).SendKeys("");
 			driver.FindElement(By.Id("update-profile-button")).Click();
@@ -122,13 +122,42 @@ namespace JellyFishTest
 			Assert.AreEqual("You must provide a phone number", a);
 		}
 
+		[Test]
+
+		public void SearchFor_JR_Jobs()
+		{
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsApplicant();
+            driver.FindElement(By.Name("jobTitle")).SendKeys("JR");
+            driver.FindElement(By.Id("searchBtn")).Click();
+            var jobs = driver.FindElement(By.Id("jobs"));
+			//var a = driver.FindElement(By.Id("ind-job"));
+			var a = jobs.FindElements(By.Id("ind-job"));
+			Assert.AreEqual(3, a.Count());
+        }
+
+
+        [Test]
+
+        public void ApplyForJob()
+        {
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsApplicant();
+            driver.FindElement(By.Name("jobTitle")).SendKeys("JR");
+            driver.FindElement(By.Id("searchBtn")).Click();
+            var jobs = driver.FindElement(By.Id("jobs"));
+            //var a = driver.FindElement(By.Id("ind-job"));
+            var a = jobs.FindElements(By.Id("ind-job"));
+            Assert.AreEqual(3, a.Count());
+        }
 
 
 
 
 
 
-		[OneTimeTearDown]
+
+        [OneTimeTearDown]
 		public void CloseTest()
 		{
 			driver.Close();
