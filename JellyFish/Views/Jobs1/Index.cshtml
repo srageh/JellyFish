@@ -24,7 +24,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Category)
             </th>
             <th>
@@ -36,7 +36,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Level)
             </th>
-            <th></th>
+            <th></th>*@
         </tr>
     </thead>
     <tbody>
@@ -54,16 +54,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
-            <td>
+            <td hidden>
                 @Html.DisplayFor(modelItem => item.Category.CategoryId)
             </td>
-            <td>
+                <td hidden>
                 @Html.DisplayFor(modelItem => item.Employer.EmployerId)
             </td>
-            <td>
+                <td hidden>
                 @Html.DisplayFor(modelItem => item.JobType.JobTypeId)
             </td>
-            <td>
+                <td hidden>
                 @Html.DisplayFor(modelItem => item.Level.Id)
             </td>
             <td>
