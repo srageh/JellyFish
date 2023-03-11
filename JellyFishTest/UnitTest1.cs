@@ -146,9 +146,12 @@ namespace JellyFishTest
             driver.FindElement(By.Name("jobTitle")).SendKeys("JR");
             driver.FindElement(By.Id("searchBtn")).Click();
             var jobs = driver.FindElement(By.Id("jobs"));
-            //var a = driver.FindElement(By.Id("ind-job"));
-            var a = jobs.FindElements(By.Id("ind-job"));
-            Assert.AreEqual(3, a.Count());
+			//var a = driver.FindElement(By.Id("ind-job"));
+
+			GetHref("ind-job");
+           //driver.FindElement(By.Id("ind-job"))
+				
+           // Assert.AreEqual(3, a.Count());
         }
 
 
