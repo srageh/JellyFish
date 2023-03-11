@@ -636,9 +636,8 @@ namespace JellyFish.Controllers
             
 			if (User.IsInRole("Employer"))
 			{
-				var jobs = from g in _context.Jobs.
-					 Include(d => d.JobCategories).
-					 ThenInclude(g => g.Category)
+				var jobs = from g in _context.Jobs.					 
+					 Include(g => g.Category)
 						   select g;
 
 				return View("Index_Emp", await jobs.ToListAsync());

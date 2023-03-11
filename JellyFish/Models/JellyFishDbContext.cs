@@ -39,8 +39,6 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<Job> Jobs { get; set; }
 
-    public virtual DbSet<JobCategory> JobCategories { get; set; }
-
     public virtual DbSet<JobType> JobTypes { get; set; }
 
     public virtual DbSet<Level> Levels { get; set; }
@@ -49,12 +47,15 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
+  
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C812A5477F");
+            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C8089DD54C");
 
             entity.ToTable("Address");
 
@@ -83,7 +84,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Applicant>(entity =>
         {
-            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C1F8144AA4");
+            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C1D5B48DBE");
 
             entity.ToTable("Applicant");
 
@@ -180,7 +181,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B47F115340");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B4B52227CB");
 
             entity.ToTable("Category");
 
@@ -192,7 +193,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E267235E6E1986C");
+            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E2672359E368EF7");
 
             entity.ToTable("Company");
 
@@ -210,7 +211,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Employer>(entity =>
         {
-            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E75656F05F");
+            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E779EF14AF");
 
             entity.ToTable("Employer");
 
@@ -233,7 +234,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A54866493A");
+            entity.HasKey(e => e.JobId).HasName("PK__Job__6E32B6A58335C4ED");
 
             entity.ToTable("Job");
 
@@ -278,30 +279,9 @@ public partial class JellyFishDbContext : DbContext
                 .HasConstraintName("fk_level");
         });
 
-        modelBuilder.Entity<JobCategory>(entity =>
-        {
-            entity.HasKey(e => e.JobCategoryId).HasName("PK__JobCateg__73D53188770B9BE8");
-
-            entity.ToTable("JobCategory");
-
-            entity.Property(e => e.JobCategoryId).HasColumnName("job_category_id");
-            entity.Property(e => e.CategoryId).HasColumnName("category_id");
-            entity.Property(e => e.JobId).HasColumnName("job_id");
-
-            entity.HasOne(d => d.Category).WithMany(p => p.JobCategories)
-                .HasForeignKey(d => d.CategoryId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FKJobCategor418821");
-
-            entity.HasOne(d => d.Job).WithMany(p => p.JobCategories)
-                .HasForeignKey(d => d.JobId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FKJobCategor238289");
-        });
-
         modelBuilder.Entity<JobType>(entity =>
         {
-            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7FF563A6DA");
+            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7F1E20188D");
 
             entity.ToTable("JobType");
 
@@ -313,7 +293,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Level>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC07D01713BD");
+            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC0764C1EF3F");
 
             entity.ToTable("Level");
 
@@ -324,7 +304,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Skill>(entity =>
         {
-            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA83795E18D450");
+            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA8379BE372032");
 
             entity.ToTable("Skill");
 
@@ -336,7 +316,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
-            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B02A92038");
+            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B0D42BAA9");
 
             entity.ToTable("UserSkill");
 
