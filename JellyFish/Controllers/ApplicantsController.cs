@@ -42,7 +42,7 @@ namespace JellyFish.Controllers
                     job_ID = Int32.Parse(jobID),
                     user_ID = userid,
                     job_title = jobs[0].Title,
-                    job_desc = jjobsob[0].Description
+                    job_desc = jobs[0].Description
                 };
                 Applicant appl = new Applicant()
                 {

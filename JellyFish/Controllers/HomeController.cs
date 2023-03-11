@@ -41,8 +41,8 @@ namespace JellyFish.Controllers
 
             if (User.IsInRole("Employer"))
             {
-                var user =  _userManager.GetUserAsync(User);
-                List<Job> jobs = (List<Job>)_context.Jobs.Where(j => j.EmployerId == user.Id.ToString()).ToList();
+                var user =  _userManager.GetUserId(User);
+                List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer)                   .Where(j => j.EmployerId == user.ToString()).ToList();
 
                 return View("Index_EMP", jobs);
             }

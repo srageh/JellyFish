@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Level]
 (
 	[Id] INT IDENTITY NOT NULL,
-	level nvarchar(255),
+	Level_name nvarchar(255),
 	PRIMARY KEY ([Id])
 )

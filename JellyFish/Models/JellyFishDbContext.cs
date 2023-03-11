@@ -47,8 +47,6 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-  
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
@@ -297,9 +295,9 @@ public partial class JellyFishDbContext : DbContext
 
             entity.ToTable("Level");
 
-            entity.Property(e => e.Level1)
+            entity.Property(e => e.LevelName)
                 .HasMaxLength(255)
-                .HasColumnName("level");
+                .HasColumnName("Level_name");
         });
 
         modelBuilder.Entity<Skill>(entity =>

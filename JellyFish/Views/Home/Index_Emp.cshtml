@@ -1,161 +1,164 @@
 ﻿@model IEnumerable<JellyFish.Models.Job>
 
 @{
-    ViewData["Title"] = "Index_Emp";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Index_Emp";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-     #call-to-action {
-        text-align: center;
-        margin: 2em 0;
+	#call-to-action {
+		text-align: center;
+		margin: 2em 0;
+	}
 
-      }
-      #call-to-action h1 {
-      font-size: 4em;
-        margin-bottom: 0.5em;
-        color: #3b5e9c;
-      }
+		#call-to-action h1 {
+			font-size: 4em;
+			margin-bottom: 0.5em;
+			color: #3b5e9c;
+		}
 
-  #call-to-action p {
-                font-size: 1.8em;
-        max-width: 790px;
-      margin: 0 auto;
-    color:#555;
-      }
+		#call-to-action p {
+			font-size: 1.8em;
+			max-width: 790px;
+			margin: 0 auto;
+			color: #555;
+		}
 
-    jobs-search {
-        display: flex;
-        justify-content: center;
-    }
+	jobs-search {
+		display: flex;
+		justify-content: center;
+	}
 
-    #jobs-search input {
-        padding: 0.9em;
-    }
+	#jobs-search input {
+		padding: 0.9em;
+	}
 
-    #jobs-search [type=text] {
-        width: 22em;
-        border: 1px solid rgb(119, 119, 119);
-    }
-
-
-    #jobs-search #searchBtn {
-        background-color: #3b5e9c;
-        color: white;
-        font-weight: 600;
-        padding: 1em;
-        width: 8em;
-        border: none;
-    }
-
-    /* JOBS FILTER */
-
-    #filter-select {
-        padding: 0.5em 1em;
-        text-align: center;
-        background-color: rgb(213, 213, 213);
-        border-radius: 5px;
-    }
-
-    #job-container {
-        font-size: 1.2rem;
-        padding: 18px 1em;
-        border: 1px solid rgba(144,146,148,0.2);
-        position: relative;
-        margin-bottom: 8px;
-        box-shadow: 1px 1px 2px #ccc;
-    }
+	#jobs-search [type=text] {
+		width: 22em;
+		border: 1px solid rgb(119, 119, 119);
+	}
 
 
+	#jobs-search #searchBtn {
+		background-color: #3b5e9c;
+		color: white;
+		font-weight: 600;
+		padding: 1em;
+		width: 8em;
+		border: none;
+	}
+
+	/* JOBS FILTER */
+
+	#filter-select {
+		padding: 0.5em 1em;
+		text-align: center;
+		background-color: rgb(213, 213, 213);
+		border-radius: 5px;
+	}
+
+	#job-container {
+		font-size: 1.2rem;
+		padding: 18px 1em;
+		border: 1px solid rgba(144,146,148,0.2);
+		position: relative;
+		margin-bottom: 8px;
+		box-shadow: 1px 1px 2px #ccc;
+	}
 
 
-    #appyBtn {
-        float: right;
-        /* background-color: #3b5e9c; */
-        color: #3b5e9c;
-        font-weight: 600;
-        padding: 1em;
-        width: 8em;
-        border: 0.5px solid #3b5e9c;
-        margin-right: 20px;
-    }
+
+
+	#appyBtn {
+		float: right;
+		/* background-color: #3b5e9c; */
+		color: #3b5e9c;
+		font-weight: 600;
+		padding: 1em;
+		width: 8em;
+		border: 0.5px solid #3b5e9c;
+		margin-right: 20px;
+	}
 </style>
 
 
 <section id="call-to-action">
-      <h1>
-        The #1 Job Board for
-        <br />
-        <span>IT Professionals</span>
-      </h1>
-      <p>Find the companies looking to hire or post a job if you are hiring</p>
+	<h1>
+		The #1 Job Board for
+		<br />
+		<span>IT Professionals</span>
+	</h1>
+	<p>Find the companies looking to hire or post a job if you are hiring</p>
 
-      	<div class="form-floating">
+	<div class="form-floating">
 		<div class="btn-group">
-            <input type="radio" class="btn-check" id="option1" value="1" checked />
+			<input type="radio" class="btn-check" id="option1" value="1" checked />
 			<label class="btn btn-primary" for="option1">All Jobs</label>
 
 			<input type="radio" class="btn-check" id="option2" value="2" />
 			<label class="btn btn-primary" for="option2">Active Jobs</label>
 
-			<input type="radio" class="btn-check" id="option3" value="3"  />
+			<input type="radio" class="btn-check" id="option3" value="3" />
 			<label class="btn btn-primary" for="option3">Inactive Jobs</label>
 
 		</div>
 	</div>
 
 
-    </section>
+</section>
 
 
 
 <section id="jobs">
 
-@foreach(var item in Model)
-    {
-        <div id="job-container">
-            <img width="40px"
-             height="40px" src="Prof.png" alt="company logo" />
-        
-            <h4>Google</h4>
-            <h3>Front-end developer</h3>
-            <p>Full-time</p>
-        </div>
-    }
-    <div id="job-container">
-        <img width="40px"
-             height="40px" src="Prof.png" alt="company logo" />
-        <button id="appyBtn">Apply</button>
-        <button id="appyBtn">Save</button>
-        <h4>Google</h4>
-        <h3>Front-end developer</h3>
-        <p>Full-time</p>
-    </div>
-    <div id="job-container">
-        <img width="40px"
-             height="40px" src="Prof.png" alt="company logo" />
-        <button id="appyBtn">Apply</button>
-        <button id="appyBtn">Save</button>
-        <h4>Google</h4>
-        <h3>Front-end developer</h3>
-        <p>Full-time</p>
-    </div>
-    <div id="job-container">
-        <img width="40px"
-             height="40px" src="Prof.png" alt="company logo" />
-        <button id="appyBtn">Apply</button>
-        <button id="appyBtn">Save</button>
-        <h4>Google</h4>
-        <h3>Front-end developer</h3>
-        <p>Full-time</p>
-    </div>
-    <div id="job-container">
-        <img width="40px"
-             height="40px" src="Prof.png" alt="company logo" />
-        <button id="appyBtn">Apply</button>
-        <button id="appyBtn">Save</button>
-        <h4>Google</h4>
-        <h3>Front-end developer</h3>
-        <p>Full-time</p>
-    </div>
+	@foreach (var item in Model)
+	{
+		<div id="job-container">
+			<img width="40px"
+			 height="40px" src="Prof.png" alt="company logo" />
+
+			<h3>@item.Employer.Title</h3>
+			<h4>@item.JobType.Name</h4>
+			<p>@item.Level.LevelName</p>
+		</div>
+	}
+
+
+@*
+	<div id="job-container">
+		<img width="40px"
+			 height="40px" src="Prof.png" alt="company logo" />
+		<button id="appyBtn">Apply</button>
+		<button id="appyBtn">Save</button>
+		<h4>Google</h4>
+		<h3>Front-end developer</h3>
+		<p>Full-time</p>
+	</div>
+	<div id="job-container">
+		<img width="40px"
+			 height="40px" src="Prof.png" alt="company logo" />
+		<button id="appyBtn">Apply</button>
+		<button id="appyBtn">Save</button>
+		<h4>Google</h4>
+		<h3>Front-end developer</h3>
+		<p>Full-time</p>
+	</div>
+	<div id="job-container">
+		<img width="40px"
+			 height="40px" src="Prof.png" alt="company logo" />
+		<button id="appyBtn">Apply</button>
+		<button id="appyBtn">Save</button>
+		<h4>Google</h4>
+		<h3>Front-end developer</h3>
+		<p>Full-time</p>
+	</div>
+	<div id="job-container">
+		<img width="40px"
+			 height="40px" src="Prof.png" alt="company logo" />
+		<button id="appyBtn">Apply</button>
+		<button id="appyBtn">Save</button>
+		<h4>Google</h4>
+		<h3>Front-end developer</h3>
+		<p>Full-time</p>
+	</div>*@
 </section>
 

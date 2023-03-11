@@ -705,7 +705,7 @@ namespace JellyFish.Controllers
             ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
             //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
             ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
-            ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
+            ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "LevelName");
             ViewBag.EmployeeId = _userManager.GetUserId(User);
             return View();
         }
@@ -720,7 +720,7 @@ namespace JellyFish.Controllers
             ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
             //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
             ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
-            ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
+            ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "LevelName");
             ViewBag.EmployeeId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
