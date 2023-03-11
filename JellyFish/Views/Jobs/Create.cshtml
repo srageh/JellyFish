@@ -10,13 +10,18 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+            @*<div hidden class="form-group">
+            <label asp-for="JobId" class="control-label"></label>
+            <input asp-for="JobId" class="form-control" />
+            <span asp-validation-for="JobId" class="text-danger"></span>
+            </div>*@
             <div class="form-group">
                 <label asp-for="Salary" class="control-label"></label>
                 <input asp-for="Salary" class="form-control" />
@@ -28,33 +33,46 @@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <label asp-for="CategoryId" class="control-label">Category</label>
+                @*                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                *@
+                <select asp-for="CategoryId" class="form-select" asp-items=ViewBag.CategoryId>
+                    <option disabled selected>--Select Category--</option>
+                </select>
+
             </div>
             <div class="form-group">
-                <label asp-for="JobTypeId" class="control-label"></label>
-                <select asp-for="JobTypeId" class="form-control" asp-items="ViewBag.JobTypeId"></select>
+                <label asp-for="JobTypeId" class="control-label">Job Type</label>
+                <select asp-for="JobTypeId" class="form-select" asp-items="ViewBag.JobTypeId">
+                    <option disabled selected>--Select Job Type--</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="LevelId" class="control-label"></label>
-                <select asp-for="LevelId" class="form-control" asp-items="ViewBag.LevelId"></select>
+                <label asp-for="LevelId" class="control-label">Level</label>
+                <select asp-for="LevelId" class="form-select" asp-items="ViewBag.LevelId">
+                    <option disabled selected>--Select Level--</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label asp-for="EmployerId" class="control-label"></label>
-                <select asp-for="EmployerId" class="form-control" asp-items="ViewBag.EmployerId"></select>
-            </div>
+            @* <div class="form-group">
+            <label asp-for="EmployerId" class="control-label"></label>
+            <select asp-for="EmployerId" class ="form-control" asp-items="ViewBag.EmployerId"></select>
+            </div>*@
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <textarea asp-for="Description" rows="15" cols="10" class="form-control"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <input type="hidden" value="@ViewBag.EmployeeId" asp-for="EmployerId" class="form-control" />
+            </div>
+            <br />
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
+<br />
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

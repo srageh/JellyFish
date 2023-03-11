@@ -4,10 +4,22 @@ namespace JellyFish.Models.View_Models
 {
     public class JobPostingViewModel
     {
-        public Job job { get; set; }
-        
-        public IEnumerable<SelectListItem> CategoryList { get; set; }
-        public IEnumerable<SelectListItem> JobTypeList { get; set; }   
-        public IEnumerable<SelectListItem> LevelList { get; set; }
+           public int JobId { get; set; }
+
+    public string Title { get; set; } = null!;
+
+    public decimal Salary { get; set; }
+
+    public string Status { get; set; } = null!;
+
+    public int CategoryId { get; set; }
+
+    public int JobTypeId { get; set; }
+
+    public int LevelId { get; set; }
+
+    public string EmployerId { get; set; } = null!;
+
+    public string Description { get; set; } = null!;
     }
 }

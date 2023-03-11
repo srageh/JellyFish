@@ -6,44 +6,57 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JellyFish.Models;
+using JellyFish.Models.View_Models;
+using Microsoft.AspNetCore.Identity;
+using JellyFish.Areas.Identity.Data;
+using JellyFish.Repository;
+using JellyFish.Repository.IRepository;
 
 namespace JellyFish.Controllers
 {
 	public class JobsController : Controller
 	{
 		private readonly JellyFishDbContext _context;
+        private readonly UserManager<JellyFishUser> _userManager;
 
-		public JobsController(JellyFishDbContext context)
-		{
-			_context = context;
-		}
+        public JobsController(JellyFishDbContext context, UserManager<JellyFishUser> userManager)
+        {
+            _userManager = userManager;
+            _context = context;
+        }
 
-		// GET: Jobs
-		public async Task<IActionResult> Index(string? searchQuery)
+        // GET: Jobs
+        public async Task<IActionResult> Index(string? searchQuery)
 		{
 			ViewData["searchQuery"] = searchQuery;
 
-			if (User.IsInRole("JobSeeker"))
-			{
-                var jobs = from g in _context.Jobs.
-                    Include(d => d.JobCategories).
-                    ThenInclude(g => g.Category).Include(j => j.Applicants)
-				select g;
+  
 
 
-                if (!string.IsNullOrEmpty(searchQuery))
+            if (User.IsInRole("JobSeeker"))
+            {
+
+                var user = await _userManager.GetUserAsync(User);
+                var applicantJobs = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).ToList();
+
+
+                if (!String.IsNullOrEmpty(searchQuery))
                 {
-                    jobs = jobs.Where(g => g.Title.Contains(searchQuery));
-                    /*||
-                        g.Developer.Name.Contains(searchQuery) ||
-                        g.Publisher.Name.Contains(searchQuery) ||
-                        g.Genre.Type.Contains(searchQuery));*/
-
+                    applicantJobs = applicantJobs.Where(x => x.Title.Contains(searchQuery)).ToList();
                 }
 
-                return View("Index_Appl", await jobs.ToListAsync());
 
+                var jobViewModel = GetViewModel(applicantJobs, null, null, null);
+
+                return View("Index_Appl", jobViewModel);
+                //return View( "Index_Appl");
             }
+
+
+
+            //return View("Index_Appl", await jobs.ToListAsync());
+
+            
 			if (User.IsInRole("Employer"))
 			{
 				var jobs = from g in _context.Jobs.
@@ -110,33 +123,40 @@ namespace JellyFish.Controllers
         //	}
         //	return View(job);
         //}
+        [HttpGet]
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId");
-            ViewData["EmployerId"] = new SelectList(_context.Employers, "EmployerId", "EmployerId");
-            ViewData["JobTypeId"] = new SelectList(_context.JobTypes, "JobTypeId", "JobTypeId");
-            ViewData["LevelId"] = new SelectList(_context.Levels, "Id", "Id");
+            ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
+            //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
+            ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
+            ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
+            ViewBag.EmployeeId = _userManager.GetUserId(User);
             return View();
         }
 
-        // POST: Jobs1/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
+        public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
         {
+            job.EmployerId = _userManager.GetUserId(User).ToString();
+            ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
+            //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
+            ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
+            ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
+            ViewBag.EmployeeId = _userManager.GetUserId(User);
+
             if (ModelState.IsValid)
             {
-                _context.Add(job);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.Jobs.Add(job);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "CategoryId", "CategoryId", job.CategoryId);
-            ViewData["EmployerId"] = new SelectList(_context.Employers, "EmployerId", "EmployerId", job.EmployerId);
-            ViewData["JobTypeId"] = new SelectList(_context.JobTypes, "JobTypeId", "JobTypeId", job.JobTypeId);
-            ViewData["LevelId"] = new SelectList(_context.Levels, "Id", "Id", job.LevelId);
+           
             return View(job);
+
+       
         }
 
         
@@ -236,5 +256,76 @@ namespace JellyFish.Controllers
 		{
 			return (_context.Jobs?.Any(e => e.JobId == id)).GetValueOrDefault();
 		}
-	}
+
+        [HttpPost]
+        public IActionResult FilterJobType(JobViewModel types)
+        {
+
+
+            //var user =  _userManager.GetUserAsync(User);
+            //var applicantJobs = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).ToList();
+
+
+            //var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "\\images\\", "amazon.png");
+
+
+
+            List<int> allJobTypes = _context.Jobs.Select(x => x.JobTypeId).Distinct().ToList();
+            List<int> allCatTypes = _context.Jobs.Select(x => x.CategoryId).Distinct().ToList();
+            List<int> allLevelTypes = _context.Jobs.Select(x => x.LevelId).Distinct().ToList();
+            var jobFilter = types.JobTypeFilterId == null ? allJobTypes : new List<int>()
+            {
+
+                types.JobTypeFilterId ?? 0
+            };
+
+            var jobFilterCat = types.CategoryFilterId == null ? allCatTypes : new List<int>()
+            {
+
+                types.CategoryFilterId ?? 0
+            };
+
+            var jobFilterLev = types.LevelFilterId == null ? allLevelTypes : new List<int>()
+            {
+
+                types.LevelFilterId ?? 0
+            };
+            var jobFiltered = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).Where(x => jobFilter.Contains(x.JobTypeId) && jobFilterCat.Contains(x.CategoryId) && jobFilterLev.Contains(x.LevelId)).ToList();
+            //test.ForEach(job => { job.Employer.Company.Logo = imagePath; });
+            var jobViewModel = GetViewModel(jobFiltered, types.JobTypeFilterId, types.CategoryFilterId, types.LevelFilterId);
+
+
+            return View("Index_Appl", jobViewModel);
+        }
+
+
+        public JobViewModel GetViewModel(List<Job> jobList, int? jobTypeFilter, int? categoryFilter, int? levelFilter)
+        {
+            //var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "\\images\\", "amazon.png");
+
+
+
+            //List<int> /*allJobTypes*/ = _context.Jobs.Select(x => x.JobTypeId).Distinct().ToList();
+
+            //jobList.ForEach(job => { job.Employer.Company.Logo = imagePath; });
+
+            var s = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
+            ViewBag.Categories = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
+            ViewBag.Level = new SelectList(_context.Levels.ToList(), "Id", "Level1");
+            ViewBag.Types = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
+
+            JobViewModel jobViewModel = new JobViewModel
+            {
+
+                Jobs = jobList,
+                JobTypeFilterId = jobTypeFilter,
+                CategoryFilterId = categoryFilter,
+                LevelFilterId = levelFilter
+
+            };
+
+
+            return jobViewModel;
+        }
+    }
 }
