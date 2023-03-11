@@ -118,7 +118,19 @@
 
 			<h3>@item.Employer.Title</h3>
 			<h4>@item.JobType.Name</h4>
+
 			<p>@item.Level.LevelName</p>
+
+			<hr/>
+			<h4>@item.CreatedDate</h4>
+			<h4>@item.Location</h4>
+			<hr />
+
+			@foreach(var i in item.Applicants)
+			{
+				<h4>@i.User.FirstName  @i.User.LastName</h4>
+			}
+			
 		</div>
 	}
 

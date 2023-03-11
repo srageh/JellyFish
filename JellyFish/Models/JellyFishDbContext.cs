@@ -232,12 +232,13 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__Job__6E32B6A58335C4ED");
+            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A5B250B980");
 
             entity.ToTable("Job");
 
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
+            entity.Property(e => e.CreatedDate).HasColumnName("createdDate");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
@@ -246,6 +247,9 @@ public partial class JellyFishDbContext : DbContext
                 .HasColumnName("employer_id");
             entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
             entity.Property(e => e.LevelId).HasColumnName("level_id");
+            entity.Property(e => e.Location)
+                .HasMaxLength(50)
+                .HasColumnName("location");
             entity.Property(e => e.Salary)
                 .HasColumnType("numeric(10, 2)")
                 .HasColumnName("salary");
