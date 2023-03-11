@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<JellyFish.Models.Job>
+
 @{
     ViewData["Title"] = "Index_Emp";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -86,40 +87,40 @@
         <br />
         <span>IT Professionals</span>
       </h1>
-      <p>
-Find the companies
-        looking to hire or post a job if you are hiring
-      </p>
-    </section>
-<section id="jobs-search">
+      <p>Find the companies looking to hire or post a job if you are hiring</p>
 
-    <form>
-        <input type="text" placeholder="Job Title" />
-        <input type="text" placeholder="Location" />
-        <input id="searchBtn" type="button" value="Seach Job" />
-    </form>
-</section>
-<section id="call-to-action">
-    <select id="filter-select">
-        <option selected disabled>Category</option>
-        <option>Front-end</option>
-        <option>Back-end</option>
-        <option>Full-stack</option>
-    </select>
-    <select id="filter-select">
-        <option selected disabled>Remote</option>
-        <option>Yes</option>
-        <option>No</option>
-    </select>
-    <select id="filter-select">
-        <option selected disabled>Job Type</option>
-        <option>Full-time</option>
-        <option>Part-time</option>
-        <option>Contract</option>
-    </select>
-</section>
+      	<div class="form-floating">
+		<div class="btn-group">
+            <input type="radio" class="btn-check" id="option1" value="1" checked />
+			<label class="btn btn-primary" for="option1">All Jobs</label>
+
+			<input type="radio" class="btn-check" id="option2" value="2" />
+			<label class="btn btn-primary" for="option2">Active Jobs</label>
+
+			<input type="radio" class="btn-check" id="option3" value="3"  />
+			<label class="btn btn-primary" for="option3">Inactive Jobs</label>
+
+		</div>
+	</div>
+
+
+    </section>
+
+
+
 <section id="jobs">
 
+@foreach(var item in Model)
+    {
+        <div id="job-container">
+            <img width="40px"
+             height="40px" src="Prof.png" alt="company logo" />
+        
+            <h4>Google</h4>
+            <h3>Front-end developer</h3>
+            <p>Full-time</p>
+        </div>
+    }
     <div id="job-container">
         <img width="40px"
              height="40px" src="Prof.png" alt="company logo" />
