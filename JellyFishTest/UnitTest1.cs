@@ -128,30 +128,69 @@ namespace JellyFishTest
 		{
             driver.Url = "https://localhost:7143/Identity/Account/Login";
             loginAsApplicant();
-            driver.FindElement(By.Name("jobTitle")).SendKeys("JR");
+            driver.FindElement(By.Name("searchQuery")).SendKeys("JR");
             driver.FindElement(By.Id("searchBtn")).Click();
             var jobs = driver.FindElement(By.Id("jobs"));
 			//var a = driver.FindElement(By.Id("ind-job"));
 			var a = jobs.FindElements(By.Id("ind-job"));
 			Assert.AreEqual(3, a.Count());
         }
+		[Test]
+        public void SearchFor_Intern_Jobs()
+        {
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsApplicant();
+            driver.FindElement(By.Name("searchQuery")).SendKeys("Intern");
+            driver.FindElement(By.Id("searchBtn")).Click();
+            var jobs = driver.FindElement(By.Id("jobs"));
+            //var a = driver.FindElement(By.Id("ind-job"));
+            var a = jobs.FindElements(By.Id("ind-job"));
+            Assert.AreEqual(5, a.Count());
+        }
 
 
         [Test]
 
+        public void Re_ApplyForJob()
+        {
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsApplicant();
+            driver.FindElement(By.Name("searchQuery")).SendKeys("Intern");
+            driver.FindElement(By.Id("searchBtn")).Click();
+            var job = driver.FindElements(By.Id("ind-job")).LastOrDefault();
+            driver.Url = job.GetAttribute("href");
+            //var a = driver.FindElement(By.Id("ind-job"));
+            string isApplied = driver.FindElement(By.Id("isApplied")).GetAttribute("innerHTML");
+			//driver.FindElement(By.Id("ind-job"))
+			Assert.AreEqual("Already applied !", isApplied);
+		}
+
+        [Test]
         public void ApplyForJob()
         {
             driver.Url = "https://localhost:7143/Identity/Account/Login";
             loginAsApplicant();
-            driver.FindElement(By.Name("jobTitle")).SendKeys("JR");
+            driver.FindElement(By.Name("searchQuery")).SendKeys("Intern");
             driver.FindElement(By.Id("searchBtn")).Click();
             var jobs = driver.FindElement(By.Id("jobs"));
-			//var a = driver.FindElement(By.Id("ind-job"));
+            var allJobs = jobs.FindElements(By.Id("ind-job"));
+			var job = allJobs.LastOrDefault();
+			driver.Url = job.GetAttribute("href");
+            driver.FindElement(By.Id("btnApply")).Click();
+            string isApplied = driver.FindElement(By.Id("isApplied")).GetAttribute("innerHTML");
+            Assert.AreEqual("Already applied !", isApplied);
+        }
 
-			GetHref("ind-job");
-           //driver.FindElement(By.Id("ind-job"))
-				
-           // Assert.AreEqual(3, a.Count());
+        [Test]
+        public void DisplayApplicantJob()
+        {
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsApplicant();
+
+			GetHref("manageJobSeeker");
+			GetHref("myjobs");
+			string myJobPageTtile = driver.FindElement(By.Id("jobsTitle")).GetAttribute("innerHTML");
+			Assert.AreEqual("My Jobs", myJobPageTtile);
         }
 
 
