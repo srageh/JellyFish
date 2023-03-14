@@ -710,12 +710,12 @@ namespace JellyFish.Controllers
             return View();
         }
 
-        //public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
+        public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description", "CreatedDate", "Location")] Job job)
         {
+            /*
             job.EmployerId = _userManager.GetUserId(User).ToString();
             ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
             //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
@@ -727,12 +727,12 @@ namespace JellyFish.Controllers
             {
                 _context.Jobs.Add(job);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index_Emp");
             }
            
             return View(job);
-
-       
+            */
+            return RedirectToAction("Index_Emp");
         }
 
         
