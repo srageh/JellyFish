@@ -1,29 +1,63 @@
-﻿@model JellyFish.Models.Job
+﻿@model JellyFish.Models.View_Models.JobPostingViewModel
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 class="text-primary">Edit</h1>
 
 <h4>Job</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-6">
+        <form method="post" asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="JobId" />
+            <input type="hidden" asp-for="job.JobId" />
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="job.Title" class="control-label"></label>
+                <input asp-for="job.Title" class="form-control" />
+                <span asp-validation-for="job.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="job.Salary" class="control-label"></label>
+                <input asp-for="job.Salary" class="form-control" />
+                <span asp-validation-for="job.Salary" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="job.Status" class="control-label"></label>
+                <input asp-for="job.Status" class="form-control" />
+                <span asp-validation-for="job.Status" class="text-danger"></span>
+            </div>
+           <div class="form-group">
+                <label asp-for="job.CategoryId" class="control-label">Category</label>            
+                <select asp-for="job.CategoryId" class="form-select" asp-items="@Model.CategoryList">
+                    <option disabled selected>--Select Category--</option>
+                </select>
+
+            </div>
+             <div class="form-group">
+                <label asp-for="job.JobTypeId" class="control-label">Job Type</label>
+                <select asp-for="job.JobTypeId" class="form-select" asp-items="@Model.JobTypeList">
+                    <option disabled selected>--Select Job Type--</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="job.LevelId" class="control-label">Level</label>
+                <select asp-for="job.LevelId" class="form-select" asp-items="@Model.LevelList">
+                    <option disabled selected>--Select Level--</option>
+                </select>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="job.EmployerId" class="control-label"></label>
+                <input asp-for="job.EmployerId" class="form-control" />
+                <span asp-validation-for="job.EmployerId" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="job.Description" class="control-label"></label>
+                <textarea asp-for="job.Description" rows="15" cols="10" class="form-control"></textarea>
+                <span asp-validation-for="job.Description" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="job.EmployerId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

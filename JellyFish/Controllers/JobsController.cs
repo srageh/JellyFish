@@ -223,100 +223,131 @@ namespace JellyFish.Controllers
 
 
 
+        public IActionResult Edit(int? id)
+        {
+            JobPostingViewModel jobPostingViewModel = new()
+            {
+                job = new(),
+                CategoryList = _unitOfWork.Category.GetAll().Select(
+                 u => new SelectListItem
+                 {
+                     Text = u.Name,
+                     Value = u.CategoryId.ToString()
+                 }),
+                JobTypeList = _unitOfWork.JobType.GetAll().Select(
+                 u => new SelectListItem
+                 {
+                     Text = u.Name,
+                     Value = u.JobTypeId.ToString()
+                 }),
+                LevelList = _unitOfWork.Level.GetAll().Select(
+                 u => new SelectListItem
+                 {
+                     Text = u.Level1,
+                     Value = u.Id.ToString()
+                 })
+            };
+            if (id == null || id == 0)
+            {
+                return View(jobPostingViewModel);
+            }
+            else
+            {
+                jobPostingViewModel.job = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id);
+                return View(jobPostingViewModel);
+            }
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
+        {
+            if (ModelState.IsValid)
+            {
+                if (job.JobId == 0)
+                {
+                    _unitOfWork.Job.Add(job);
+                }
+                else
+                {
+                    _unitOfWork.Job.Update(job);
+                }
 
+                _unitOfWork.Save();
+                //TempData["success"] = "It's been updated successfully";
+                return RedirectToAction("Index");
+            }
+            JobPostingViewModel jobPostingViewModel = new()
+            {
+                job = new(),
+                CategoryList = _unitOfWork.Category.GetAll().Select(
+                 u => new SelectListItem
+                 {
+                     Text = u.Name,
+                     Value = u.CategoryId.ToString()
+                 }),
+                JobTypeList = _unitOfWork.JobType.GetAll().Select(
+                 u => new SelectListItem
+                 {
+                     Text = u.Name,
+                     Value = u.JobTypeId.ToString()
+                 }),
+                LevelList = _unitOfWork.Level.GetAll().Select(
+                 u => new SelectListItem
+                 {
+                     Text = u.Level1,
+                     Value = u.Id.ToString()
+                 })
+            };
 
+            return View(jobPostingViewModel);
+        }
 
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
 
-        // GET: Jobs/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-		{
-			if (id == null || _context.Jobs == null)
-			{
-				return NotFound();
-			}
+            var jobFromDbFirst = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id);
+            int categoryId = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id).CategoryId;
+            int jobTypeId = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id).JobTypeId;
+            int levelId = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id).LevelId;
 
-			var job = await _context.Jobs.FindAsync(id);
-			if (job == null)
-			{
-				return NotFound();
-			}
-			return View(job);
-		}
+            JobPostingViewModel jobPostingViewModel = new()
+            {
+                job = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id),
+                category = _unitOfWork.Category.GetFirstOrDefault(u => u.CategoryId == categoryId),
+                jobType = _unitOfWork.JobType.GetFirstOrDefault(u => u.JobTypeId == jobTypeId),
+                level = _unitOfWork.Level.GetFirstOrDefault(u => u.Id == levelId)
 
-		// POST: Jobs/Edit/5
-		// To protect from overposting attacks, enable the specific properties you want to bind to.
-		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("JobId,Title,Description")] Job job)
-		{
-			if (id != job.JobId)
-			{
-				return NotFound();
-			}
+            };
 
-			if (ModelState.IsValid)
-			{
-				try
-				{
-					_context.Update(job);
-					await _context.SaveChangesAsync();
-				}
-				catch (DbUpdateConcurrencyException)
-				{
-					if (!JobExists(job.JobId))
-					{
-						return NotFound();
-					}
-					else
-					{
-						throw;
-					}
-				}
-				return RedirectToAction(nameof(Index));
-			}
-			return View(job);
-		}
+            if (jobFromDbFirst == null)
+            {
+                return NotFound();
+            }
+            return View(jobPostingViewModel);
+        }
 
-		// GET: Jobs/Delete/5
-		public async Task<IActionResult> Delete(int? id)
-		{
-			if (id == null || _context.Jobs == null)
-			{
-				return NotFound();
-			}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+            var obj = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
 
-			var job = await _context.Jobs
-				.FirstOrDefaultAsync(m => m.JobId == id);
-			if (job == null)
-			{
-				return NotFound();
-			}
+            _unitOfWork.Job.Remove(obj);
+            _unitOfWork.Save();
+            //TempData["success"] = "It's been deleted successfully";
+            return RedirectToAction("Index");
+        }
 
-			return View(job);
-		}
-
-		// POST: Jobs/Delete/5
-		[HttpPost, ActionName("Delete")]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
-		{
-			if (_context.Jobs == null)
-			{
-				return Problem("Entity set 'JellyFishDbContext.Jobs'  is null.");
-			}
-			var job = await _context.Jobs.FindAsync(id);
-			if (job != null)
-			{
-				_context.Jobs.Remove(job);
-			}
-
-			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
-		}
-
-		private bool JobExists(int id)
+        private bool JobExists(int id)
 		{
 			return (_context.Jobs?.Any(e => e.JobId == id)).GetValueOrDefault();
 		}
