@@ -142,7 +142,7 @@ namespace JellyFish.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description", "CreatedDate", "Location")] Job job)
         {
-            /*
+            
             job.EmployerId = _userManager.GetUserId(User).ToString();
             ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
             //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
@@ -158,7 +158,7 @@ namespace JellyFish.Controllers
             }
            
             return View(job);
-            */
+            
             return RedirectToAction("Index_Emp");
         }
 
