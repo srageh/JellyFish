@@ -1,25 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace JellyFish.Models.View_Models
 {
     public class JobPostingViewModel
     {
-           public int JobId { get; set; }
+        public Job job { get; set; }
 
-    public string Title { get; set; } = null!;
+        [Display(Name = "Category")]
+        public Category category { get; set; }
 
-    public decimal Salary { get; set; }
+        [Display(Name = "Job Type")]
+        public JobType jobType { get; set; }
 
-    public string Status { get; set; } = null!;
+        [Display(Name = "Level")]
+        public Level level { get; set; }
 
-    public int CategoryId { get; set; }
+        [Display(Name = "Applicants")]
+        public Applicant applicant { get; set; }
 
-    public int JobTypeId { get; set; }
+        //[ValidateNever]
+        //public IEnumerable<Job> jobList { get; set; }
+        //[ValidateNever]
+        //public IEnumerable<Applicant> applicantList { get; set; }
 
-    public int LevelId { get; set; }
-
-    public string EmployerId { get; set; } = null!;
-
-    public string Description { get; set; } = null!;
+        [ValidateNever]
+        public IEnumerable<SelectListItem> CategoryList { get; set; }
+        [ValidateNever]
+        public IEnumerable<SelectListItem> JobTypeList { get; set; }
+        [ValidateNever]
+        public IEnumerable<SelectListItem> LevelList { get; set; }
     }
 }

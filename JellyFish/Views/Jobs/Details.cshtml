@@ -72,11 +72,11 @@
                 @if ((bool)ViewBag.already)
                 {
 
-                    <p>Already applied !</p>
+                    <p id="isApplied">Already applied !</p>
                 }
                 else
                 {
-                    <a class="btn btn-primary" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
+                    <a id="btnApply" class="btn btn-primary" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
                     <a class="btn btn-success" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Save</a>
                 }
 
