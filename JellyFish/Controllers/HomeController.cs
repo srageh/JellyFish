@@ -32,7 +32,7 @@ namespace JellyFish.Controllers
         {
             if (User.IsInRole("JobSeeker"))
             {
-                return View("Index_Appl");
+                return RedirectToAction("Index", "Jobs");
             }
 
 

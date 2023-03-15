@@ -1,6 +1,7 @@
-insert into level (Level_name) VALUES ('Junior');
-insert into level (Level_name) VALUES ('Mid-Level');
-insert into level (Level_name) VALUES ('Senior');
+insert into level ([Level_name]) VALUES ('Junior');
+insert into level ([Level_name]) VALUES ('Mid-Level');
+insert into level ([Level_name]) VALUES ('Senior');
+
 
 Insert into Category(name) VALUES ('Fullstack');
 Insert into Category(name) VALUES ('FrontEnd');
