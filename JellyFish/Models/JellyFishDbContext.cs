@@ -237,6 +237,7 @@ public partial class JellyFishDbContext : DbContext
 
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
+            entity.Property(e => e.CreatedDate).HasColumnName("createdDate");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
@@ -245,6 +246,9 @@ public partial class JellyFishDbContext : DbContext
                 .HasColumnName("employer_id");
             entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
             entity.Property(e => e.LevelId).HasColumnName("level_id");
+            entity.Property(e => e.Location)
+                .HasMaxLength(50)
+                .HasColumnName("location");
             entity.Property(e => e.Salary)
                 .HasColumnType("numeric(10, 2)")
                 .HasColumnName("salary");
@@ -292,9 +296,9 @@ public partial class JellyFishDbContext : DbContext
 
             entity.ToTable("Level");
 
-            entity.Property(e => e.Level1)
+            entity.Property(e => e.LevelName)
                 .HasMaxLength(255)
-                .HasColumnName("level");
+                .HasColumnName("Level_name");
         });
 
         modelBuilder.Entity<Skill>(entity =>

@@ -23,7 +23,7 @@
 
 		.nav-color:hover{
 			color: #9DAECD !important;
-		}
+		}											
 	</style>
 
 
@@ -61,7 +61,7 @@
 							}
 							@if (User.IsInRole("Administrator"))
 							{
-								<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+								<a class="nav-color nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Home</a>
 
 							}
 
@@ -76,6 +76,9 @@
 						
 						@if (User.IsInRole("Employer"))
 						{
+							<li class="nav-item">
+								<a style="background-color: #3b5e9c;padding: 10px 10px;color: white;" class="nav-link" asp-area="" asp-controller="Jobs" asp-action="Index">View Applicent</a>
+							</li>
 							<li class="nav-item">
 								<a style="background-color: #3b5e9c;padding: 10px 10px;color: white;" class="nav-link" asp-area="" asp-controller="Jobs" asp-action="Create">Post a Job</a>
 							</li>
