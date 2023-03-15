@@ -175,7 +175,7 @@ namespace JellyFish.Controllers
                 LevelList = _unitOfWork.Level.GetAll().Select(
                 u => new SelectListItem
                 {
-                    Text = u.Level1,
+                    Text = u.LevelName,
                     Value = u.Id.ToString()
                 })
 
@@ -213,7 +213,7 @@ namespace JellyFish.Controllers
                 LevelList = _unitOfWork.Level.GetAll().Select(
                  u => new SelectListItem
                  {
-                     Text = u.Level1,
+                     Text = u.LevelName,
                      Value = u.Id.ToString()
                  })
             };
@@ -243,7 +243,7 @@ namespace JellyFish.Controllers
                 LevelList = _unitOfWork.Level.GetAll().Select(
                  u => new SelectListItem
                  {
-                     Text = u.Level1,
+                     Text = u.LevelName,
                      Value = u.Id.ToString()
                  })
             };
@@ -295,7 +295,7 @@ namespace JellyFish.Controllers
                 LevelList = _unitOfWork.Level.GetAll().Select(
                  u => new SelectListItem
                  {
-                     Text = u.Level1,
+                     Text = u.LevelName,
                      Value = u.Id.ToString()
                  })
             };
