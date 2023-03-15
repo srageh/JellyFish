@@ -186,18 +186,19 @@ namespace JellyFish.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
+        public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description", "Location")] Job job)
         {
             if (ModelState.IsValid)
             {
+                job.CreatedDate = DateTime.Today.Date;
                 _unitOfWork.Job.Add(job);
                 _unitOfWork.Save();
-                return RedirectToAction("Index");
+                 return RedirectToAction("Index");
             }
 
             JobPostingViewModel jobPostingViewModel = new()
             {
-                job = new(),
+                job = job,
                 CategoryList = _unitOfWork.Category.GetAll().Select(
                  u => new SelectListItem
                  {
@@ -406,7 +407,7 @@ namespace JellyFish.Controllers
 
             var s = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
             ViewBag.Categories = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
-            ViewBag.Level = new SelectList(_context.Levels.ToList(), "Id", "Level1");
+            ViewBag.Level = new SelectList(_context.Levels.ToList(), "Id", "LevelName");
             ViewBag.Types = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
 
             JobViewModel jobViewModel = new JobViewModel

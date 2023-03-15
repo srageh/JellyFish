@@ -113,64 +113,75 @@
 	@foreach (var item in Model)
 	{
 		<div id="job-container">
+			<button id="appyBtn">Edit </button> |  <button id="appyBtn">Delete</button>
 			<img width="40px"
-			 height="40px" src="Prof.png" alt="company logo" />
+			 height="40px" src="@item.Employer.Company.Logo" alt="company logo" />
+			<h2>Job Title:</h2>
+			<p>@item.Title</p>
+			<h2>Job Type:</h2>
+			<p>@item.JobType.Name</p>
 
-			<h3>@item.Employer.Title</h3>
-			<h4>@item.JobType.Name</h4>
-
+			<h2>Job level type:</h2>
 			<p>@item.Level.LevelName</p>
 
-			<hr/>
-			<h4>@item.CreatedDate</h4>
-			<h4>@item.Location</h4>
+			<hr />
+			<h2>Created Date:</h2>
+			<p>@item.CreatedDate</p>
+			<h2>Location:</h2>
+			<p>@item.Location</p>
 			<hr />
 
-			@foreach(var i in item.Applicants)
+			@if (item.Applicants != null)
 			{
-				<h4>@i.User.FirstName  @i.User.LastName</h4>
+				<h2>Users That applied for this job:</h2>
+				@foreach (var i in item.Applicants)
+				{
+					<p>@i.User.FirstName  @i.User.LastName</p>
+					
+
+				
+				}
 			}
-			
 		</div>
 	}
 
 
-@*
+	@*
 	<div id="job-container">
-		<img width="40px"
-			 height="40px" src="Prof.png" alt="company logo" />
-		<button id="appyBtn">Apply</button>
-		<button id="appyBtn">Save</button>
-		<h4>Google</h4>
-		<h3>Front-end developer</h3>
-		<p>Full-time</p>
+	<img width="40px"
+	height="40px" src="Prof.png" alt="company logo" />
+	<button id="appyBtn">Apply</button>
+	<button id="appyBtn">Save</button>
+	<h4>Google</h4>
+	<h3>Front-end developer</h3>
+	<p>Full-time</p>
 	</div>
 	<div id="job-container">
-		<img width="40px"
-			 height="40px" src="Prof.png" alt="company logo" />
-		<button id="appyBtn">Apply</button>
-		<button id="appyBtn">Save</button>
-		<h4>Google</h4>
-		<h3>Front-end developer</h3>
-		<p>Full-time</p>
+	<img width="40px"
+	height="40px" src="Prof.png" alt="company logo" />
+	<button id="appyBtn">Apply</button>
+	<button id="appyBtn">Save</button>
+	<h4>Google</h4>
+	<h3>Front-end developer</h3>
+	<p>Full-time</p>
 	</div>
 	<div id="job-container">
-		<img width="40px"
-			 height="40px" src="Prof.png" alt="company logo" />
-		<button id="appyBtn">Apply</button>
-		<button id="appyBtn">Save</button>
-		<h4>Google</h4>
-		<h3>Front-end developer</h3>
-		<p>Full-time</p>
+	<img width="40px"
+	height="40px" src="Prof.png" alt="company logo" />
+	<button id="appyBtn">Apply</button>
+	<button id="appyBtn">Save</button>
+	<h4>Google</h4>
+	<h3>Front-end developer</h3>
+	<p>Full-time</p>
 	</div>
 	<div id="job-container">
-		<img width="40px"
-			 height="40px" src="Prof.png" alt="company logo" />
-		<button id="appyBtn">Apply</button>
-		<button id="appyBtn">Save</button>
-		<h4>Google</h4>
-		<h3>Front-end developer</h3>
-		<p>Full-time</p>
+	<img width="40px"
+	height="40px" src="Prof.png" alt="company logo" />
+	<button id="appyBtn">Apply</button>
+	<button id="appyBtn">Save</button>
+	<h4>Google</h4>
+	<h3>Front-end developer</h3>
+	<p>Full-time</p>
 	</div>*@
 </section>
 
