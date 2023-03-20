@@ -89,6 +89,24 @@
 	</h1>
 	<p>Find the companies looking to hire or post a job if you are hiring</p>
 
+
+
+	@using(Html.BeginForm("CheckRadio","Home", FormMethod.Post))
+	{
+		<div>
+			All Jobs @Html.RadioButton("Status", "All Jobs")
+			Active Jobs @Html.RadioButton("Status", "Active Jobs")
+			InActive Jobs @Html.RadioButton("Status", "InActive Jobs")
+
+		</div>
+	}
+
+
+
+
+
+
+
 	<div class="form-floating">
 		<div class="btn-group">
 			<input type="radio" class="btn-check" id="option1" value="1" checked />
@@ -113,7 +131,7 @@
 	@foreach (var item in Model)
 	{
 		<div id="job-container">
-			<button id="appyBtn">Edit </button> |  <button id="appyBtn">Delete</button>
+			<button id="appyBtn">Edit </button>   <button id="appyBtn">Delete</button>
 			<img width="40px"
 			 height="40px" src="@item.Employer.Company.Logo" alt="company logo" />
 			<h2>Job Title:</h2>

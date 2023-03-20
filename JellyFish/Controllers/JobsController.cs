@@ -82,6 +82,27 @@ namespace JellyFish.Controllers
             //			  Problem("Entity set 'JellyFishDbContext.Jobs'  is null.");
         }
 
+
+
+
+        public string CheckRadio(FormCollection frm)
+        {
+            string radiobut = frm["Gender"].ToString();
+            return radiobut;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 		// GET: Jobs/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
@@ -186,14 +207,14 @@ namespace JellyFish.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description", "Location")] Job job)
+        public IActionResult Create([Bind("Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description, Location")] Job job)
         {
             if (ModelState.IsValid)
             {
                 job.CreatedDate = DateTime.Today.Date;
                 _unitOfWork.Job.Add(job);
                 _unitOfWork.Save();
-                 return RedirectToAction("Index");
+                 return RedirectToAction("Index", "Home");
             }
 
             JobPostingViewModel jobPostingViewModel = new()
