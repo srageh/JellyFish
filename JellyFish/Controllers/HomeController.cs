@@ -38,6 +38,10 @@ namespace JellyFish.Controllers
             {
                 return View("Index_EMP");
             }
+            if (User.IsInRole("Administrator"))
+            {
+                return View();
+            }
             return View();
 
 

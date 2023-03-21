@@ -12,8 +12,7 @@ using JellyFish.Areas.Identity.Data;
 using JellyFish.Repository;
 using JellyFish.Repository.IRepository;
 using System.Security.Claims;
-
-
+using System.Collections;
 
 namespace JellyFish.Controllers
 {
@@ -64,23 +63,63 @@ namespace JellyFish.Controllers
             
 			if (User.IsInRole("Employer"))
 			{
-				var jobs = from g in _context.Jobs.					 
-					 Include(g => g.Category)
-						   select g;
-
-				return View("Index_Emp", await jobs.ToListAsync());
-
-			}
+                var jobs = from g in _context.Jobs.
+                     Include(g => g.Category)
+                           select g;
 
 
 
+                // For counting applicants' number on job posting for employer
+                using (JellyFishDbContext context = new JellyFishDbContext())
+                {
+                    try
+                    {
+                        Job job = new Job();
+                        var jobList = _context.Jobs.Select(x => x.JobId).ToList();
+                        var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
+                        var applicantCountArray = new ArrayList();
+                        int count = 0;
 
-			return View();
 
-            //return _context.Jobs != null ?
-            //			  View(await _context.Jobs.ToListAsync()) :
-            //			  Problem("Entity set 'JellyFishDbContext.Jobs'  is null.");
+
+                        for (int i = 0; i < jobList.Count; i++)
+                        {
+                            for (int j = 0; j < applicantList.Count; j++)
+                            {
+                                if (applicantList[j] == jobList[i])
+                                {
+                                    count++;
+                                }
+                            }
+
+                  
+
+                            applicantCountArray.Add(jobList[i] + " " + count);
+                            count = 0;
+                        }
+                        TempData["ApplicantCountArray"] = applicantCountArray.ToArray(typeof(object));
+
+
+
+
+                        return View("Index_Emp", jobs.ToList());
+
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        //Response.Write("Property: " + ex.Message);
+                        return View();
+                    }
+                }
+
+            }
+            return View();
         }
+
+		
+        
 
 		// GET: Jobs/Details/5
 		public async Task<IActionResult> Details(int? id)

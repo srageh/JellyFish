@@ -47,6 +47,7 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
+   
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -237,6 +238,9 @@ public partial class JellyFishDbContext : DbContext
 
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("createdDate");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
@@ -245,6 +249,7 @@ public partial class JellyFishDbContext : DbContext
                 .HasColumnName("employer_id");
             entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
             entity.Property(e => e.LevelId).HasColumnName("level_id");
+            entity.Property(e => e.Location).HasMaxLength(50);
             entity.Property(e => e.Salary)
                 .HasColumnType("numeric(10, 2)")
                 .HasColumnName("salary");

@@ -8,6 +8,9 @@ job_type_id int NOT NULL,
 level_id int NOT  NULL,
 employer_id nvarchar(450) NOT NULL,
 description nvarchar(255) NOT NULL, 
+Location nvarchar(50) NULL,
+createdDate DateTime NULL,
+
 
 PRIMARY KEY (job_id),
 CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES Category (category_id),
