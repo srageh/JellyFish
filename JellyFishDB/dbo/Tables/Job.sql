@@ -2,16 +2,17 @@
 job_id int IDENTITY NOT NULL, 
 title nvarchar(255) NOT NULL,
 salary NUMERIC(10,2) NOT NULL,
-createdDate DATETIME2 NULL, 
+createdDate DATETIME NULL, 
 location NVARCHAR(50) NULL, 
-status BIT NULL,
+isActive BIT NULL,
+isOpen BIT NULL,
 category_id int NOT NULL,
 job_type_id int NOT NULL,
 level_id int NOT  NULL,
 employer_id nvarchar(450) NOT NULL,
 description nvarchar(255) NOT NULL, 
-Location nvarchar(50) NULL,
-createdDate DateTime NULL,
+
+
 
 
 

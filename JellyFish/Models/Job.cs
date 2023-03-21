@@ -11,11 +11,13 @@ public partial class Job
 
     public decimal Salary { get; set; }
 
-    public bool? Status { get; set; }
-
     public DateTime? CreatedDate { get; set; }
 
     public string? Location { get; set; }
+
+    public bool? IsActive { get; set; }
+
+    public bool? IsOpen { get; set; }
 
     public int CategoryId { get; set; }
 
@@ -26,10 +28,6 @@ public partial class Job
     public string EmployerId { get; set; } = null!;
 
     public string Description { get; set; } = null!;
-
-    public string? Location { get; set; }
-
-    public DateTime? CreatedDate { get; set; }
 
     public virtual ICollection<Applicant> Applicants { get; } = new List<Applicant>();
 
