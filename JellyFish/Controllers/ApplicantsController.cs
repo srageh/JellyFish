@@ -35,14 +35,14 @@ namespace JellyFish.Controllers
 
             if (User.IsInRole("JobSeeker"))
             {
-                List<Job> job =  (List<Job>) _context.Jobs.Where(j => j.JobId == Int32.Parse(jobID)).ToList(); 
+                List<Job> jobs =  (List<Job>) _context.Jobs.Where(j => j.JobId == Int32.Parse(jobID)).ToList(); 
 
                 ApplyJobsViewModel vm = new ApplyJobsViewModel()
                 {
                     job_ID = Int32.Parse(jobID),
                     user_ID = userid,
-                    job_title = job[0].Title,
-                    job_desc = job[0].Description
+                    job_title = jobs[0].Title,
+                    job_desc = jobs[0].Description
                 };
                 Applicant appl = new Applicant()
                 {

@@ -297,9 +297,9 @@ public partial class JellyFishDbContext : DbContext
 
             entity.ToTable("Level");
 
-            entity.Property(e => e.Level1)
+            entity.Property(e => e.LevelName)
                 .HasMaxLength(255)
-                .HasColumnName("level");
+                .HasColumnName("Level_name");
         });
 
         modelBuilder.Entity<Skill>(entity =>

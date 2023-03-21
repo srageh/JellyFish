@@ -13,6 +13,10 @@ public partial class Job
 
     public bool? Status { get; set; }
 
+    public DateTime? CreatedDate { get; set; }
+
+    public string? Location { get; set; }
+
     public int CategoryId { get; set; }
 
     public int JobTypeId { get; set; }

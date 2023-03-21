@@ -28,15 +28,23 @@ namespace JellyFish.Controllers
 
 		}
 
-        public async Task<IActionResult> IndexAsync()
+        public IActionResult Index()
         {
             if (User.IsInRole("JobSeeker"))
             {
                 return RedirectToAction("Index", "Jobs");
             }
+
+
+
+
+
             if (User.IsInRole("Employer"))
             {
-                return View("Index_EMP");
+                var user =  _userManager.GetUserId(User);
+                List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer).ThenInclude(q => q.Company).Include(w => w.Applicants).ThenInclude(r => r.User).Where(j => j.EmployerId == user.ToString()).ToList();
+
+                return View("Index_EMP", jobs);
             }
             if (User.IsInRole("Administrator"))
             {

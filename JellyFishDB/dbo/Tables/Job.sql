@@ -2,6 +2,8 @@
 job_id int IDENTITY NOT NULL, 
 title nvarchar(255) NOT NULL,
 salary NUMERIC(10,2) NOT NULL,
+createdDate DATETIME2 NULL, 
+location NVARCHAR(50) NULL, 
 status BIT NULL,
 category_id int NOT NULL,
 job_type_id int NOT NULL,
@@ -10,6 +12,7 @@ employer_id nvarchar(450) NOT NULL,
 description nvarchar(255) NOT NULL, 
 Location nvarchar(50) NULL,
 createdDate DateTime NULL,
+
 
 
 PRIMARY KEY (job_id),
