@@ -47,6 +47,9 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS19;Database=JellyFishDB;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -231,19 +234,23 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__Job__6E32B6A5B999C1AA");
+            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A57836EAAC");
 
             entity.ToTable("Job");
 
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.CategoryId).HasColumnName("category_id");
-            entity.Property(e => e.CreatedDate).HasColumnName("createdDate");
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("createdDate");
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
                 .HasColumnName("description");
             entity.Property(e => e.EmployerId)
                 .HasMaxLength(450)
                 .HasColumnName("employer_id");
+            entity.Property(e => e.IsActive).HasColumnName("isActive");
+            entity.Property(e => e.IsOpen).HasColumnName("isOpen");
             entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
             entity.Property(e => e.LevelId).HasColumnName("level_id");
             entity.Property(e => e.Location)
@@ -252,7 +259,6 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.Salary)
                 .HasColumnType("numeric(10, 2)")
                 .HasColumnName("salary");
-            entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
                 .HasColumnName("title");

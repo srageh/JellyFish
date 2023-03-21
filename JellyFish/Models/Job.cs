@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace JellyFish.Models;
@@ -12,11 +11,13 @@ public partial class Job
 
     public decimal Salary { get; set; }
 
-    public bool? Status { get; set; }
-
     public DateTime? CreatedDate { get; set; }
 
     public string? Location { get; set; }
+
+    public bool? IsActive { get; set; }
+
+    public bool? IsOpen { get; set; }
 
     public int CategoryId { get; set; }
 
@@ -30,12 +31,11 @@ public partial class Job
 
     public virtual ICollection<Applicant> Applicants { get; } = new List<Applicant>();
 
-    [ValidateNever]
     public virtual Category Category { get; set; } = null!;
-    [ValidateNever]
+
     public virtual Employer Employer { get; set; } = null!;
-    [ValidateNever]
+
     public virtual JobType JobType { get; set; } = null!;
-    [ValidateNever]
+
     public virtual Level Level { get; set; } = null!;
 }
