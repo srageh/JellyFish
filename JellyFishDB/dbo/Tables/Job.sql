@@ -10,7 +10,7 @@ category_id int NOT NULL,
 job_type_id int NOT NULL,
 level_id int NOT  NULL,
 employer_id nvarchar(450) NOT NULL,
-description nvarchar(255) NOT NULL, 
+description nvarchar(MAX) NOT NULL, 
 
 
 

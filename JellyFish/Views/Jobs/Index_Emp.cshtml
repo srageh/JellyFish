@@ -119,7 +119,123 @@ Find the companies
 
 
 
-<h1>Index</h1>
+<style>
+    #call-to-action {
+        text-align: center;
+        margin: 2em 0;
+    }
+
+        #call-to-action h1 {
+            font-size: 4em;
+            margin-bottom: 0.5em;
+            color: #3b5e9c;
+        }
+
+        #call-to-action p {
+            font-size: 1.8em;
+            max-width: 790px;
+            margin: 0 auto;
+            color: #555;
+        }
+
+    jobs-search {
+        display: flex;
+        justify-content: center;
+    }
+
+    #jobs-search input {
+        padding: 0.9em;
+    }
+
+    #jobs-search [type=text] {
+        width: 22em;
+        border: 1px solid rgb(119, 119, 119);
+    }
+
+
+    #jobs-search #searchBtn {
+        background-color: #3b5e9c;
+        color: white;
+        font-weight: 600;
+        padding: 1em;
+        width: 8em;
+        border: none;
+    }
+
+    /* JOBS FILTER */
+
+    #filter-select {
+        padding: 0.5em 1em;
+        text-align: center;
+        background-color: rgb(213, 213, 213);
+        border-radius: 5px;
+    }
+
+    #job-container {
+        font-size: 1.2rem;
+        padding: 18px 1em;
+        border: 1px solid rgba(144,146,148,0.2);
+        position: relative;
+        margin-bottom: 8px;
+        box-shadow: 1px 1px 2px #ccc;
+    }
+
+
+
+
+    #appyBtn {
+        float: right;
+        /* background-color: #3b5e9c; */
+        color: #3b5e9c;
+        font-weight: 600;
+        padding: 1em;
+        width: 8em;
+        border: 0.5px solid #3b5e9c;
+        margin-right: 20px;
+    }
+</style>
+
+
+<section id="call-to-action">
+    <h1>
+        The #1 Job Board for
+        <br />
+        <span>IT Professionals</span>
+    </h1>
+    <p>Find the companies looking to hire or post a job if you are hiring</p>
+
+
+
+    @using (Html.BeginForm("CheckRadio", "Home", FormMethod.Post))
+    {
+        <div>
+            All Jobs @Html.RadioButton("Status", "All Jobs")
+            Active Jobs @Html.RadioButton("Status", "Active Jobs")
+            InActive Jobs @Html.RadioButton("Status", "InActive Jobs")
+
+        </div>
+    }
+
+
+
+
+    <div class="form-floating">
+        <div class="btn-group">
+            <input type="radio" class="btn-check" id="option1" value="1" checked />
+            <label class="btn btn-primary" for="option1">All Jobs</label>
+
+            <input type="radio" class="btn-check" id="option2" value="2" />
+            <label class="btn btn-primary" for="option2">Active Jobs</label>
+
+            <input type="radio" class="btn-check" id="option3" value="3" />
+            <label class="btn btn-primary" for="option3">Inactive Jobs</label>
+
+        </div>
+    </div>
+
+
+</section>
+
 
 
 
@@ -166,19 +282,25 @@ Find the companies
             <th>
                 @Html.DisplayNameFor(model => model.IsOpen)
             </th>
+            <th>
+                Applicant
+            </th>
            
             <th>
                 @Html.DisplayNameFor(model => model.Salary)
             </th>
-            @*<th>
+            <th>
                 @Html.DisplayNameFor(model => model.Location)
-            </th>*@
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
-          @*  <th>
+            <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>*@
+            </th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -198,11 +320,16 @@ Find the companies
                 <td>
 
                     @{
-                        Array objectArray = (Array)TempData["ApplicantCountArray"];
+
+
+                        if (@ViewBag.ApplicantCountArray.Count > 0)
+                        {
 
 
 
-                        foreach (var obj in objectArray)
+
+
+                            foreach (var obj in @ViewBag.ApplicantCountArray)
                         {
                             string applicantCount = obj.ToString();
                             string[] applicantCountList = applicantCount.Split(" ");
@@ -210,8 +337,14 @@ Find the companies
                             {
                                 <p>
                                     <a asp-action="ApplicantInfoList">@applicantCountList[1]</a>
-                                </p>
+                                    </p>
+                                }
                             }
+
+                        }
+                        else
+                        {
+                            <p>0</p>
                         }
                     }
                 </td>

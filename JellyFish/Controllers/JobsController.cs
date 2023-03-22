@@ -63,9 +63,7 @@ namespace JellyFish.Controllers
             
 			if (User.IsInRole("Employer"))
 			{
-                var jobs = from g in _context.Jobs.
-                     Include(g => g.Category)
-                           select g;
+                var jobs = _context.Jobs.Include(x => x.Category);
 
 
 
@@ -77,8 +75,9 @@ namespace JellyFish.Controllers
                         Job job = new Job();
                         var jobList = _context.Jobs.Select(x => x.JobId).ToList();
                         var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
-                        var applicantCountArray = new ArrayList();
+                        List<string> applicantCountArray = new List<string>();
                         int count = 0;
+
 
 
 
@@ -97,7 +96,15 @@ namespace JellyFish.Controllers
                             applicantCountArray.Add(jobList[i] + " " + count);
                             count = 0;
                         }
-                        TempData["ApplicantCountArray"] = applicantCountArray.ToArray(typeof(object));
+                        if(applicantCountArray.Count > 0)
+                        {
+
+                        ViewBag.ApplicantCountArray = applicantCountArray;
+                        }
+                        //else
+                        //{
+                        //    ViewBag.ApplicantCountArray = 0;
+                        //}
 
 
 
@@ -243,14 +250,16 @@ namespace JellyFish.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description, Location")] Job job)
+        public IActionResult Create([Bind("Title,Salary,isActive, isOpen, CategoryId,JobTypeId,LevelId,EmployerId,Description, Location")] Job job)
         {
             if (ModelState.IsValid)
             {
                 job.CreatedDate = DateTime.Today.Date;
+                job.IsActive = false;
+                job.IsOpen = false;
                 _unitOfWork.Job.Add(job);
                 _unitOfWork.Save();
-                 return RedirectToAction("Index", "Home");
+                 return RedirectToAction("Index");
             }
 
             JobPostingViewModel jobPostingViewModel = new()

@@ -41,10 +41,11 @@ namespace JellyFish.Controllers
 
             if (User.IsInRole("Employer"))
             {
-                var user =  _userManager.GetUserId(User);
-                List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer).ThenInclude(q => q.Company).Include(w => w.Applicants).ThenInclude(r => r.User).Where(j => j.EmployerId == user.ToString()).ToList();
+                //var user =  _userManager.GetUserId(User);
+                //List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer).ThenInclude(q => q.Company).Include(w => w.Applicants).ThenInclude(r => r.User).Where(j => j.EmployerId == user.ToString()).ToList();
 
-                return View("Index_EMP", jobs);
+                //return View("Index_EMP", jobs);
+                return RedirectToAction("Index", "Jobs");
             }
             if (User.IsInRole("Administrator"))
             {
