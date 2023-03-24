@@ -12,46 +12,58 @@ namespace JellyFish.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-		private readonly UserManager<JellyFishUser> _userManager;
-		private readonly SignInManager<JellyFishUser> _signInManager;
-		private readonly Models.JellyFishDbContext _context;
-		private IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<JellyFishUser> _userManager;
+        private readonly SignInManager<JellyFishUser> _signInManager;
+        private readonly Models.JellyFishDbContext _context;
+        private IWebHostEnvironment _webHostEnvironment;
 
 
-		public HomeController(ILogger<HomeController> logger, JellyFishDbContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager, IWebHostEnvironment webHostEnvironment)
-		{
+        public HomeController(ILogger<HomeController> logger, JellyFishDbContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager, IWebHostEnvironment webHostEnvironment)
+        {
             _logger = logger;
-			_userManager = userManager;
-			_signInManager = signInManager;
-			_context = context;
-			_webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _context = context;
+            _webHostEnvironment = webHostEnvironment;
 
-		}
+        }
 
         public IActionResult Index()
         {
+
+            if (User.IsInRole("Administrator"))
+            {
+                return View();
+            }
+
+
             if (User.IsInRole("JobSeeker"))
             {
                 return RedirectToAction("Index", "Jobs");
             }
 
-
-
-
-
             if (User.IsInRole("Employer"))
             {
-                //var user =  _userManager.GetUserId(User);
-                //List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer).ThenInclude(q => q.Company).Include(w => w.Applicants).ThenInclude(r => r.User).Where(j => j.EmployerId == user.ToString()).ToList();
-
-                //return View("Index_EMP", jobs);
                 return RedirectToAction("Index", "Jobs");
             }
-            if (User.IsInRole("Administrator"))
-            {
-                return View();
-            }
+
+
             return View();
+
+
+
+
+            //    //var user =  _userManager.GetUserId(User);
+            //    //List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer).ThenInclude(q => q.Company).Include(w => w.Applicants).ThenInclude(r => r.User).Where(j => j.EmployerId == user.ToString()).ToList();
+
+            //    //return View("Index_EMP", jobs);
+            //    return RedirectToAction("Index", "Jobs");
+            //}
+            //if (User.IsInRole("Administrator"))
+            //{
+            //    return View();
+            //}
+            //return View();
 
 
             //return RedirectToAction("Index", "Jobs");
@@ -68,6 +80,6 @@ namespace JellyFish.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-  
+
     }
 }

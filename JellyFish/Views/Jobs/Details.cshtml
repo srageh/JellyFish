@@ -69,17 +69,19 @@
                 
             </div>
             <div>
-                @if ((bool)ViewBag.already)
+                @if (User.IsInRole("JobSeeker"))
                 {
+                    @if ((bool)ViewBag.already)
+                    {
 
-                    <p id="isApplied">Already applied !</p>
+                        <p id="isApplied">Already applied !</p>
+                    }
+                    else
+                    {
+                        <a id="btnApply" class="btn btn-primary" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
+                        <a class="btn btn-success" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Save</a>
+                    }
                 }
-                else
-                {
-                    <a id="btnApply" class="btn btn-primary" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
-                    <a class="btn btn-success" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Save</a>
-                }
-
 
 
 

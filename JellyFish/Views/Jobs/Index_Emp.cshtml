@@ -205,33 +205,27 @@ Find the companies
     <p>Find the companies looking to hire or post a job if you are hiring</p>
 
 
+    <form asp-controller="Jobs" asp-action="RadioSelect" method="post">
 
-    @using (Html.BeginForm("CheckRadio", "Home", FormMethod.Post))
-    {
-        <div>
-            All Jobs @Html.RadioButton("Status", "All Jobs")
-            Active Jobs @Html.RadioButton("Status", "Active Jobs")
-            InActive Jobs @Html.RadioButton("Status", "InActive Jobs")
+        <div class="form-floating">
+            <div class="btn-group">
+                <input type="radio" name="searchQuery" class="btn-check" id="option1" value="all" checked />
+                <label class="btn btn-primary" for="option1">All Jobs</label>
 
+                <input type="radio"  name="searchQuery" class="btn-check" id="option2" value="act" />
+                <label class="btn btn-primary" for="option2">Active Jobs</label>
+
+                <input type="radio"  name="searchQuery" class="btn-check" id="option3" value="inact" />
+                <label class="btn btn-primary" for="option3">Inactive Jobs</label>
+
+            </div>
+              <input type="submit" value="Display" />
         </div>
-    }
 
 
+    </form>
 
 
-    <div class="form-floating">
-        <div class="btn-group">
-            <input type="radio" class="btn-check" id="option1" value="1" checked />
-            <label class="btn btn-primary" for="option1">All Jobs</label>
-
-            <input type="radio" class="btn-check" id="option2" value="2" />
-            <label class="btn btn-primary" for="option2">Active Jobs</label>
-
-            <input type="radio" class="btn-check" id="option3" value="3" />
-            <label class="btn btn-primary" for="option3">Inactive Jobs</label>
-
-        </div>
-    </div>
 
 
 </section>
@@ -242,9 +236,7 @@ Find the companies
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div class="sidebar">
-    <input type="submit" value="Active" class="btn btn-primary" /> |  <input type="submit" value="Paused" class="btn btn-primary" />
-</div>
+
 
 
 
@@ -258,24 +250,11 @@ Find the companies
 
 
 
-<div class="dropdown">
-    <button class="dropbtn">
-        Dropdown
-        <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-options">
-        <a href="#">Active</a>
-        <a href="#">Paused</a>
-    </div>
-</div>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-
-
-
-            </th>
+          
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -307,9 +286,7 @@ Find the companies
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    <input type="checkbox" name="forStatus" value="@item.JobId" id="forStatus-@item.JobId" />
-                </td>
+              
                 <td>
                     @Html.DisplayFor(model => item.Title)
                 </td>
@@ -325,18 +302,14 @@ Find the companies
                         if (@ViewBag.ApplicantCountArray.Count > 0)
                         {
 
-
-
-
-
                             foreach (var obj in @ViewBag.ApplicantCountArray)
-                        {
+                            {
                             string applicantCount = obj.ToString();
                             string[] applicantCountList = applicantCount.Split(" ");
                             if (item.JobId.ToString() == applicantCountList[0])
                             {
                                 <p>
-                                    <a asp-action="ApplicantInfoList">@applicantCountList[1]</a>
+                                        <a asp-controller="Jobs" asp-action="Index" >@applicantCountList[1]</a>
                                     </p>
                                 }
                             }
