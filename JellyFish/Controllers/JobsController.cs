@@ -401,41 +401,7 @@ namespace JellyFish.Controllers
 		}
 
 
-		//[HttpGet]
-		//public IActionResult Create()
-		//{
-		//    ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
-		//    //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
-		//    ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
-		//    ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
-		//    ViewBag.EmployeeId = _userManager.GetUserId(User);
-		//    return View();
-		//}
-
-		////public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
-
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]
-		//public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
-		//{
-		//    job.EmployerId = _userManager.GetUserId(User).ToString();
-		//    ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
-		//    //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
-		//    ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
-		//    ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
-		//    ViewBag.EmployeeId = _userManager.GetUserId(User);
-
-		//    if (ModelState.IsValid)
-		//    {
-		//        _context.Jobs.Add(job);
-		//        _context.SaveChanges();
-		//        return RedirectToAction("Index");
-		//    }
-
-		//    return View(job);
-
-
-		//}
+	
 
 
 
