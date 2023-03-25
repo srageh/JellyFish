@@ -50,7 +50,10 @@ public partial class JellyFishDbContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Address>(entity =>
+
+		modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
+		modelBuilder.Entity<Address>(entity =>
         {
             entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C801E93ACB");
 
