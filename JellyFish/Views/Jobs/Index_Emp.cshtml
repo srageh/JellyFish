@@ -252,67 +252,123 @@ Find the companies
 
 
 <table class="table">
-	<thead>
-		<tr>
+    <thead>
+        <tr>
+          
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsOpen)
+            </th>
+            <th>
+                Applicant
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.Salary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+           @* <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <p hidden>@Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>
+              
+                <td>
+                    @Html.DisplayFor(model => item.Title)
+                </td>
+                @{
 
-			<th>
-				@Html.DisplayNameFor(model => model.Title)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.IsOpen)
-			</th>
-			<th>
-				Applicant
-			</th>
+                    // var toggle = item.IsActive;
 
-			<th>
-				@Html.DisplayNameFor(model => model.Salary)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Location)
-			</th>
-			@* <th>
-			@Html.DisplayNameFor(model => model.Description)
-			</th>*@
-			<th>
-				@Html.DisplayNameFor(model => model.CreatedDate)
-			</th>
-			<th>
-				Actions
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
+                    if (item.IsActive == true)
+                    {
+                        if (item.IsOpen == true)
+                        {
 
-				<td>
-					@Html.DisplayFor(model => item.Title)
-				</td>
-				<td>
-					@Html.DisplayFor(model => item.IsOpen)
-				</td>
+                            <td>
+                                <select  id="select_Status" name="select_Status" class="select_Status">
+                                    <option selected value="Active">Open</option>
+                                    <option value="Paused">Closed</option>
+                                </select>
+                            </td>
+                        }
+                        else if (item.IsOpen == false)
+                        {
+                            <td>
+                                <select  id="select_Status" name="select_Status" class="select_Status">
+                                    <option value="Active">Open</option>
+                                    <option selected value="Paused">Closed</option>
+                                </select>
+                            </td>
+                        }
 
-				<td>
+                    }
+                    else
+                    {
+                        if (item.IsOpen == true)
+                        {
 
-					@{
+                            <td>
+                                <select disabled id="select_Status" name="select_Status" class="select_Status">
+                                    <option selected value="Active">Open</option>
+                                    <option value="Paused">Closed</option>
+                                </select>
+                            </td>
+                        }
+                        else if (item.IsOpen == false)
+                        {
+                            <td>
+                                <select disabled id="select_Status" name="select_Status" class="select_Status">
+                                    <option value="Active">Open</option>
+                                    <option selected value="Paused">Closed</option>
+                                </select>
+                            </td>
+                        }
+                    }
+
+                        
+
+              
+
+
+                   
+                }
+
+                <td>
+
+
+                    @{
 
 
 						if (@ViewBag.ApplicantCountArray.Count > 0)
 						{
 
-							foreach (var obj in @ViewBag.ApplicantCountArray)
-							{
-								string applicantCount = obj.ToString();
-								string[] applicantCountList = applicantCount.Split(" ");
-								if (item.JobId.ToString() == applicantCountList[0])
-								{
-									<p>
-										<a asp-controller="Jobs" asp-action="Index">@applicantCountList[1]</a>
-									</p>
-								}
-							}
+                            foreach (var obj in @ViewBag.ApplicantCountArray)
+                            {
+                                string applicantCount = obj.ToString();
+                                string[] applicantCountList = applicantCount.Split(" ");
+                                if (item.JobId.ToString() == applicantCountList[0])
+                                {
+                                    <p>
+                                        <a asp-controller="Jobs" asp-action="Index">@applicantCountList[1]</a>
+                                    </p>
+                                }
+                            }
 
 						}
 						else
@@ -354,22 +410,44 @@ Find the companies
 		}
 	</tbody>
 </table>
+
 <script>
-	tinymce.init({
-		selector: 'textarea',
-		width: 600,
-		height: 300,
-		plugins: [
-			'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview',
-			'anchor', 'pagebreak',
-			'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code',
-			'fullscreen', 'insertdatetime',
-			'media', 'table', 'emoticons', 'template', 'help'
-		],
-		toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
-			'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
-			'forecolor backcolor emoticons | help',
-		menubar: 'favs file edit view insert format tools table help',
-		content_css: 'css/content.css'
-	});
+    $(document).ready(function () {
+        $("select.select_Status").change(function () {
+            var selectedStatus = $(this).children("option:selected").val();
+            var jobIdValue = $('#jobId').val();
+            $.ajax({
+                url: '@Url.Action("ChangeStatus","Jobs")',
+                type: 'POST',
+                data: { statusValue: selectedStatus, jobId: jobIdValue },
+                success: function (result) {
+                    $("h5").text("The Status has been changed to " + selectedStatus);
+                }
+            });
+
+        });
+
+    });
+
+
+
+</script>
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        width: 600,
+        height: 300,
+        plugins: [
+            'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview',
+            'anchor', 'pagebreak',
+            'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code',
+            'fullscreen', 'insertdatetime',
+            'media', 'table', 'emoticons', 'template', 'help'
+        ],
+        toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+            'forecolor backcolor emoticons | help',
+        menubar: 'favs file edit view insert format tools table help',
+        content_css: 'css/content.css'
+    });
 </script>
