@@ -1,7 +1,7 @@
 ﻿@model JellyFish.Models.View_Models.JobPostingViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Edit";
 }
 
 <h1 class="text-primary">Edit</h1>
@@ -9,89 +9,106 @@
 <h4>Job</h4>
 <hr />
 <div class="row">
-    <div class="col-md-6">
-        <form method="post" asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="job.JobId" />
-            <div class="form-group">
-                <label asp-for="job.Title" class="control-label"></label>
-                <input asp-for="job.Title" class="form-control" />
-                <span asp-validation-for="job.Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="job.Salary" class="control-label"></label>
-                <input asp-for="job.Salary" class="form-control" />
-                <span asp-validation-for="job.Salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="job.IsOpen" class="control-label"></label>
-                <input asp-for="job.IsOpen" class="form-control" />
-                <span asp-validation-for="job.IsOpen" class="text-danger"></span>
-            </div>
-           <div class="form-group">
-                <label asp-for="job.CategoryId" class="control-label">Category</label>            
-                <select asp-for="job.CategoryId" class="form-select" asp-items="@Model.CategoryList">
-                    <option disabled selected>--Select Category--</option>
-                </select>
+	<div class="col-md-6">
+		<form method="post" asp-action="Edit" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="job.JobId" />
+			<div class="form-group">
+				<label asp-for="job.Title" class="control-label"></label>
+				<input asp-for="job.Title" class="form-control" />
+				<span asp-validation-for="job.Title" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="job.Location" class="control-label"></label>
+				<input asp-for="job.Location" class="form-control" />
+				<span asp-validation-for="job.Location" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="job.Salary" class="control-label"></label>
+				<input asp-for="job.Salary" class="form-control" />
+				<span asp-validation-for="job.Salary" class="text-danger"></span>
+			</div>
 
-            </div>
-             <div class="form-group">
-                <label asp-for="job.JobTypeId" class="control-label">Job Type</label>
-                <select asp-for="job.JobTypeId" class="form-select" asp-items="@Model.JobTypeList">
-                    <option disabled selected>--Select Job Type--</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="job.LevelId" class="control-label">Level</label>
-                <select asp-for="job.LevelId" class="form-select" asp-items="@Model.LevelList">
-                    <option disabled selected>--Select Level--</option>
-                </select>
-            </div>
-            @*<div class="form-group">
-                <label asp-for="job.EmployerId" class="control-label"></label>
-                <input asp-for="job.EmployerId" class="form-control" />
-                <span asp-validation-for="job.EmployerId" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <label asp-for="job.Description" class="control-label"></label>
-                <textarea asp-for="job.Description" rows="15" cols="10" class="form-control"></textarea>
-                <span asp-validation-for="job.Description" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="job.EmployerId" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+			<div class="form-group">
+				<label asp-for="job.CategoryId" class="control-label">Category</label>
+				<select asp-for="job.CategoryId" class="form-select" asp-items="@Model.CategoryList">
+					<option disabled selected>--Select Category--</option>
+				</select>
+
+			</div>
+			<div class="form-group">
+				<label asp-for="job.JobTypeId" class="control-label">Job Type</label>
+				<select asp-for="job.JobTypeId" class="form-select" asp-items="@Model.JobTypeList">
+					<option disabled selected>--Select Job Type--</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label asp-for="job.LevelId" class="control-label">Level</label>
+				<select asp-for="job.LevelId" class="form-select" asp-items="@Model.LevelList">
+					<option disabled selected>--Select Level--</option>
+				</select>
+			</div>
+
+
+
+
+			<div class="form-group">
+				<label asp-for="job.Description" class="control-label"></label>
+				<textarea asp-for="job.Description" rows="15" cols="10" class="form-control"></textarea>
+				<span asp-validation-for="job.Description" class="text-danger"></span>
+			</div>
+
+			@{
+				DateTime currentTime = DateTime.Now;
+				<input type="hidden" value="@currentTime" asp-for="job.CreatedDate" />
+			}
+
+
+
+			@{
+				string statusValue = "Active";
+				<input type="hidden" value="@statusValue" asp-for="job.IsActive" />
+			}
+
+
+
+			<input type="hidden" asp-for="job.EmployerId" />
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Index">Back to List</a>
 </div>
 
 
 
 <script>
-    tinymce.init({
-        selector: 'textarea',
-        width: 600,
-        height: 300,
-        plugins: [
-            'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview',
-            'anchor', 'pagebreak',
-            'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code',
-            'fullscreen', 'insertdatetime',
-            'media', 'table', 'emoticons', 'template', 'help'
-        ],
-        toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
-            'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
-            'forecolor backcolor emoticons | help',
-        menubar: 'favs file edit view insert format tools table help',
-        content_css: 'css/content.css'
-    });
+	tinymce.init({
+		selector: 'textarea',
+		width: 600,
+		height: 300,
+		plugins: [
+			'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview',
+			'anchor', 'pagebreak',
+			'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code',
+			'fullscreen', 'insertdatetime',
+			'media', 'table', 'emoticons', 'template', 'help'
+		],
+		toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+			'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+			'forecolor backcolor emoticons | help',
+		menubar: 'favs file edit view insert format tools table help',
+		content_css: 'css/content.css'
+	});
 </script>
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }

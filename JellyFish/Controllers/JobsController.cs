@@ -60,8 +60,6 @@ namespace JellyFish.Controllers
 
 
 
-			//return View("Index_Appl", await jobs.ToListAsync());
-
 
 			if (User.IsInRole("Employer"))
 			{
