@@ -292,9 +292,9 @@ Find the companies
             <th>
                 @Html.DisplayNameFor(model => model.Location)
             </th>
-            <th>
+           @* <th>
                 @Html.DisplayNameFor(model => model.Description)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
@@ -354,9 +354,9 @@ Find the companies
                 <td>
                     @Html.DisplayFor(model => item.Location)
                 </td>
-                <td>
+              @*  <td>
                     @Html.Raw(@item.Description)
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(model => item.CreatedDate)
                 </td>

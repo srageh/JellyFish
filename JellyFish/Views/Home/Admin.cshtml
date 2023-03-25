@@ -1,0 +1,59 @@
+﻿
+
+@model List<Job>
+@{
+    <h1>Admin</h1>
+    <div>
+    <form class="navbar-form navbar-left" role="search" method="get" asp-action="Index">
+    <div class="form-group">
+        <input type="text" name="keyword" class="form-control" value="@ViewBag.Keyword" placeholder="Search Job" style="width:500px;">
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a class="btn btn-primary" asp-action="Index" asp-route-keyword="">Clear Search</a>
+</form>
+        <table class="table">
+    
+    <thead>
+    <tr>
+    
+        <th>Job Title</th>
+        <th>Company</th>
+        <th>Location</th>
+        <th>Salary</th>
+        <th>Date Created</th>
+        <th>IsActive</th>
+        <th>Actions</th>
+       </tr>
+
+
+    </thead>
+    
+    <tbody>  
+    @foreach(var job in Model)
+        {
+        <tr>
+
+            
+            <td>@job.Title</td>
+            <td>@job.Employer.Company.Name</td>
+            <td>@job.Location</td>
+            <td>@job.Salary</td>
+            <td>@job.CreatedDate</td>
+            <td>@job.IsActive</td>
+            <td>
+                            <a asp-action="AcceptJob" class="btn btn-success" value="Accept">
+                                Accept
+                            </a>
+                             <a asp-action="AcceptJob" class="btn btn-danger" value="Accept">
+                                Decline
+                            </a>
+            </td>
+           
+        </tr>
+
+        }
+        </tbody>
+        </table>
+
+    </div>
+}

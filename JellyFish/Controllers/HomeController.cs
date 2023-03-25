@@ -49,7 +49,8 @@ namespace JellyFish.Controllers
             }
             if (User.IsInRole("Administrator"))
             {
-                return View();
+                var inactiveJobs = _context.Jobs.Include(x=> x.Employer).ThenInclude(x=> x.Company).Where(x => x.IsActive == false).ToList();
+                return View("Admin", inactiveJobs);
             }
             return View();
 
