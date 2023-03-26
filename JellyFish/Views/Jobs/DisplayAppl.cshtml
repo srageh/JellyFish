@@ -155,7 +155,7 @@
 
 
 				<td>
-					<a asp-action="Delete" asp-route-id="@item.JobId">View</a>
+					<a asp-controller="Applicants" asp-action="Details" asp-route-id="@item.ApplicantId">View</a>
 					<a asp-action="Edit" asp-route-id="@item.JobId">Accept</a> |
 					<a asp-action="Details" asp-route-id="@item.JobId">Decline</a> |
 
@@ -164,6 +164,10 @@
 		}
 	</tbody>
 </table>
+
+
+
+<a asp-action="Index" asp-controller="Home">Back to List</a>
 <script>
 	tinymce.init({
 		selector: 'textarea',
