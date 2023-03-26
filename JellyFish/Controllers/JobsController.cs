@@ -298,12 +298,31 @@ namespace JellyFish.Controllers
 		}
 
 
-		public async Task<IActionResult> DisplayApplicents(string? searchQuery)
+
+
+
+
+
+
+
+
+		public async Task<IActionResult> DisplayApplicents(string? jobID)
 		{
 			var user = _userManager.GetUserId(User);
-			List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer).ThenInclude(q => q.Company).Include(w => w.Applicants).ThenInclude(r => r.User).Where(j => j.EmployerId == user.ToString()).ToList();
+			List<Job> _job = (List<Job>)_context.Jobs
+				.Include(k => k.Level)
+				.Include(k => k.Category)
+				.Include(k => k.JobType)
+				.Include(l => l.Employer)
+				.ThenInclude(q => q.Company)
+				.Include(w => w.Applicants)
+				.ThenInclude(w => w.User)
+				.ThenInclude(w => w.UserSkills)
+				.ThenInclude(w => w.Skill)
+				.Where(j => j.EmployerId == user.ToString())
+				.Where(r => r.JobId == Int32.Parse(jobID)).ToList();
 
-			return View("DisplayAppl", jobs);
+			return View("DisplayAppl", _job[0]);
 		}
 
 

@@ -1,6 +1,4 @@
-﻿
-
-@model IEnumerable<JellyFish.Models.Job>
+﻿@model JellyFish.Models.Job
 
 
 
@@ -96,25 +94,6 @@
 	<p>Find the companies looking to hire or post a job if you are hiring</p>
 
 
-	<form asp-controller="Jobs" asp-action="RadioSelect" method="post">
-
-		<div class="form-floating">
-			<div class="btn-group">
-				<input type="radio" name="searchQuery" class="btn-check" id="option1" value="all" checked />
-				<label class="btn btn-primary" for="option1">All Jobs</label>
-
-				<input type="radio" name="searchQuery" class="btn-check" id="option2" value="act" />
-				<label class="btn btn-primary" for="option2">Active Jobs</label>
-
-				<input type="radio" name="searchQuery" class="btn-check" id="option3" value="inact" />
-				<label class="btn btn-primary" for="option3">Inactive Jobs</label>
-
-			</div>
-			<input type="submit" value="Display" />
-		</div>
-
-
-	</form>
 
 
 
@@ -124,20 +103,7 @@
 
 
 
-<p>
-	<a asp-action="Create">Create New</a>
-</p>
 
-
-
-
-@*<div class="dropdown">
-    <button>Status</button>
-    <div class="dropdown-options">
-        <a href="#">Active</a>
-        <a href="#">Paused</a>
-    </div>
-</div>*@
 
 
 
@@ -146,99 +112,53 @@
 	<thead>
 		<tr>
 
+
 			<th>
-				@Html.DisplayNameFor(model => model.Title)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.IsOpen)
-			</th>
-			<th>
-				Applicant
+				Applicant First Name
 			</th>
 
 			<th>
-				@Html.DisplayNameFor(model => model.Salary)
+				Applicant Last Name
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Location)
+				Skills
 			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Description)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.CreatedDate)
-			</th>
+		
+
 			<th>
 				Actions
 			</th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in Model)
+		@foreach (var item in Model.Applicants)
 		{
 			<tr>
 
 				<td>
-					@Html.DisplayFor(model => item.Title)
+					@Html.DisplayFor(model => item.User.FirstName)
 				</td>
 				<td>
-					@Html.DisplayFor(model => item.IsOpen)
+					@Html.DisplayFor(model => item.User.LastName)
 				</td>
 
 				<td>
-
-					@{
-
-						if (@ViewBag.ApplicantCountArray.Count > 0)
+					<p>
+						@foreach (var iteme in item.User.UserSkills)
 						{
-
-							foreach (var obj in @ViewBag.ApplicantCountArray)
-							{
-								string applicantCount = obj.ToString();
-								string[] applicantCountList = applicantCount.Split(" ");
-								if (item.JobId.ToString() == applicantCountList[0])
-								{
-									<p>
-										<a asp-controller="Jobs" asp-action="DisplayAppl">@applicantCountList[1]</a>
-									</p>
-								}
-							}
-
+							@(iteme.Skill.Name + "    ")
 						}
-						else
-						{
-							<p>0</p>
-						}
-					}
+					</p>
+
 				</td>
+				
+
+
 				<td>
-					@Html.DisplayFor(model => item.Salary)
-				</td>
-				<td>
-					@Html.DisplayFor(model => item.Location)
-				</td>
-				<td>
-					@Html.Raw(@item.Description)
-				</td>
-				<td>
-					@Html.DisplayFor(model => item.CreatedDate)
-				</td>
-				@* <td hidden>
-			@Html.DisplayFor(modelItem => item.Category.CategoryId)
-			</td>
-			<td hidden>
-			@Html.DisplayFor(modelItem => item.Employer.EmployerId)
-			</td>
-			<td hidden>
-			@Html.DisplayFor(modelItem => item.JobType.JobTypeId)
-			</td>
-			<td hidden>
-			@Html.DisplayFor(modelItem => item.Level.Id)
-			</td>*@
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.JobId">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.JobId">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.JobId">Delete</a>
+					<a asp-action="Delete" asp-route-id="@item.JobId">View</a>
+					<a asp-action="Edit" asp-route-id="@item.JobId">Accept</a> |
+					<a asp-action="Details" asp-route-id="@item.JobId">Decline</a> |
+
 				</td>
 			</tr>
 		}
@@ -262,4 +182,4 @@
 		menubar: 'favs file edit view insert format tools table help',
 		content_css: 'css/content.css'
 	});
-</script>s
+</script>
