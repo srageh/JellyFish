@@ -412,7 +412,18 @@ namespace JellyFish.Controllers
 			ViewData["already"] = false;
 			if (job.Applicants.Count != 0)
 			{
-				ViewData["already"] = true;
+				var _userId = _userManager.GetUserId(User);
+
+
+				foreach(var item in job.Applicants)
+				{
+					if(item.UserId == _userId)
+					{
+						ViewData["already"] = true;
+						break;
+					}
+				}
+	
 			}
 
 

@@ -114,52 +114,164 @@
 
 
 			<th>
-				Applicant First Name
+				<h2>Applicants for @Model.Title</h2>
 			</th>
 
-			<th>
-				Applicant Last Name
-			</th>
-			<th>
-				Skills
-			</th>
-		
 
-			<th>
-				Actions
-			</th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var item in Model.Applicants)
+		@{
+			List<JellyFish.Models.Applicant> myList = Model.Applicants.ToList();
+			int myIndex = -1;
+		}
+		@if (myList.Count > 2)
+			@for (int i = 0; i < (myList.Count / 2) * 2 + myList.Count % 2; i++)
+			{
+				<tr>
+					@for (int j = 0; j < 2; j++)
+					{
+						@try
+						{
+							myIndex++;
+							var testToStop = myList[myIndex];
+							<td>
+
+								<section style="background-color: #9de2ff;">
+									<div class="container py-5 h-100">
+										<div class="row  align-items-center h-100">
+											<div class="col col-md-12 ">
+												<div class="card" style="border-radius: 15px;">
+													<div class="card-body p-4">
+														<div class="d-flex text-black">
+															<div class="flex-shrink-0">
+																<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+													 alt="Generic placeholder image" class="img-fluid"
+													 style="width: 180px; border-radius: 10px;">
+															</div>
+															<div class="flex-grow-1 ms-3">
+																<h5 class="mb-1">@myList[myIndex].User.FirstName @myList[i].User.LastName</h5>
+																<p class="mb-2 pb-1" style="color: #2b2a2a;">Senior Journalist</p>
+																<div class="d-flex justify-content-start rounded-3 p-2 mb-2"
+													 style="background-color: #efefef;">
+																	<div>
+																		<p class="small text-muted mb-1">Experiance</p>
+																		<p class="mb-0">41</p>
+																	</div>
+																	<div class="px-3">
+																		<p class="small text-muted mb-1">Skills</p>
+																		<p class="mb-0">
+
+
+																			@for (int q = 0; q < myList[myIndex].User.UserSkills.Count; q++)
+																			{
+																				@(((List<UserSkill>)myList[myIndex].User.UserSkills)[q].Skill.Name + "  ")
+																				;
+																			}
+
+
+																		</p>
+																	</div>
+																	<div>
+																		<p class="small text-muted mb-1">Rating</p>
+																		<p class="mb-0">8.5</p>
+																	</div>
+																</div>
+																<div class="d-flex pt-1">
+																	<a class="btn btn-primary flex-grow-1" asp-controller="Applicants" asp-action="Details" asp-route-id="@myList[myIndex].ApplicantId">View More Details</a>
+
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</section>
+
+
+							</td>
+						}
+						catch (Exception e)
+						{
+
+						}
+
+
+
+
+
+					}
+				</tr>
+			}
+
+		else
 		{
 			<tr>
-
-				<td>
-					@Html.DisplayFor(model => item.User.FirstName)
-				</td>
-				<td>
-					@Html.DisplayFor(model => item.User.LastName)
-				</td>
-
-				<td>
-					<p>
-						@foreach (var iteme in item.User.UserSkills)
-						{
-							@(iteme.Skill.Name + "    ")
-						}
-					</p>
-
-				</td>
-				
+				@foreach (var item in Model.Applicants)
+				{
 
 
-				<td>
-					<a asp-controller="Applicants" asp-action="Details" asp-route-id="@item.ApplicantId">View</a>
-					<a asp-action="Edit" asp-route-id="@item.JobId">Accept</a> |
-					<a asp-action="Details" asp-route-id="@item.JobId">Decline</a> |
+					<td>
+						<form asp-asp-controller="Jobs" method="post">
+							<section style="background-color: #9de2ff;">
+								<div class="container py-5 h-100">
+									<div class="row  align-items-center h-100">
+										<div class="col col-md-12 ">
+											<div class="card" style="border-radius: 15px;">
+												<div class="card-body p-4">
+													<div class="d-flex text-black">
+														<div class="flex-shrink-0">
+															<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+														 alt="Generic placeholder image" class="img-fluid"
+														 style="width: 180px; border-radius: 10px;">
+														</div>
+														<div class="flex-grow-1 ms-3">
+															<h5 class="mb-1">@item.User.FirstName @item.User.LastName</h5>
+															<p class="mb-2 pb-1" style="color: #2b2a2a;">Senior Journalist</p>
+															<div class="d-flex justify-content-start rounded-3 p-2 mb-2"
+														 style="background-color: #efefef;">
+																<div>
+																	<p class="small text-muted mb-1">Experiance</p>
+																	<p class="mb-0">41</p>
+																</div>
+																<div class="px-3">
+																	<p class="small text-muted mb-1">Skills</p>
+																	<p class="mb-0">
 
-				</td>
+
+																		@for (int q = 0; q < item.User.UserSkills.Count; q++)
+																		{
+																			@(((List<UserSkill>)item.User.UserSkills)[q].Skill.Name + "  ")
+																			;
+																		}
+
+
+																	</p>
+																</div>
+																<div>
+																	<p class="small text-muted mb-1">Rating</p>
+																	<p class="mb-0">8.5</p>
+																</div>
+															</div>
+															<div class="d-flex pt-1">
+																<button type="button" class="btn btn-primary flex-grow-1">View More Details</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+
+						</form>
+					</td>
+
+
+				}
 			</tr>
 		}
 	</tbody>
@@ -187,3 +299,34 @@
 		content_css: 'css/content.css'
 	});
 </script>
+
+
+@*
+			<tr>
+
+				<td>
+					@Html.DisplayFor(model => item.User.FirstName)
+				</td>
+				<td>
+					@Html.DisplayFor(model => item.User.LastName)
+				</td>
+
+				<td>
+					<p>
+						@foreach (var iteme in item.User.UserSkills)
+						{
+							@(iteme.Skill.Name + "    ")
+						}
+					</p>
+
+				</td>
+
+
+
+				<td>
+					<a asp-controller="Applicants" asp-action="Details" asp-route-id="@item.ApplicantId">View</a>
+					<a asp-action="Edit" asp-route-id="@item.JobId">Accept</a> |
+					<a asp-action="Details" asp-route-id="@item.JobId">Decline</a> |
+
+				</td>
+			</tr>*@

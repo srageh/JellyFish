@@ -102,11 +102,28 @@ namespace JellyFish.Controllers
                 return NotFound();
             }
 
-            var applicant = await _context.Applicants                
+
+            //var _user = await _context.AspNetUsers
+            //    .Include(q => q.Address)
+            // .Include(w => w.UserSkills)
+            // .ThenInclude(w => w.Skill)
+            // .Include(e => e.Applicants) ;
+             
+           
+
+            ViewBag.address = await _context.Applicants
                 .Include(a => a.User)
+                .ThenInclude(w => w.Address)
+                .FirstOrDefaultAsync(m => m.ApplicantId == id);
+
+
+
+            var applicant = await _context.Applicants
+                .Include(a => a.User)          
                 .ThenInclude(w => w.UserSkills)
                 .ThenInclude(w => w.Skill)
                 .FirstOrDefaultAsync(m => m.ApplicantId == id);
+
             if (applicant == null)
             {
                 return NotFound();
