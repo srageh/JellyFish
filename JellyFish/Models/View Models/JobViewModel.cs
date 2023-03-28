@@ -6,5 +6,6 @@
         public int? JobTypeFilterId { get; set; }
         public int? CategoryFilterId { get; set; }
         public int? LevelFilterId { get; set; }
+        public string? IsRemote { get; set; }
     }
 }

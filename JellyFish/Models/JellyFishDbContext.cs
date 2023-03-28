@@ -47,12 +47,15 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS19;Database=JellyFishDB;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C801E93ACB");
+            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C83DC65455");
 
             entity.ToTable("Address");
 
@@ -81,13 +84,17 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Applicant>(entity =>
         {
-            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C11E3AE64A");
+            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C14AE3459F");
 
             entity.ToTable("Applicant");
 
             entity.HasIndex(e => new { e.JobId, e.UserId }, "IX_NoDublicate").IsUnique();
 
             entity.Property(e => e.ApplicantId).HasColumnName("applicant_id");
+            entity.Property(e => e.IsApplied)
+                .HasMaxLength(100)
+                .HasColumnName("isApplied");
+            entity.Property(e => e.IsSelected).HasColumnName("isSelected");
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -178,7 +185,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B414D44A88");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B43974A730");
 
             entity.ToTable("Category");
 
@@ -190,7 +197,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E267235EB53CAF2");
+            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E2672354BBE83B7");
 
             entity.ToTable("Company");
 
@@ -208,7 +215,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Employer>(entity =>
         {
-            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E7704B9C0B");
+            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E74872C574");
 
             entity.ToTable("Employer");
 
@@ -231,7 +238,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A57836EAAC");
+            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A57B7DC067");
 
             entity.ToTable("Job");
 
@@ -240,14 +247,13 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("createdDate");
-            entity.Property(e => e.Description)
-                .HasMaxLength(255)
-                .HasColumnName("description");
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.EmployerId)
                 .HasMaxLength(450)
                 .HasColumnName("employer_id");
             entity.Property(e => e.IsActive).HasColumnName("isActive");
             entity.Property(e => e.IsOpen).HasColumnName("isOpen");
+            entity.Property(e => e.IsRemote).HasColumnName("isRemote");
             entity.Property(e => e.JobTypeId).HasColumnName("job_type_id");
             entity.Property(e => e.LevelId).HasColumnName("level_id");
             entity.Property(e => e.Location)
@@ -283,7 +289,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<JobType>(entity =>
         {
-            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7F7853CBBA");
+            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7FDB34978A");
 
             entity.ToTable("JobType");
 
@@ -295,7 +301,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Level>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC077C71DA05");
+            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC07385CD5C2");
 
             entity.ToTable("Level");
 
@@ -306,7 +312,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Skill>(entity =>
         {
-            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA8379B8DF27F2");
+            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA837919B88403");
 
             entity.ToTable("Skill");
 
@@ -318,7 +324,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
-            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B2EE831B6");
+            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B7A067D82");
 
             entity.ToTable("UserSkill");
 

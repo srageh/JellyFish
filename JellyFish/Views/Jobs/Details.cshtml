@@ -71,15 +71,21 @@
             <div>
                 @if (User.IsInRole("JobSeeker"))
                 {
-                    @if ((bool)ViewBag.already)
+                    @if (ViewBag.already == "Applied")
                     {
 
-                        <p id="isApplied">Already applied !</p>
+                        <button disabled id="btnApply" class="btn btn-primary" >Apply</button>
+                        <a class="btn btn-success" asp-controller="Applicants" asp-route-isApplied="Saved" asp-action="Index" asp-route-jobID=@Model.JobId>Save</a>
+                    }
+                    else if (ViewBag.already == "Saved")
+                    {
+                        <a id="btnApply" class="btn btn-primary" asp-route-isApplied="Applied" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
+                        <button disabled class="btn btn-success" >Save</button>
                     }
                     else
                     {
-                        <a id="btnApply" class="btn btn-primary" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
-                        <a class="btn btn-success" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Save</a>
+                        <a id="btnApply" class="btn btn-primary" asp-route-isApplied="Applied" asp-controller="Applicants" asp-action="Index" asp-route-jobID=@Model.JobId>Apply</a>
+                        <a  class="btn btn-success" asp-controller="Applicants" asp-route-isApplied="Saved" asp-action="Index" asp-route-jobID=@Model.JobId>Save</a>
                     }
                 }
 

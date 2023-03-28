@@ -52,7 +52,7 @@ namespace JellyFish.Controllers
 				}
 
 
-				var jobViewModel = GetViewModel(applicantJobs, null, null, null);
+				var jobViewModel = GetViewModel(applicantJobs, null, null, null, null);
 
 				return View("Index_Appl", jobViewModel);
 				//return View( "Index_Appl");
@@ -391,53 +391,29 @@ namespace JellyFish.Controllers
 			{
 				return NotFound();
 			}
-
-			ViewData["already"] = false;
-			if (job.Applicants.Count != 0)
+			if (job.Applicants.FirstOrDefault() != null)
 			{
-				ViewData["already"] = true;
-			}
+                ViewBag.already = job.Applicants.FirstOrDefault().IsApplied;
+            }
+			else
+			{
+				ViewBag.already = "Neither";
+
+            }
+
+
+			
+			//if (job.Applicants.Count != 0)
+			//{
+			//	ViewData["already"] = true;
+			//}
 
 
 			return View(job);
 		}
 
 
-		//[HttpGet]
-		//public IActionResult Create()
-		//{
-		//    ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
-		//    //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
-		//    ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
-		//    ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
-		//    ViewBag.EmployeeId = _userManager.GetUserId(User);
-		//    return View();
-		//}
-
-		////public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
-
-		//[HttpPost]
-		//[ValidateAntiForgeryToken]
-		//public IActionResult Create([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
-		//{
-		//    job.EmployerId = _userManager.GetUserId(User).ToString();
-		//    ViewBag.CategoryId = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
-		//    //ViewData["EmployerId"] = new SelectList(_unitOfWork.Em, "EmployerId", "EmployerId");
-		//    ViewBag.JobTypeId = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
-		//    ViewBag.LevelId = new SelectList(_context.Levels.ToList(), "Id", "Level1");
-		//    ViewBag.EmployeeId = _userManager.GetUserId(User);
-
-		//    if (ModelState.IsValid)
-		//    {
-		//        _context.Jobs.Add(job);
-		//        _context.SaveChanges();
-		//        return RedirectToAction("Index");
-		//    }
-
-		//    return View(job);
-
-
-		//}
+		
 
 
 
@@ -651,7 +627,29 @@ namespace JellyFish.Controllers
 			return (_context.Jobs?.Any(e => e.JobId == id)).GetValueOrDefault();
 		}
 
-		[HttpPost]
+
+		[HttpGet]
+		public async Task<IActionResult> MyJobs()
+		{
+			var user = _userManager.GetUserId(User);
+			
+			if (_context.Applicants != null)
+			{
+				var myjobs = await _context.Applicants
+                    .Include(a => a.User)
+                .Include(a => a.Job)
+				.ThenInclude(x=> x.Employer)
+				.ThenInclude(x => x.Company)
+				.Where(x => x.UserId == user)
+				.ToListAsync();
+				return View(myjobs);
+			}
+			return View();
+		}
+
+
+
+			[HttpPost]
 		public IActionResult FilterJobType(JobViewModel types)
 		{
 
@@ -661,6 +659,19 @@ namespace JellyFish.Controllers
 
 
 			//var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "\\images\\", "amazon.png");
+
+			bool remote = false;
+
+			if(types.IsRemote == "Yes")
+			{
+                 remote = true;
+            }
+			else if(types.IsRemote == "No")
+			{
+				 remote = false;
+			}
+			
+			
 
 
 
@@ -685,15 +696,20 @@ namespace JellyFish.Controllers
 				types.LevelFilterId ?? 0
 			};
 			var jobFiltered = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).Where(x => jobFilter.Contains(x.JobTypeId) && jobFilterCat.Contains(x.CategoryId) && jobFilterLev.Contains(x.LevelId)).ToList();
+
+			if(types.IsRemote != null)
+			{
+				jobFiltered = jobFiltered.Where(x => x.IsRemote == remote).ToList();
+			}
 			//test.ForEach(job => { job.Employer.Company.Logo = imagePath; });
-			var jobViewModel = GetViewModel(jobFiltered, types.JobTypeFilterId, types.CategoryFilterId, types.LevelFilterId);
+			var jobViewModel = GetViewModel(jobFiltered, types.JobTypeFilterId, types.CategoryFilterId, types.LevelFilterId, types.IsRemote);
 
 
 			return View("Index_Appl", jobViewModel);
 		}
 
 
-		public JobViewModel GetViewModel(List<Job> jobList, int? jobTypeFilter, int? categoryFilter, int? levelFilter)
+		public JobViewModel GetViewModel(List<Job> jobList, int? jobTypeFilter, int? categoryFilter, int? levelFilter, string? isRemote)
 		{
 			//var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "\\images\\", "amazon.png");
 
@@ -702,11 +718,14 @@ namespace JellyFish.Controllers
 			//List<int> /*allJobTypes*/ = _context.Jobs.Select(x => x.JobTypeId).Distinct().ToList();
 
 			//jobList.ForEach(job => { job.Employer.Company.Logo = imagePath; });
+			var remoteList = new List<string>{ "Yes", "No" };
 
-			var s = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
+
+            var s = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
 			ViewBag.Categories = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
 			ViewBag.Level = new SelectList(_context.Levels.ToList(), "Id", "LevelName");
 			ViewBag.Types = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
+			ViewBag.IsRemote = new SelectList(remoteList);
 
 			JobViewModel jobViewModel = new JobViewModel
 			{
@@ -714,7 +733,9 @@ namespace JellyFish.Controllers
 				Jobs = jobList,
 				JobTypeFilterId = jobTypeFilter,
 				CategoryFilterId = categoryFilter,
-				LevelFilterId = levelFilter
+				LevelFilterId = levelFilter,
+				IsRemote = isRemote
+				
 
 			};
 

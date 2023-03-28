@@ -286,8 +286,9 @@ Find the companies
         @foreach (var item in Model)
         {
             <tr>
-                <p hidden>@Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>
-              
+                @*<p hidden>@Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>*@
+                
+                
                 <td>
                     @Html.DisplayFor(model => item.Title)
                 </td>
@@ -301,7 +302,7 @@ Find the companies
                         {
 
                             <td>
-                                <select  id="select_Status" name="select_Status" class="select_Status">
+                                <select data-valjob="@item.JobId"  id="select_Status" name="select_Status" class="select_Status">
                                     <option selected value="Active">Open</option>
                                     <option value="Paused">Closed</option>
                                 </select>
@@ -310,7 +311,7 @@ Find the companies
                         else if (item.IsOpen == false)
                         {
                             <td>
-                                <select  id="select_Status" name="select_Status" class="select_Status">
+                                <select data-valjob="@item.JobId" id="select_Status" name="select_Status" class="select_Status">
                                     <option value="Active">Open</option>
                                     <option selected value="Paused">Closed</option>
                                 </select>
@@ -324,7 +325,7 @@ Find the companies
                         {
 
                             <td>
-                                <select disabled id="select_Status" name="select_Status" class="select_Status">
+                                <select data-valjob="@item.JobId" disabled id="select_Status" name="select_Status" class="select_Status">
                                     <option selected value="Active">Open</option>
                                     <option value="Paused">Closed</option>
                                 </select>
@@ -333,7 +334,7 @@ Find the companies
                         else if (item.IsOpen == false)
                         {
                             <td>
-                                <select disabled id="select_Status" name="select_Status" class="select_Status">
+                                <select data-valjob="@item.JobId" disabled id="select_Status" name="select_Status" class="select_Status">
                                     <option value="Active">Open</option>
                                     <option selected value="Paused">Closed</option>
                                 </select>
@@ -415,7 +416,7 @@ Find the companies
     $(document).ready(function () {
         $("select.select_Status").change(function () {
             var selectedStatus = $(this).children("option:selected").val();
-            var jobIdValue = $('#jobId').val();
+            var jobIdValue = $(this).data("valjob");
             $.ajax({
                 url: '@Url.Action("ChangeStatus","Jobs")',
                 type: 'POST',
