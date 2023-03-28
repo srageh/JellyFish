@@ -15,7 +15,7 @@ public partial class Address
 
     public string? Province { get; set; }
 
-    public string UserId { get; set; } = null!;
+	public string UserId { get; set; } = null!;
 
     public virtual AspNetUser User { get; set; } = null!;
 }

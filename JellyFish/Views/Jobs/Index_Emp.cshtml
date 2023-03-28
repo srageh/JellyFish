@@ -210,23 +210,32 @@ Find the companies
 		<div class="form-floating">
 			<div class="btn-group">
 				<input type="radio" name="searchQuery" class="btn-check" id="option1" value="all" checked />
-				<label class="btn btn-primary" for="option1">All Jobs</label>
+				<label class="btn btn-primary" for="option1">All Jobs</label> 
 
-				<input type="radio" name="searchQuery" class="btn-check" id="option2" value="act" />
-				<label class="btn btn-primary" for="option2">Active Jobs</label>
+                <input type="radio" name="searchQuery" class="btn-check" id="option2" value="act" /> 
+                <label class="btn btn-primary" for="option2">Active Jobs</label> 
 
-				<input type="radio" name="searchQuery" class="btn-check" id="option3" value="inact" />
-				<label class="btn btn-primary" for="option3">Inactive Jobs</label>
+				<input type="radio" name="searchQuery" class="btn-check" id="option3" value="inact" /> 
+				<label class="btn btn-primary" for="option3">Inactive Jobs</label> 
+
+                <input type="radio" name="searchQuery" class="btn-check" id="option4" value="opend" />
+				<label class="btn btn-primary" for="option4">Opend Jobs</label> 
+
+                <input type="radio" name="searchQuery" class="btn-check" id="option5" value="closed" />
+                <label class="btn btn-primary" for="option5">Closed Jobs</label>
 
 			</div>
 			<input type="submit" value="Display" />
 		</div>
-
+       @* <select id="selectsearch" name="selectsearch" class="selectsearch">
+            <option selected value="all">All Jobs</option>
+            <option value="act">Active Jobs</option>
+            <option value="inact">Inactive Jobs</option>
+            <option value="opend">Opend Jobs</option>
+            <option value="closed">Closed Jobs</option>                                  
+        </select>*@
 
 	</form>
-
-
-
 
 </section>
 
@@ -254,7 +263,9 @@ Find the companies
 <table class="table">
     <thead>
         <tr>
-          
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -286,8 +297,20 @@ Find the companies
         @foreach (var item in Model)
         {
             <tr>
-                <p hidden>@Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>
-              
+                <p hidden> @Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>
+                <td>
+                    
+                    @{
+                        if(item.IsActive == false)
+                        {
+                            <p style="color: red">pending</p>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(model => item.Title)
                 </td>
@@ -340,12 +363,6 @@ Find the companies
                             </td>
                         }
                     }
-
-                        
-
-              
-
-
                    
                 }
 
@@ -365,7 +382,7 @@ Find the companies
                                 if (item.JobId.ToString() == applicantCountList[0])
                                 {
                                     <p>
-                                        <a asp-controller="Jobs" asp-action="Index">@applicantCountList[1]</a>
+                                        <a asp-controller="Jobs" asp-action="ApplicantInfoList">@applicantCountList[1]</a>
                                     </p>
                                 }
                             }
@@ -416,6 +433,7 @@ Find the companies
         $("select.select_Status").change(function () {
             var selectedStatus = $(this).children("option:selected").val();
             var jobIdValue = $('#jobId').val();
+            alert(jobIdValue);
             $.ajax({
                 url: '@Url.Action("ChangeStatus","Jobs")',
                 type: 'POST',
@@ -428,8 +446,6 @@ Find the companies
         });
 
     });
-
-
 
 </script>
 <script>

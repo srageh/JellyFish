@@ -43,7 +43,7 @@ namespace JellyFish.Controllers
 			{
 
 				var user = await _userManager.GetUserAsync(User);
-				var applicantJobs = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).ToList();
+				var applicantJobs = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).Where(x => x.IsOpen == true).ToList();
 
 
 				if (!String.IsNullOrEmpty(searchQuery))
@@ -178,8 +178,100 @@ namespace JellyFish.Controllers
 
 					}
 
+                    if (searchQuery.Equals("opend"))
+                    {
+                        var jobsz = _context.Jobs.Where(r => r.IsOpen == true).Include(x => x.Category);
 
-					if (searchQuery.Equals("all"))
+                        // For counting applicants' number on job posting for employer
+
+                        try
+                        {
+                            var jobList = _context.Jobs.Where(r => r.IsOpen == true).Select(x => x.JobId).ToList();
+                            var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
+                            List<string> applicantCountArray = new List<string>();
+                            int count = 0;
+
+                            for (int i = 0; i < jobList.Count; i++)
+                            {
+                                for (int j = 0; j < applicantList.Count; j++)
+                                {
+                                    if (applicantList[j] == jobList[i])
+                                    {
+                                        count++;
+                                    }
+                                }
+
+                                applicantCountArray.Add(jobList[i] + " " + count);
+                                count = 0;
+                            }
+                            if (applicantCountArray.Count > 0)
+                            {
+
+                                ViewBag.ApplicantCountArray = applicantCountArray;
+                            }
+                            else
+                            {
+                                ViewBag.ApplicantCountArray = applicantCountArray;
+                            }
+
+                            return View("Index_Emp", jobsz.ToList());
+
+                        }
+                        catch (Exception ex)
+                        {
+                            //Response.Write("Property: " + ex.Message);
+                            return View();
+                        }
+
+                    }
+                    if (searchQuery.Equals("closed"))
+                    {
+                        var jobsz = _context.Jobs.Where(r => r.IsOpen == false).Include(x => x.Category);
+
+                        // For counting applicants' number on job posting for employer
+
+                        try
+                        {
+                            var jobList = _context.Jobs.Where(r => r.IsOpen == false).Select(x => x.JobId).ToList();
+                            var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
+                            List<string> applicantCountArray = new List<string>();
+                            int count = 0;
+
+                            for (int i = 0; i < jobList.Count; i++)
+                            {
+                                for (int j = 0; j < applicantList.Count; j++)
+                                {
+                                    if (applicantList[j] == jobList[i])
+                                    {
+                                        count++;
+                                    }
+                                }
+
+                                applicantCountArray.Add(jobList[i] + " " + count);
+                                count = 0;
+                            }
+                            if (applicantCountArray.Count > 0)
+                            {
+
+                                ViewBag.ApplicantCountArray = applicantCountArray;
+                            }
+                            else
+                            {
+                                ViewBag.ApplicantCountArray = applicantCountArray;
+                            }
+
+                            return View("Index_Emp", jobsz.ToList());
+
+                        }
+                        catch (Exception ex)
+                        {
+                            //Response.Write("Property: " + ex.Message);
+                            return View();
+                        }
+
+                    }
+
+                    if (searchQuery.Equals("all"))
 					{
 
 						var jobsv = _context.Jobs.Include(x => x.Category);
@@ -241,10 +333,13 @@ namespace JellyFish.Controllers
 				}
 
 
-				var jobs = _context.Jobs.Include(x => x.Category);
+				//var jobs = _context.Jobs.Include(x => x.Category);
+                var jobs = from g in _context.Jobs.
+                     Include(g => g.Category)
+                           select g;
 
-				// For counting applicants' number on job posting for employer
-				using (JellyFishDbContext context = new JellyFishDbContext())
+                // For counting applicants' number on job posting for employer
+                using (JellyFishDbContext context = new JellyFishDbContext())
 				{
 					try
 					{
@@ -297,6 +392,7 @@ namespace JellyFish.Controllers
 			return View();
 		}
 
+		
 
 		public async Task<IActionResult> DisplayApplicents(string? searchQuery)
 		{
@@ -332,7 +428,18 @@ namespace JellyFish.Controllers
 
 				return RedirectToAction("Index", "Jobs", new { searchQuery = "inact" });
 			}
-			return View();
+            if (searchQuery.Equals("opend"))
+            {
+
+                return RedirectToAction("Index", "Jobs", new { searchQuery = "opend" });
+            }
+            if (searchQuery.Equals("closed"))
+            {
+
+                return RedirectToAction("Index", "Jobs", new { searchQuery = "closed" });
+            }
+
+            return View();
 		}
 
 
@@ -355,26 +462,12 @@ namespace JellyFish.Controllers
 				_context.Update(updateJobs);
 				_context.SaveChanges();
 
-
-
-
 				return RedirectToAction("Index");
 
 			}
 
 			return View();
-
-
-
 		}
-
-
-
-
-
-
-
-
 
 		// GET: Jobs/Details/5
 		public async Task<IActionResult> Details(int? id)

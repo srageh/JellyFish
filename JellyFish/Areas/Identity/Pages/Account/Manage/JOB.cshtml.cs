@@ -17,12 +17,14 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 		private readonly SignInManager<JellyFishUser> _signInManager;
 		private readonly Models.JellyFishDbContext _context;
 
-		public IndexModel(JellyFishDbContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager)
+		private readonly IWebHostEnvironment _webHostEnvironment;
+
+		public IndexModel(JellyFishDbContext context, UserManager<JellyFishUser> userManager, SignInManager<JellyFishUser> signInManager, IWebHostEnvironment webHostEnvironment)
 		{
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_context = context;
-
+			_webHostEnvironment = webHostEnvironment;
 		}
 
 		/// <summary>
@@ -84,12 +86,14 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 			[Display(Name = "Date Of Birth")]
 			public DateOnly DateOfBirth { get; set; }
 
-
-
-
-
 			[Display(Name = "Add a Skill")]
 			public string? Skill { get; set; }
+
+			[Display(Name = "Image of Profile")]
+			public string? ProfileImage { get; set; }
+
+			[Display(Name = "Resume File")]
+			public string? ResumeFile { get; set; }
 		}
 
 		private async Task LoadAsync(JellyFishUser user)
@@ -102,6 +106,9 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 			Username = userName;
 
+			int skillId = _context.UserSkills.Where(x => x.UserId == user.Id).FirstOrDefault().SkillId;
+
+			Skill _skill = _context.Skills.Where(x => x.SkillId== skillId).FirstOrDefault();
 
 			Address? addres = (Address?)_context.Addresses.Include(f => f.User).Where(n => n.UserId == userId).FirstOrDefault();
 			if (addres != null)
@@ -115,7 +122,9 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 					City = addres.City,
 					PostalCode = addres.PostalCode,
 					Province = addres.Province,
-					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth)
+					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth),
+					ProfileImage = _AspUser.ProfileImage,
+					ResumeFile = _skill.ResumeFile
 
 				};
 			}
@@ -130,7 +139,9 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 					City = "",
 					PostalCode = "",
 					Province = "",
-					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth)
+					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth),
+					ProfileImage = "",
+					ResumeFile = ""
 				};
 			}
 
@@ -168,7 +179,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 			return Page();
 		}
 
-		public async Task<IActionResult> OnPostAsync()
+		public async Task<IActionResult> OnPostAsync(List<IFormFile> files)
 		{
 			var user = await _userManager.GetUserAsync(User);
 			if (user == null)
@@ -196,12 +207,98 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 			user.DateOfBirth = Input.DateOfBirth.ToDateTime(TimeOnly.Parse("10:00 PM"));
 			user.FirstName = Input.FirstName;
 			user.LastName = Input.LastName;
-			user.PhoneNumber = Input.PhoneNumber;
+			user.PhoneNumber = Input.PhoneNumber;			
+			
 			await _userManager.UpdateAsync(user);
 
+			//for profile image and resume file
+			string profileImg = HttpContext.Request.Form["profileImg"].ToString();
 
 
+			//var supportedTypes = new[] { "txt", "doc", "docx", "pdf", "xls", "xlsx" };
+			var supportedTypes = new[] { "png", "jpeg", "jpg", "gif", "bmp" };
+			
 
+			var profileImage = _context.AspNetUsers.Where(x => x.Id == user.Id).FirstOrDefault();
+			int skillId = _context.UserSkills.Where(x => x.UserId == user.Id).FirstOrDefault().SkillId;
+			var resume = _context.Skills.Where(x => x.SkillId == skillId).FirstOrDefault();
+
+			string wwwRootPath = _webHostEnvironment.WebRootPath;
+
+			if (files.Count > 0)
+			{
+				foreach (var file in files)
+				{
+					string fileName = Guid.NewGuid().ToString();
+					var uploadsForProfile = Path.Combine(wwwRootPath, @"images\profile");
+					var uploadsForResume = Path.Combine(wwwRootPath, @"images\resume");
+					var extension = Path.GetExtension(file.FileName);
+					var fileExt = System.IO.Path.GetExtension(file.FileName).Substring(1);
+
+					if (supportedTypes.Contains(fileExt))
+					{
+						if (profileImage.ProfileImage != null || profileImage.ProfileImage != "")
+						{
+							var oldImagePath = Path.Combine(wwwRootPath, profileImage.ProfileImage.TrimStart('\\'));
+							if (System.IO.File.Exists(oldImagePath))
+							{
+								System.IO.File.Delete(oldImagePath);
+							}
+							using (var fileStreams = new FileStream(Path.Combine(uploadsForProfile, fileName + extension), FileMode.Create))
+							{
+								file.CopyTo(fileStreams);
+							}
+
+							profileImage.ProfileImage = @"\images\profile\" + fileName + extension;
+							_context.AspNetUsers.Update(profileImage);
+
+						}
+						else if (profileImage.ProfileImage == null || profileImage.ProfileImage == "")
+						{
+							using (var fileStreams = new FileStream(Path.Combine(uploadsForProfile, fileName + extension), FileMode.Create))
+							{
+								file.CopyTo(fileStreams);
+							}
+
+							profileImage.ProfileImage = @"\images\profile\" + fileName + extension;
+							_context.AspNetUsers.Add(profileImage);
+
+						}
+					}
+					else
+					{
+						if (resume.ResumeFile != null || resume.ResumeFile != "")
+						{
+							var oldImagePath = Path.Combine(wwwRootPath, resume.ResumeFile.TrimStart('\\'));
+							if (System.IO.File.Exists(oldImagePath))
+							{
+								System.IO.File.Delete(oldImagePath);
+							}
+							using (var fileStreams = new FileStream(Path.Combine(uploadsForResume, fileName + extension), FileMode.Create))
+							{
+								file.CopyTo(fileStreams);
+							}
+
+							resume.ResumeFile = @"\images\resume\" + fileName + extension;
+							_context.Skills.Update(resume);
+
+						}
+						else if (resume.ResumeFile == null || resume.ResumeFile == "")
+						{
+							using (var fileStreams = new FileStream(Path.Combine(uploadsForResume, fileName + extension), FileMode.Create))
+							{
+								file.CopyTo(fileStreams);
+							}
+
+							resume.ResumeFile = @"\images\resume\" + fileName + extension;
+							_context.Skills.Add(resume);
+
+						}
+					}
+					
+				}
+				_context.SaveChanges();
+			}
 
 
 			var userId = await _userManager.GetUserIdAsync(user);
@@ -239,16 +336,11 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 				_context.SaveChanges();
 			}
 
-
-
-
-
 			bool notFound = true;
 			bool UserSkillsnotFound = true;
 
 			if (Input.Skill != null)
 			{
-
 				List<Skill> skillstable = (List<Skill>)_context.Skills.ToList<Skill>();
 				if (skillstable.Count != 0)
 				{

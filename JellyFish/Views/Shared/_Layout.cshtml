@@ -7,12 +7,18 @@
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/JellyFish.styles.css" asp-append-version="true" />
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 	@*    <link rel="stylesheet" href="/lib/fontawesome-free-6.3.0-web/css/all.css" />*@
 	<script src="https://kit.fontawesome.com/c727c6872d.js" crossorigin="anonymous"></script>
 	<script src="~/js/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
 
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+	
+
+	<link href="~/notification/ikr.notification.css" rel="stylesheet" />
+
 	<style>
 		.nav-color{
 			color: #3b5e9c !important;
@@ -49,7 +55,7 @@
 							<img height="70" width="180" src="~/images/Logo.png" />
 						</a>
 					</div>
-
+					
 
 					<ul class="navbar-nav nav-align-center">
 						<li class="nav-item ">
@@ -61,11 +67,12 @@
 							@if (User.IsInRole("Employer"))
 							{
 								<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+								<div id="noti_Container"></div>
 
 							}
 							@if (User.IsInRole("Administrator"))
 							{
-								<a class="nav-color nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Home</a>
+								<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
 
 							}
 
@@ -104,6 +111,7 @@
 	</header>
 	<div class="container">
 		<main role="main" class="p-5">
+			<partial name="_Notification" />
 			@RenderBody()
 		</main>
 	</div>
@@ -118,7 +126,36 @@
 	</footer>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script src="~/notification/ikr.notificationplugin.js"></script>
+
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#noti_Container").ikrNotificationSetup();
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: "/Notifications/GetNotifications",
+			traditional: true,
+			contentType: "application/json;charset=utf-8",
+			success: function (data){
+				var notifications = data;
+				$("#noti_Container").ikrNotificationCount({
+					NotificationList: notifications,
+					//NotiFromPropName: "FromUserName",
+					ListTitlePropName: "NotiHeader",
+					ListBodyPropName: "NotiBody",
+					ControllerName: "Notifications",
+					ActionName: "AllNotifications"
+				});
+			},
+			error: function (xhr, status, error){
+
+			}
+		});
+	});	
+</script>

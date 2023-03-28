@@ -11,11 +11,14 @@
 
 <partial name="_StatusMessage" for="StatusMessage" />
 
-<form id="profile-form" method="post">
+@Html.Partial("_ProfileImgPartial")
+
+<form id="profile-form" method="post" enctype="multipart/form-data">
+	<input asp-for="Input.ProfileImage" hidden />
+	<input asp-for="Input.ResumeFile" hidden />
 	<div class="row">
 		<div class="col-md-6">
-			<h3>Profile</h3>
-
+			<h3>Profile</h3>			
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-floating">
 				<input asp-for="Username" class="form-control" disabled />
@@ -72,10 +75,11 @@
 
 		</div>
 
+
 		<div class="col-md-6">
 			<h3>Skills</h3>
 			<div class="form-floating">
-				<input asp-for="Input.Skill" class="form-control" />
+				<input asp-for="Input.Skill"  class="form-control" />
 				<label asp-for="Input.Skill" class="form-label"></label>
 				<span asp-validation-for="Input.Skill" class="text-danger"></span>
 			</div>
@@ -99,12 +103,33 @@
 				</div>
 			}
 
-			<hr />
+			
+			<div class="col-md-6">
+				<div class="form-floating">				
+					<input type="file" name="files" class="form-control">					
+				</div>
+				<label asp-for="Input.ProfileImage" class="form-label"></label>
+			</div>
+			<br />
+			<div class="col-md-6">				
+				<div class="form-floating">							
+					<input type="file" name="files" class="form-control">
+				</div>	
+				<label asp-for="Input.ResumeFile" class="form-label"></label>
+			</div>	
+			<div class="row">
+				<div class="col-md-4">
+					<a class="btn btn-outline-primary" href="@Model.Input.ResumeFile" target="_blank">
+						Read now
+					</a>
+				</div>
+			</div>
+			@*<div class="col-2">
+				<img src="@Model.Input.ProfileImage" class="img-fluid" />
+			</div>*@
 			<button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
 		</div>
-
-
-
+		
 	</div>
 </form>
 @section Scripts {
