@@ -410,17 +410,21 @@ namespace JellyFish.Controllers
 			}
 			if (job.Applicants.FirstOrDefault() != null)
 			{
-                ViewBag.already = job.Applicants.FirstOrDefault().IsApplied;
-            }
+				ViewBag.already = job.Applicants.FirstOrDefault().IsApplied;
+			}
 			else
 			{
 				ViewBag.already = "Neither";
 
-            }
+			}
+            return View(job);
+        }
+
+
+    
 
 
 
-	
 
 
 
@@ -429,8 +433,8 @@ namespace JellyFish.Controllers
 
 
 
-		// GET: Jobs1/Create
-		[HttpGet]
+    // GET: Jobs1/Create
+    [HttpGet]
 		public IActionResult Create()
 		{
 
