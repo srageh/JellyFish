@@ -103,7 +103,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 			Username = userName;
 
 
-			Address? addres = (Address?)_context.Addresses.Include(f => f.User).Where(n => n.UserId == userId).FirstOrDefault();
+			Address? addres = _context.Addresses.Where(n => n.AddressId == userId).FirstOrDefault();
 			if (addres != null)
 			{
 				Input = new InputModel
@@ -115,7 +115,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 					City = addres.City,
 					PostalCode = addres.PostalCode,
 					Province = addres.Province,
-					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth)
+					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? DateTime.Now : (DateTime)_AspUser.DateOfBirth)
 
 				};
 			}
@@ -130,7 +130,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 					City = "",
 					PostalCode = "",
 					Province = "",
-					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth)
+					DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? DateTime.Now : (DateTime)_AspUser.DateOfBirth)
 				};
 			}
 
@@ -205,16 +205,17 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
 
 			var userId = await _userManager.GetUserIdAsync(user);
-			Address? addres = (Address?)_context.Addresses.Include(f => f.User).Where(n => n.UserId == userId).FirstOrDefault();
+			Address? addres = _context.Addresses.Where(n => n.AddressId == userId).FirstOrDefault();
 
 			if (addres == null)
 			{
 				addres = new Address();
+				addres.AddressId = userId;
 				addres.City = Input.City;
 				addres.Street = Input.Street;
 				addres.PostalCode = Input.PostalCode;
 				addres.Province = Input.Province;
-				addres.UserId = userId;
+				
 
 				_context.Addresses.Add(addres);
 				_context.SaveChanges();
@@ -233,7 +234,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 				if (Input.Province != addres.Province)
 					addres.Province = Input.Province;
 
-				addres.UserId = userId;
+				addres.AddressId = userId;
 
 				_context.Addresses.Update(addres);
 				_context.SaveChanges();

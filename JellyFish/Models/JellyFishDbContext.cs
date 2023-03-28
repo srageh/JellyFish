@@ -47,12 +47,11 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS19;Database=JellyFishDB;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
         modelBuilder.Entity<Address>(entity =>
         {
             entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C83DC65455");
@@ -72,12 +71,9 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.Street)
                 .HasMaxLength(255)
                 .HasColumnName("street");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .HasColumnName("user_id");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.AddressNavigation).WithOne(p => p.Address)
+                .HasForeignKey<Address>(d => d.AddressId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FKAddress726313");
         });
@@ -91,10 +87,11 @@ public partial class JellyFishDbContext : DbContext
             entity.HasIndex(e => new { e.JobId, e.UserId }, "IX_NoDublicate").IsUnique();
 
             entity.Property(e => e.ApplicantId).HasColumnName("applicant_id");
+            entity.Property(e => e.IsAccepted).HasColumnName("isAccepted");
             entity.Property(e => e.IsApplied)
                 .HasMaxLength(100)
                 .HasColumnName("isApplied");
-            entity.Property(e => e.IsSelected).HasColumnName("isSelected");
+            
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 

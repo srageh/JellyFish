@@ -1,4 +1,4 @@
-﻿CREATE TABLE Applicant (applicant_id int IDENTITY NOT NULL, job_id int NOT NULL, user_id nvarchar(450) NOT NULL, [isSelected] BIT NULL, 
+﻿CREATE TABLE Applicant (applicant_id int IDENTITY NOT NULL, job_id int NOT NULL, user_id nvarchar(450) NOT NULL, [isAccepted] BIT NULL, 
     [isApplied] NVARCHAR(100) NULL, 
     PRIMARY KEY (applicant_id));
 GO

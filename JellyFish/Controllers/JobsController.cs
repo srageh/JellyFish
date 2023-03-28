@@ -60,8 +60,6 @@ namespace JellyFish.Controllers
 
 
 
-			//return View("Index_Appl", await jobs.ToListAsync());
-
 
 			if (User.IsInRole("Employer"))
 			{
@@ -123,65 +121,65 @@ namespace JellyFish.Controllers
 
 					}
 
-                    if (searchQuery.Equals("act"))
-                    {
-                        var jobsz = _context.Jobs.Where(r => r.IsActive == true).Include(x => x.Category);
+					if (searchQuery.Equals("act"))
+					{
+						var jobsz = _context.Jobs.Where(r => r.IsActive == true).Include(x => x.Category);
 
-                        // For counting applicants' number on job posting for employer
+						// For counting applicants' number on job posting for employer
 
-                        try
-                        {
-                            var jobList = _context.Jobs.Where(r => r.IsActive == true).Select(x => x.JobId).ToList();
-                            var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
-                            List<string> applicantCountArray = new List<string>();
-                            int count = 0;
-
-
-
-
-                            for (int i = 0; i < jobList.Count; i++)
-                            {
-                                for (int j = 0; j < applicantList.Count; j++)
-                                {
-                                    if (applicantList[j] == jobList[i])
-                                    {
-                                        count++;
-                                    }
-                                }
-
-
-
-                                applicantCountArray.Add(jobList[i] + " " + count);
-                                count = 0;
-                            }
-                            if (applicantCountArray.Count > 0)
-                            {
-
-                                ViewBag.ApplicantCountArray = applicantCountArray;
-                            }
-                            else
-                            {
-                                ViewBag.ApplicantCountArray = applicantCountArray;
-                            }
+						try
+						{
+							var jobList = _context.Jobs.Where(r => r.IsActive == true).Select(x => x.JobId).ToList();
+							var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
+							List<string> applicantCountArray = new List<string>();
+							int count = 0;
 
 
 
 
-                            return View("Index_Emp", jobsz.ToList());
+							for (int i = 0; i < jobList.Count; i++)
+							{
+								for (int j = 0; j < applicantList.Count; j++)
+								{
+									if (applicantList[j] == jobList[i])
+									{
+										count++;
+									}
+								}
 
 
 
-                        }
-                        catch (Exception ex)
-                        {
-                            //Response.Write("Property: " + ex.Message);
-                            return View();
-                        }
+								applicantCountArray.Add(jobList[i] + " " + count);
+								count = 0;
+							}
+							if (applicantCountArray.Count > 0)
+							{
 
-                    }
+								ViewBag.ApplicantCountArray = applicantCountArray;
+							}
+							else
+							{
+								ViewBag.ApplicantCountArray = applicantCountArray;
+							}
 
 
-                    if (searchQuery.Equals("all"))
+
+
+							return View("Index_Emp", jobsz.ToList());
+
+
+
+						}
+						catch (Exception ex)
+						{
+							//Response.Write("Property: " + ex.Message);
+							return View();
+						}
+
+					}
+
+
+					if (searchQuery.Equals("all"))
 					{
 
 						var jobsv = _context.Jobs.Include(x => x.Category);
@@ -274,11 +272,11 @@ namespace JellyFish.Controllers
 							applicantCountArray.Add(jobList[i] + " " + count);
 							count = 0;
 						}
-					
+
 
 						ViewBag.ApplicantCountArray = applicantCountArray;
-				
-					
+
+
 
 
 
@@ -300,12 +298,31 @@ namespace JellyFish.Controllers
 		}
 
 
-		public async Task<IActionResult> DisplayApplicents(string? searchQuery)
+
+
+
+
+
+
+
+
+		public async Task<IActionResult> DisplayApplicents(string? jobID)
 		{
 			var user = _userManager.GetUserId(User);
-			List<Job> jobs = (List<Job>)_context.Jobs.Include(k => k.Level).Include(k => k.Category).Include(k => k.JobType).Include(l => l.Employer).ThenInclude(q => q.Company).Include(w => w.Applicants).ThenInclude(r => r.User).Where(j => j.EmployerId == user.ToString()).ToList();
+			List<Job> _job = (List<Job>)_context.Jobs
+				.Include(k => k.Level)
+				.Include(k => k.Category)
+				.Include(k => k.JobType)
+				.Include(l => l.Employer)
+				.ThenInclude(q => q.Company)
+				.Include(w => w.Applicants)
+				.ThenInclude(w => w.User)
+				.ThenInclude(w => w.UserSkills)
+				.ThenInclude(w => w.Skill)
+				.Where(j => j.EmployerId == user.ToString())
+				.Where(r => r.JobId == Int32.Parse(jobID)).ToList();
 
-			return View("DisplayAppl", jobs);	
+			return View("DisplayAppl", _job[0]);
 		}
 
 
@@ -338,39 +355,37 @@ namespace JellyFish.Controllers
 		}
 
 
-        [HttpPost]
-        public IActionResult ChangeStatus(int jobId, string statusValue)
-        {
-            if (ModelState.IsValid)
-            {
-                var updateJobs = _context.Jobs.Where(x => x.JobId == jobId).FirstOrDefault();
+		[HttpPost]
+		public IActionResult ChangeStatus(int jobId, string statusValue)
+		{
+			if (ModelState.IsValid)
+			{
+				var updateJobs = _context.Jobs.Where(x => x.JobId == jobId).FirstOrDefault();
 
-				if(statusValue == "Active")
+				if (statusValue == "Active")
 				{
-                updateJobs.IsOpen = true;
+					updateJobs.IsOpen = true;
 
 				}
 				else
 				{
 					updateJobs.IsOpen = false;
 				}
-                _context.Update(updateJobs);
-                _context.SaveChanges();
+				_context.Update(updateJobs);
+				_context.SaveChanges();
 
 
 
 
-                return RedirectToAction("Index");
+				return RedirectToAction("Index");
 
-            }
+			}
 
-            return View();
-
-
-
-        }
+			return View();
 
 
+
+		}
 
 
 
@@ -378,8 +393,10 @@ namespace JellyFish.Controllers
 
 
 
-        // GET: Jobs/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+
+		// GET: Jobs/Details/5
+		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null || _context.Jobs == null)
 			{
@@ -402,18 +419,11 @@ namespace JellyFish.Controllers
             }
 
 
-			
-			//if (job.Applicants.Count != 0)
-			//{
-			//	ViewData["already"] = true;
-			//}
+
+	
 
 
-			return View(job);
-		}
 
-
-		
 
 
 
@@ -500,82 +510,36 @@ namespace JellyFish.Controllers
 
 		public IActionResult Edit(int? id)
 		{
-			JobPostingViewModel jobPostingViewModel = new()
-			{
-				job = new(),
-				CategoryList = _unitOfWork.Category.GetAll().Select(
-				 u => new SelectListItem
-				 {
-					 Text = u.Name,
-					 Value = u.CategoryId.ToString()
-				 }),
-				JobTypeList = _unitOfWork.JobType.GetAll().Select(
-				 u => new SelectListItem
-				 {
-					 Text = u.Name,
-					 Value = u.JobTypeId.ToString()
-				 }),
-				LevelList = _unitOfWork.Level.GetAll().Select(
-				 u => new SelectListItem
-				 {
-					 Text = u.LevelName,
-					 Value = u.Id.ToString()
-				 })
-			};
-			if (id == null || id == 0)
-			{
-				return View(jobPostingViewModel);
-			}
-			else
-			{
-				jobPostingViewModel.job = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id);
-				return View(jobPostingViewModel);
-			}
+			
+
+			ViewBag.CategoryList = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
+			ViewBag.LevelList = new SelectList(_context.Levels.ToList(), "Id", "LevelName");
+			ViewBag.JobType = new SelectList(_context.JobTypes.ToList(), "JobTypeId", "Name");
+
+
+
+			Job job = _unitOfWork.Job.GetFirstOrDefault(u => u.JobId == id);
+			return View(job);
+
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Edit([Bind("JobId,Title,Salary,Status,CategoryId,JobTypeId,LevelId,EmployerId,Description")] Job job)
+		public IActionResult Edit([Bind("JobId,Title,Salary,IsActive, IsOpen, CreatedDate, CategoryId,JobTypeId,LevelId,EmployerId,Description, Location")] Job job)
 		{
 			if (ModelState.IsValid)
 			{
-				if (job.JobId == 0)
-				{
-					_unitOfWork.Job.Add(job);
-				}
-				else
-				{
-					_unitOfWork.Job.Update(job);
-				}
-
+				_unitOfWork.Job.Update(job);
 				_unitOfWork.Save();
-				//TempData["success"] = "It's been updated successfully";
+			
 				return RedirectToAction("Index");
 			}
-			JobPostingViewModel jobPostingViewModel = new()
+			else
 			{
-				job = new(),
-				CategoryList = _unitOfWork.Category.GetAll().Select(
-				 u => new SelectListItem
-				 {
-					 Text = u.Name,
-					 Value = u.CategoryId.ToString()
-				 }),
-				JobTypeList = _unitOfWork.JobType.GetAll().Select(
-				 u => new SelectListItem
-				 {
-					 Text = u.Name,
-					 Value = u.JobTypeId.ToString()
-				 }),
-				LevelList = _unitOfWork.Level.GetAll().Select(
-				 u => new SelectListItem
-				 {
-					 Text = u.LevelName,
-					 Value = u.Id.ToString()
-				 })
-			};
-
-			return View(jobPostingViewModel);
+				return View(job);
+			}
+			
+		
 		}
 
 		public IActionResult Delete(int? id)

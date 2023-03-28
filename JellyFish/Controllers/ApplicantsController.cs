@@ -105,15 +105,16 @@ namespace JellyFish.Controllers
                 return NotFound();
             }
 
-            var applicant = await _context.Applicants
-                .Include(a => a.Job)
+            var applicant = await _context.Applicants                
                 .Include(a => a.User)
+                .ThenInclude(w => w.UserSkills)
+                .ThenInclude(w => w.Skill)
                 .FirstOrDefaultAsync(m => m.ApplicantId == id);
             if (applicant == null)
             {
                 return NotFound();
             }
-
+           
             return View(applicant);
         }
 

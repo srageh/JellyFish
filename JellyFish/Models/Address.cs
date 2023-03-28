@@ -5,7 +5,7 @@ namespace JellyFish.Models;
 
 public partial class Address
 {
-    public int AddressId { get; set; }
+    public string AddressId { get; set; } = null!;
 
     public string? Street { get; set; }
 
@@ -15,7 +15,5 @@ public partial class Address
 
     public string? Province { get; set; }
 
-    public string UserId { get; set; } = null!;
-
-    public virtual AspNetUser User { get; set; } = null!;
+    public virtual AspNetUser AddressNavigation { get; set; } = null!;
 }

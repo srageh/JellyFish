@@ -101,10 +101,10 @@ Find the companies
         <button id="appyBtn">Accept</button>
         <button id="appyBtn">Decline</button>
         <button id="appyBtn">View Applicent Details</button>
-        <h3>Possition applied for is:</h3>      
+        <h3>Possition applied for is:</h3>
         <p>Job Title displaed</p>
     </div>
-   
+
 </section>
 
 *@
@@ -114,116 +114,116 @@ Find the companies
 
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 
 
 <style>
-    #call-to-action {
-        text-align: center;
-        margin: 2em 0;
-    }
+	#call-to-action {
+		text-align: center;
+		margin: 2em 0;
+	}
 
-        #call-to-action h1 {
-            font-size: 4em;
-            margin-bottom: 0.5em;
-            color: #3b5e9c;
-        }
+		#call-to-action h1 {
+			font-size: 4em;
+			margin-bottom: 0.5em;
+			color: #3b5e9c;
+		}
 
-        #call-to-action p {
-            font-size: 1.8em;
-            max-width: 790px;
-            margin: 0 auto;
-            color: #555;
-        }
+		#call-to-action p {
+			font-size: 1.8em;
+			max-width: 790px;
+			margin: 0 auto;
+			color: #555;
+		}
 
-    jobs-search {
-        display: flex;
-        justify-content: center;
-    }
+	jobs-search {
+		display: flex;
+		justify-content: center;
+	}
 
-    #jobs-search input {
-        padding: 0.9em;
-    }
+	#jobs-search input {
+		padding: 0.9em;
+	}
 
-    #jobs-search [type=text] {
-        width: 22em;
-        border: 1px solid rgb(119, 119, 119);
-    }
-
-
-    #jobs-search #searchBtn {
-        background-color: #3b5e9c;
-        color: white;
-        font-weight: 600;
-        padding: 1em;
-        width: 8em;
-        border: none;
-    }
-
-    /* JOBS FILTER */
-
-    #filter-select {
-        padding: 0.5em 1em;
-        text-align: center;
-        background-color: rgb(213, 213, 213);
-        border-radius: 5px;
-    }
-
-    #job-container {
-        font-size: 1.2rem;
-        padding: 18px 1em;
-        border: 1px solid rgba(144,146,148,0.2);
-        position: relative;
-        margin-bottom: 8px;
-        box-shadow: 1px 1px 2px #ccc;
-    }
+	#jobs-search [type=text] {
+		width: 22em;
+		border: 1px solid rgb(119, 119, 119);
+	}
 
 
+	#jobs-search #searchBtn {
+		background-color: #3b5e9c;
+		color: white;
+		font-weight: 600;
+		padding: 1em;
+		width: 8em;
+		border: none;
+	}
+
+	/* JOBS FILTER */
+
+	#filter-select {
+		padding: 0.5em 1em;
+		text-align: center;
+		background-color: rgb(213, 213, 213);
+		border-radius: 5px;
+	}
+
+	#job-container {
+		font-size: 1.2rem;
+		padding: 18px 1em;
+		border: 1px solid rgba(144,146,148,0.2);
+		position: relative;
+		margin-bottom: 8px;
+		box-shadow: 1px 1px 2px #ccc;
+	}
 
 
-    #appyBtn {
-        float: right;
-        /* background-color: #3b5e9c; */
-        color: #3b5e9c;
-        font-weight: 600;
-        padding: 1em;
-        width: 8em;
-        border: 0.5px solid #3b5e9c;
-        margin-right: 20px;
-    }
+
+
+	#appyBtn {
+		float: right;
+		/* background-color: #3b5e9c; */
+		color: #3b5e9c;
+		font-weight: 600;
+		padding: 1em;
+		width: 8em;
+		border: 0.5px solid #3b5e9c;
+		margin-right: 20px;
+	}
 </style>
 
 
 <section id="call-to-action">
-    <h1>
-        The #1 Job Board for
-        <br />
-        <span>IT Professionals</span>
-    </h1>
-    <p>Find the companies looking to hire or post a job if you are hiring</p>
+	<h1>
+		The #1 Job Board for
+		<br />
+		<span>IT Professionals</span>
+	</h1>
+	<p>Find the companies looking to hire or post a job if you are hiring</p>
 
 
-    <form asp-controller="Jobs" asp-action="RadioSelect" method="post">
+	<form asp-controller="Jobs" asp-action="RadioSelect" method="post">
 
-        <div class="form-floating">
-            <div class="btn-group">
-                <input type="radio" name="searchQuery" class="btn-check" id="option1" value="all" checked />
-                <label class="btn btn-primary" for="option1">All Jobs</label>
+		<div class="form-floating">
+			<div class="btn-group">
+				<input type="radio" name="searchQuery" class="btn-check" id="option1" value="all" checked />
+				<label class="btn btn-primary" for="option1">All Jobs</label>
 
-                <input type="radio"  name="searchQuery" class="btn-check" id="option2" value="act" />
-                <label class="btn btn-primary" for="option2">Active Jobs</label>
+				<input type="radio" name="searchQuery" class="btn-check" id="option2" value="act" />
+				<label class="btn btn-primary" for="option2">Active Jobs</label>
 
-                <input type="radio"  name="searchQuery" class="btn-check" id="option3" value="inact" />
-                <label class="btn btn-primary" for="option3">Inactive Jobs</label>
+				<input type="radio" name="searchQuery" class="btn-check" id="option3" value="inact" />
+				<label class="btn btn-primary" for="option3">Inactive Jobs</label>
 
-            </div>
-              <input type="submit" value="Display" />
-        </div>
+			</div>
+			<input type="submit" value="Display" />
+		</div>
 
 
-    </form>
+	</form>
 
 
 
@@ -234,7 +234,7 @@ Find the companies
 
 
 <p>
-    <a asp-action="Create">Create New</a>
+	<a asp-action="Create">Create New</a>
 </p>
 
 
@@ -365,51 +365,62 @@ Find the companies
                                 string[] applicantCountList = applicantCount.Split(" ");
                                 if (item.JobId.ToString() == applicantCountList[0])
                                 {
-                                    <p>
-                                        <a asp-controller="Jobs" asp-action="Index">@applicantCountList[1]</a>
-                                    </p>
+
+                                    if(Int32.Parse(applicantCountList[1]) != 0)
+                                    {
+                                        <a style="background-color: #3b5e9c;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
+
+                                    }
+                                    else
+                                    {
+                                        <a style="background-color: #768fba;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
+
+                                    }
+
+  
+                                   
                                 }
                             }
 
-                        }
-                        else
-                        {
-                            <p>0</p>
-                        }
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Salary)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.Location)
-                </td>
-              @*  <td>
-                    @Html.Raw(@item.Description)
-                </td>*@
-                <td>
-                    @Html.DisplayFor(model => item.CreatedDate)
-                </td>
-                @* <td hidden>
-            @Html.DisplayFor(modelItem => item.Category.CategoryId)
-            </td>
-            <td hidden>
-            @Html.DisplayFor(modelItem => item.Employer.EmployerId)
-            </td>
-            <td hidden>
-            @Html.DisplayFor(modelItem => item.JobType.JobTypeId)
-            </td>
-            <td hidden>
-            @Html.DisplayFor(modelItem => item.Level.Id)
-            </td>*@
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.JobId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.JobId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.JobId">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
+						}
+						else
+						{
+							<p>0</p>
+						}
+					}
+				</td>
+				<td>
+					@Html.DisplayFor(model => item.Salary)
+				</td>
+				<td>
+					@Html.DisplayFor(model => item.Location)
+				</td>
+				@*  <td>
+			@Html.Raw(@item.Description)
+			</td>*@
+				<td>
+					@Html.DisplayFor(model => item.CreatedDate)
+				</td>
+				@* <td hidden>
+			@Html.DisplayFor(modelItem => item.Category.CategoryId)
+			</td>
+			<td hidden>
+			@Html.DisplayFor(modelItem => item.Employer.EmployerId)
+			</td>
+			<td hidden>
+			@Html.DisplayFor(modelItem => item.JobType.JobTypeId)
+			</td>
+			<td hidden>
+			@Html.DisplayFor(modelItem => item.Level.Id)
+			</td>*@
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.JobId">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.JobId">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.JobId">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
 
 <script>

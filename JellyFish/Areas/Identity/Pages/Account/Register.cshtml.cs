@@ -134,7 +134,6 @@ namespace JellyFish.Areas.Identity.Pages.Account
                 if(Input.UserType == 1)
                 {
                     await _userManager.AddToRoleAsync(user, "JobSeeker");
-
                 }
                 else
                 {
