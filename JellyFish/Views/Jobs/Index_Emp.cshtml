@@ -1,115 +1,4 @@
-﻿@*
-@{
-    ViewData["Title"] = "Index_Emp";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-<style>
-     #call-to-action {
-        text-align: center;
-        margin: 2em 0;
-
-      }
-      #call-to-action h1 {
-      font-size: 4em;
-        margin-bottom: 0.5em;
-        color: #3b5e9c;
-      }
-
-  #call-to-action p {
-                font-size: 1.8em;
-        max-width: 790px;
-      margin: 0 auto;
-    color:#555;
-      }
-
-    jobs-search {
-        display: flex;
-        justify-content: center;
-    }
-
-    #jobs-search input {
-        padding: 0.9em;
-    }
-
-    #jobs-search [type=text] {
-        width: 22em;
-        border: 1px solid rgb(119, 119, 119);
-    }
-
-
-    #jobs-search #searchBtn {
-        background-color: #3b5e9c;
-        color: white;
-        font-weight: 600;
-        padding: 1em;
-        width: 8em;
-        border: none;
-    }
-
-    /* JOBS FILTER */
-
-    #filter-select {
-        padding: 0.5em 1em;
-        text-align: center;
-        background-color: rgb(213, 213, 213);
-        border-radius: 5px;
-    }
-
-    #job-container {
-        font-size: 1.2rem;
-        padding: 18px 1em;
-        border: 1px solid rgba(144,146,148,0.2);
-        position: relative;
-        margin-bottom: 8px;
-        box-shadow: 1px 1px 2px #ccc;
-    }
-
-
-
-
-    #appyBtn {
-        float: right;
-        /* background-color: #3b5e9c; */
-        color: #3b5e9c;
-        font-weight: 600;
-        padding: 1em;
-        width: 8em;
-        border: 0.5px solid #3b5e9c;
-        margin-right: 20px;
-    }
-</style>
-
-
-<section id="call-to-action">
-      <h1>
-        The #1 Job Board for
-        <br />
-        <span>IT Professionals</span>
-      </h1>
-      <p>
-Find the companies
-        looking to hire or post a job if you are hiring
-      </p>
-    </section>
-
-
-<section id="jobs">
-
-    <div id="job-container">
-        <h3>Applicaent Name</h3>
-        <p> Applicent FN  Applicent LN</p>
-        <button id="appyBtn">Accept</button>
-        <button id="appyBtn">Decline</button>
-        <button id="appyBtn">View Applicent Details</button>
-        <h3>Possition applied for is:</h3>
-        <p>Job Title displaed</p>
-    </div>
-
-</section>
-
-*@
-
-@model IEnumerable<JellyFish.Models.Job>
+﻿@model IEnumerable<JellyFish.Models.Job>
 
 
 
@@ -240,146 +129,139 @@ Find the companies
 
 
 
-@*<div class="dropdown">
-    <button>Status</button>
-    <div class="dropdown-options">
-        <a href="#">Active</a>
-        <a href="#">Paused</a>
-    </div>
-</div>*@
-
-
-
 
 <table class="table">
-    <thead>
-        <tr>
-          
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsOpen)
-            </th>
-            <th>
-                Applicant
-            </th>
-           
-            <th>
-                @Html.DisplayNameFor(model => model.Salary)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-           @* <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <p hidden>@Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>
-              
-                <td>
-                    @Html.DisplayFor(model => item.Title)
-                </td>
-                @{
+	<thead>
+		<tr>
 
-                    // var toggle = item.IsActive;
+			<th>
+				@Html.DisplayNameFor(model => model.Title)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IsOpen)
+			</th>
+			<th>
+				Applicant
+			</th>
 
-                    if (item.IsActive == true)
-                    {
-                        if (item.IsOpen == true)
-                        {
+			<th>
+				@Html.DisplayNameFor(model => model.Salary)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Location)
+			</th>
+			@* <th>
+			@Html.DisplayNameFor(model => model.Description)
+			</th>*@
+			<th>
+				@Html.DisplayNameFor(model => model.CreatedDate)
+			</th>
+			<th>
+				Actions
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<p hidden>@Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>
 
-                            <td>
-                                <select  id="select_Status" name="select_Status" class="select_Status">
-                                    <option selected value="Active">Open</option>
-                                    <option value="Paused">Closed</option>
-                                </select>
-                            </td>
-                        }
-                        else if (item.IsOpen == false)
-                        {
-                            <td>
-                                <select  id="select_Status" name="select_Status" class="select_Status">
-                                    <option value="Active">Open</option>
-                                    <option selected value="Paused">Closed</option>
-                                </select>
-                            </td>
-                        }
+				<td>
+					@Html.DisplayFor(model => item.Title)
+				</td>
+				@{
 
-                    }
-                    else
-                    {
-                        if (item.IsOpen == true)
-                        {
+					// var toggle = item.IsActive;
 
-                            <td>
-                                <select disabled id="select_Status" name="select_Status" class="select_Status">
-                                    <option selected value="Active">Open</option>
-                                    <option value="Paused">Closed</option>
-                                </select>
-                            </td>
-                        }
-                        else if (item.IsOpen == false)
-                        {
-                            <td>
-                                <select disabled id="select_Status" name="select_Status" class="select_Status">
-                                    <option value="Active">Open</option>
-                                    <option selected value="Paused">Closed</option>
-                                </select>
-                            </td>
-                        }
-                    }
+					if (item.IsActive == true)
+					{
+						if (item.IsOpen == true)
+						{
 
-                        
+							<td>
+								<select id="select_Status" name="select_Status" class="select_Status">
+									<option selected value="Active">Open</option>
+									<option value="Paused">Closed</option>
+								</select>
+							</td>
+						}
+						else if (item.IsOpen == false)
+						{
+							<td>
+								<select id="select_Status" name="select_Status" class="select_Status">
+									<option value="Active">Open</option>
+									<option selected value="Paused">Closed</option>
+								</select>
+							</td>
+						}
 
-              
+					}
+					else
+					{
+						if (item.IsOpen == true)
+						{
+
+							<td>
+								<select disabled id="select_Status" name="select_Status" class="select_Status">
+									<option selected value="Active">Open</option>
+									<option value="Paused">Closed</option>
+								</select>
+							</td>
+						}
+						else if (item.IsOpen == false)
+						{
+							<td>
+								<select disabled id="select_Status" name="select_Status" class="select_Status">
+									<option value="Active">Open</option>
+									<option selected value="Paused">Closed</option>
+								</select>
+							</td>
+						}
+					}
 
 
-                   
-                }
-
-                <td>
 
 
-                    @{
 
 
-                        if (@ViewBag.ApplicantCountArray.Count > 0)
-                        {
 
-                            foreach (var obj in @ViewBag.ApplicantCountArray)
-                            {
-                                string applicantCount = obj.ToString();
-                                string[] applicantCountList = applicantCount.Split(" ");
-                                if (item.JobId.ToString() == applicantCountList[0])
-                                {
+				}
 
-                                    if(Int32.Parse(applicantCountList[1]) != 0)
-                                    {
-                                        <a style="background-color: #3b5e9c;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
+				<td>
 
-                                    }
-                                    else
-                                    {
-                                        <a style="background-color: #768fba;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
 
-                                    }
+					@{
 
-  
-                                   
-                                }
-                            }
+
+						if (@ViewBag.ApplicantCountArray.Count > 0)
+						{
+
+							foreach (var obj in @ViewBag.ApplicantCountArray)
+							{
+								string applicantCount = obj.ToString();
+								string[] applicantCountList = applicantCount.Split(" ");
+								if (item.JobId.ToString() == applicantCountList[0])
+								{
+
+									if (Int32.Parse(applicantCountList[1]) != 0)
+									{
+										<a style="background-color: #3b5e9c;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
+
+									}
+									else
+									{
+
+										<a style=" pointer-events: none; background-color: #768fba;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" disabled asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
+
+
+
+									}
+
+
+
+								}
+							}
 
 						}
 						else
@@ -423,42 +305,42 @@ Find the companies
 </table>
 
 <script>
-    $(document).ready(function () {
-        $("select.select_Status").change(function () {
-            var selectedStatus = $(this).children("option:selected").val();
-            var jobIdValue = $('#jobId').val();
-            $.ajax({
-                url: '@Url.Action("ChangeStatus","Jobs")',
-                type: 'POST',
-                data: { statusValue: selectedStatus, jobId: jobIdValue },
-                success: function (result) {
-                    $("h5").text("The Status has been changed to " + selectedStatus);
-                }
-            });
+	$(document).ready(function () {
+		$("select.select_Status").change(function () {
+			var selectedStatus = $(this).children("option:selected").val();
+			var jobIdValue = $('#jobId').val();
+			$.ajax({
+				url: '@Url.Action("ChangeStatus","Jobs")',
+				type: 'POST',
+				data: { statusValue: selectedStatus, jobId: jobIdValue },
+				success: function (result) {
+					$("h5").text("The Status has been changed to " + selectedStatus);
+				}
+			});
 
-        });
+		});
 
-    });
+	});
 
 
 
 </script>
 <script>
-    tinymce.init({
-        selector: 'textarea',
-        width: 600,
-        height: 300,
-        plugins: [
-            'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview',
-            'anchor', 'pagebreak',
-            'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code',
-            'fullscreen', 'insertdatetime',
-            'media', 'table', 'emoticons', 'template', 'help'
-        ],
-        toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
-            'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
-            'forecolor backcolor emoticons | help',
-        menubar: 'favs file edit view insert format tools table help',
-        content_css: 'css/content.css'
-    });
+	tinymce.init({
+		selector: 'textarea',
+		width: 600,
+		height: 300,
+		plugins: [
+			'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview',
+			'anchor', 'pagebreak',
+			'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code',
+			'fullscreen', 'insertdatetime',
+			'media', 'table', 'emoticons', 'template', 'help'
+		],
+		toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | ' +
+			'bullist numlist outdent indent | link image | print preview media fullscreen | ' +
+			'forecolor backcolor emoticons | help',
+		menubar: 'favs file edit view insert format tools table help',
+		content_css: 'css/content.css'
+	});
 </script>
