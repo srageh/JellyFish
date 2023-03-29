@@ -47,14 +47,15 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS19;Database=JellyFishDB;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
-
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C83DC65455");
+            entity.HasKey(e => e.AddressId).HasName("PK__tmp_ms_x__CAA247C8EA72E83A");
 
             entity.ToTable("Address");
 
@@ -91,7 +92,6 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.IsApplied)
                 .HasMaxLength(100)
                 .HasColumnName("isApplied");
-            
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -136,6 +136,7 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.LastName).HasMaxLength(256);
             entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
             entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+            entity.Property(e => e.ProfileImage).HasColumnName("profileImage");
             entity.Property(e => e.UserName).HasMaxLength(256);
 
             entity.HasMany(d => d.Roles).WithMany(p => p.Users)
@@ -317,6 +318,7 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
+            entity.Property(e => e.ResumeFile).HasColumnName("resumeFile");
         });
 
         modelBuilder.Entity<UserSkill>(entity =>
