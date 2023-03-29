@@ -311,11 +311,11 @@ namespace JellyFish.Controllers
 
 			if(acceptA.Equals("Accept"))
 			{
-				Current_Aplicant.IsAccepted = true;
+				Current_Aplicant.IsAccepted = 2;
 			}
 			else
 			{
-				Current_Aplicant.IsAccepted = false;
+				Current_Aplicant.IsAccepted = 1;
 			}
 
 			_context.Applicants.Update(Current_Aplicant);
