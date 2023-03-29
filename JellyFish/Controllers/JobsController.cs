@@ -303,7 +303,31 @@ namespace JellyFish.Controllers
 
 
 
+		public async Task<IActionResult> AcceptDeclineApplicant(string? acceptA, string? A_ID, string? Job_ID)
+		{
 
+			var Applicant_List = _context.Applicants.Where(w => w.ApplicantId == Int32.Parse(A_ID)).ToList();
+			Applicant Current_Aplicant = Applicant_List[0];
+
+			if(acceptA.Equals("Accept"))
+			{
+				Current_Aplicant.IsAccepted = true;
+			}
+			else
+			{
+				Current_Aplicant.IsAccepted = false;
+			}
+
+			_context.Applicants.Update(Current_Aplicant);
+			_context.SaveChanges();
+
+
+
+
+		
+
+			return RedirectToAction("DisplayApplicents","Jobs", new { jobID = Int32.Parse(Job_ID) });
+		}
 
 
 		public async Task<IActionResult> DisplayApplicents(string? jobID)
@@ -415,15 +439,15 @@ namespace JellyFish.Controllers
 				var _userId = _userManager.GetUserId(User);
 
 
-				foreach(var item in job.Applicants)
+				foreach (var item in job.Applicants)
 				{
-					if(item.UserId == _userId)
+					if (item.UserId == _userId)
 					{
 						ViewData["already"] = true;
 						break;
 					}
 				}
-	
+
 			}
 
 
@@ -431,7 +455,7 @@ namespace JellyFish.Controllers
 		}
 
 
-	
+
 
 
 
@@ -518,7 +542,7 @@ namespace JellyFish.Controllers
 
 		public IActionResult Edit(int? id)
 		{
-			
+
 
 			ViewBag.CategoryList = new SelectList(_context.Categories.ToList(), "CategoryId", "Name");
 			ViewBag.LevelList = new SelectList(_context.Levels.ToList(), "Id", "LevelName");
@@ -539,15 +563,15 @@ namespace JellyFish.Controllers
 			{
 				_unitOfWork.Job.Update(job);
 				_unitOfWork.Save();
-			
+
 				return RedirectToAction("Index");
 			}
 			else
 			{
 				return View(job);
 			}
-			
-		
+
+
 		}
 
 		public IActionResult Delete(int? id)
