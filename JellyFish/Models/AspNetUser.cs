@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace JellyFish.Models;
@@ -42,8 +41,7 @@ public partial class AspNetUser
 
     public int AccessFailedCount { get; set; }
 
-    [ValidateNever]
-    public string? ProfileImage { get; set; } = string.Empty;
+    public string? ProfileImage { get; set; }
 
     public virtual Address? Address { get; set; }
 

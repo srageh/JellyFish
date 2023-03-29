@@ -49,7 +49,8 @@ namespace JellyFish.Controllers
                 {
                     JobId = vm.job_ID,
                     UserId = vm.user_ID,
-                    IsApplied = isApplied
+                    IsApplied = isApplied//,
+                   // IsAccepted = 0;
                    
                 };
                 try

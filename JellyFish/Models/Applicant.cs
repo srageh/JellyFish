@@ -11,7 +11,7 @@ public partial class Applicant
 
     public string UserId { get; set; } = null!;
 
-    public bool? IsAccepted { get; set; }
+    public int IsAccepted { get; set; }
 
     public string? IsApplied { get; set; }
 
