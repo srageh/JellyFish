@@ -9,6 +9,7 @@ using JellyFish.Models;
 using JellyFish.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using JellyFish.Models.View_Models;
+using System.Drawing;
 
 namespace JellyFish.Controllers
 {
@@ -28,7 +29,7 @@ namespace JellyFish.Controllers
         }
 
         // GET: Applicants
-        public async Task<IActionResult> Index(string? jobID)
+        public async Task<IActionResult> Index(string? jobID, string isApplied)
         {
             var user = await _userManager.GetUserAsync(User);
             string userid = await _userManager.GetUserIdAsync(user);
@@ -47,7 +48,9 @@ namespace JellyFish.Controllers
                 Applicant appl = new Applicant()
                 {
                     JobId = vm.job_ID,
-                    UserId = vm.user_ID
+                    UserId = vm.user_ID,
+                    IsApplied = isApplied
+                   
                 };
                 try
                 {

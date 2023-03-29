@@ -11,7 +11,9 @@ public partial class Applicant
 
     public string UserId { get; set; } = null!;
 
-    public bool IsAccepted { get; set; }
+    public bool? IsAccepted { get; set; }
+
+    public string? IsApplied { get; set; }
 
     public virtual Job Job { get; set; } = null!;
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace JellyFish.Models;
@@ -26,17 +25,19 @@ public partial class Job
 
     public int LevelId { get; set; }
 
+    public bool? IsRemote { get; set; }
+
     public string EmployerId { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 
     public virtual ICollection<Applicant> Applicants { get; } = new List<Applicant>();
-	[ValidateNever]
-	public virtual Category Category { get; set; } = null!;
-	[ValidateNever]
-	public virtual Employer Employer { get; set; } = null!;
-	[ValidateNever]
-	public virtual JobType JobType { get; set; } = null!;
-	[ValidateNever]
-	public virtual Level Level { get; set; } = null!;
+
+    public virtual Category Category { get; set; } = null!;
+
+    public virtual Employer Employer { get; set; } = null!;
+
+    public virtual JobType JobType { get; set; } = null!;
+
+    public virtual Level Level { get; set; } = null!;
 }

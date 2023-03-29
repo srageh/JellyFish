@@ -75,7 +75,16 @@
 						{
 							<li class="nav-item">
 							<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Companies</a>
+								
+
 						</li>
+							<li>
+								<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Jobs</a>
+							</li>
+							<li>
+								<a class="nav-color nav-link" asp-area=""  asp-action="MyJobs">My Jobs</a>
+
+							</li>
 						}
 						
 						@if (User.IsInRole("Employer"))
@@ -104,6 +113,7 @@
 	</header>
 	<div class="container">
 		<main role="main" class="p-5">
+			<partial name="_Notification"/>
 			@RenderBody()
 		</main>
 	</div>
