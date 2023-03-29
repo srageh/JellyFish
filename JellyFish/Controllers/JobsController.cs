@@ -422,6 +422,9 @@ namespace JellyFish.Controllers
 		// GET: Jobs/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
+			var user = await _userManager.GetUserAsync(User);
+			string userid = await _userManager.GetUserIdAsync(user);
+
 			if (id == null || _context.Jobs == null)
 			{
 				return NotFound();
@@ -432,9 +435,9 @@ namespace JellyFish.Controllers
 			{
 				return NotFound();
 			}
-			if (job.Applicants.FirstOrDefault() != null)
+			if (job.Applicants.Where(x => x.UserId == userid).FirstOrDefault() != null)
 			{
-				ViewBag.already = job.Applicants.FirstOrDefault().IsApplied;
+				ViewBag.already = job.Applicants.Where(x=> x.UserId == userid).FirstOrDefault().IsApplied;
 			}
 			else
 			{
