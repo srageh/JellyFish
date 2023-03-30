@@ -144,7 +144,29 @@
 										<div class="row  align-items-center h-100">
 											<div class="col col-md-12 ">
 												<div class="card" style="border-radius: 15px;">
-													<div class="card-body p-4" style="background-color: #99CCFF;">
+													@{
+														string colorr = "";
+														if (myList[myIndex].IsAccepted == 0)
+														{
+															colorr = "#99CCFF";
+														}
+														else if (myList[myIndex].IsAccepted == 1)
+														{
+															colorr = "#99FFCC";
+														}
+														else
+														{
+															colorr = "#FF6666";
+														}
+													}
+
+
+
+								@*					<div class="card-body p-4" style="background-color: #FF6666;">
+
+									<div class="card-body p-4" style="background-color: #99FFCC;">
+									<div class="card-body p-4" style="background-color: #99CCFF;">*@
+													<div class="card-body p-4" style="background-color: @colorr;">
 														<div class="d-flex text-black">
 															<div class="flex-shrink-0">
 																<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
@@ -279,6 +301,29 @@
 	</tbody>
 </table>
 
+
+<script>
+	$(document).ready(function () {
+
+
+		$("select.select_Status").change(function () {
+			var selectedStatus = $(this).children("option:selected").val();
+			var jobIdValue = $('#jobId').val();
+			alert(jobIdValue);
+			$.ajax({
+				url: '@Url.Action("ChangeStatus","Jobs")',
+				type: 'POST',
+				data: { statusValue: selectedStatus, jobId: jobIdValue },
+				success: function (result) {
+					$("h5").text("The Status has been changed to " + selectedStatus);
+				}
+			});
+
+		});
+
+	});
+
+</script>
 
 
 <script>
