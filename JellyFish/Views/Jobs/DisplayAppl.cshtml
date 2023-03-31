@@ -229,7 +229,9 @@
 										<div class="row  align-items-center h-100">
 											<div class="col col-md-12 ">
 												<div class="card" style="border-radius: 15px;">
+													
 													<div class="card-body p-4">
+													
 														<div class="d-flex text-black">
 															<div class="flex-shrink-0">
 																<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
@@ -270,6 +272,25 @@
 																</div>
 															</div>
 														</div>
+														
+                    
+                    @{
+						if (myList[myIndex].IsAccepted == 0)
+						{
+							<p style="color: #ff6505;">Pending</p>
+						}
+						else if (myList[myIndex].IsAccepted == 1)
+						{
+							<p style="color: blue; font-weight: bold;">Accepted</p>
+						}
+						else
+						{
+							<p style="color: red; font-weight: bold;">Declined</p>
+						}
+
+                       
+                    }
+         
 													</div>
 												</div>
 											</div>
@@ -365,6 +386,29 @@
 </table>
 
 
+<script>
+	$(document).ready(function () {
+
+
+		$("select.select_Status").change(function () {
+			var selectedStatus = $(this).children("option:selected").val();
+			var jobIdValue = $('#jobId').val();
+			alert(jobIdValue);
+			$.ajax({
+				url: '@Url.Action("ChangeStatus","Jobs")',
+				type: 'POST',
+				data: { statusValue: selectedStatus, jobId: jobIdValue },
+				success: function (result) {
+					$("h5").text("The Status has been changed to " + selectedStatus);
+				}
+			});
+
+		});
+
+	});
+
+</script>
+
 
 <script>
 	tinymce.init({
@@ -387,32 +431,3 @@
 </script>
 
 
-@*
-			<tr>
-
-				<td>
-					@Html.DisplayFor(model => item.User.FirstName)
-				</td>
-				<td>
-					@Html.DisplayFor(model => item.User.LastName)
-				</td>
-
-				<td>
-					<p>
-						@foreach (var iteme in item.User.UserSkills)
-						{
-							@(iteme.Skill.Name + "    ")
-						}
-					</p>
-
-				</td>
-
-
-
-				<td>
-					<a asp-controller="Applicants" asp-action="Details" asp-route-id="@item.ApplicantId">View</a>
-					<a asp-action="Edit" asp-route-id="@item.JobId">Accept</a> |
-					<a asp-action="Details" asp-route-id="@item.JobId">Decline</a> |
-
-				</td>
-			</tr>*@

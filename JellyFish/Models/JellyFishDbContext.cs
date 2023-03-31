@@ -47,15 +47,13 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS19;Database=JellyFishDB;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__tmp_ms_x__CAA247C8EA72E83A");
+            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C8DF62F579");
 
             entity.ToTable("Address");
 
@@ -81,7 +79,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Applicant>(entity =>
         {
-            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C14AE3459F");
+            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C1D234FF9B");
 
             entity.ToTable("Applicant");
 
@@ -186,7 +184,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B43974A730");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B40EADEC8E");
 
             entity.ToTable("Category");
 
@@ -198,7 +196,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E2672354BBE83B7");
+            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E2672358BEEE131");
 
             entity.ToTable("Company");
 
@@ -216,7 +214,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Employer>(entity =>
         {
-            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E74872C574");
+            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E74114CC47");
 
             entity.ToTable("Employer");
 
@@ -239,7 +237,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A57B7DC067");
+            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A56ACDD016");
 
             entity.ToTable("Job");
 
@@ -290,7 +288,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<JobType>(entity =>
         {
-            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7FDB34978A");
+            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7F5E7301F6");
 
             entity.ToTable("JobType");
 
@@ -302,7 +300,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Level>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC07385CD5C2");
+            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC07FA0C4EC0");
 
             entity.ToTable("Level");
 
@@ -313,7 +311,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Skill>(entity =>
         {
-            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA837919B88403");
+            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA83793B52092B");
 
             entity.ToTable("Skill");
 
@@ -326,7 +324,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
-            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B7A067D82");
+            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B30B1279E");
 
             entity.ToTable("UserSkill");
 
