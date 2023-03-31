@@ -123,11 +123,7 @@
             <option value="opend">Opend Jobs</option>
             <option value="closed">Closed Jobs</option>                                  
         </select>*@
-
 	</form>
-
-
-
 
 </section>
 
@@ -149,6 +145,9 @@
                 Pending
             </th>
           
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -350,8 +349,6 @@
 		});
 
 	});
-
-
 
 </script>
 <script>

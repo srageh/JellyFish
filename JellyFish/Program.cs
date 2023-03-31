@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using JellyFish.Areas.Identity.Data;
-using JellyFish.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using JellyFish.Repository.IRepository;
 using JellyFish.Repository;
+using JellyFish.IService;
+using JellyFish.Common;
+using JellyFish.Service;
 
 var builder = WebApplication.CreateBuilder(args);
+//var connectionString = builder.
 var connectionString = builder.Configuration.GetConnectionString("JellyFishContextConnection") ?? throw new InvalidOperationException("Connection string 'JellyFishContextConnection' not found."); 
 
 
@@ -17,6 +20,8 @@ builder.Services.AddDbContext<JellyFishContext>(options =>
  options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<INotiService, NotiService>();
 
 builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
  .AddRoles<IdentityRole>()

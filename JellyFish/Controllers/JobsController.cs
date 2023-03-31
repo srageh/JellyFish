@@ -441,26 +441,12 @@ namespace JellyFish.Controllers
 				_context.Update(updateJobs);
 				_context.SaveChanges();
 
-
-
-
 				return RedirectToAction("Index");
 
 			}
 
 			return View();
-
-
-
 		}
-
-
-
-
-
-
-
-
 
 		// GET: Jobs/Details/5
 		public async Task<IActionResult> Details(int? id)

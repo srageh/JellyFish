@@ -218,6 +218,8 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
             //var supportedTypes = new[] { "txt", "doc", "docx", "pdf", "xls", "xlsx" };
             var supportedTypes = new[] { "png", "jpeg", "jpg", "gif", "bmp" };
 
+							resume.ResumeFile = @"\images\resume\" + fileName + extension;
+							_context.Skills.Add(resume);
 
             var profileImage = _context.AspNetUsers.Where(x => x.Id == user.Id).FirstOrDefault();
             int skillId = _context.UserSkills.Where(x => x.UserId == user.Id).FirstOrDefault().SkillId;

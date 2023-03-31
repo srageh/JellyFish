@@ -49,7 +49,7 @@
 
                     <p hidden>@Html.TextBoxFor(model => job.JobId, new { @class = "form-control", id = "jobId" })</p>
                     <td>@job.Title</td>
-                    <td>@job.Employer.Company.Name</td>
+                    <td>@job.Employer.Company.Name</td>              
                     <td>@job.Location</td>
                     <td>@job.Salary</td>
                     <td>@job.CreatedDate</td>
@@ -62,7 +62,7 @@
                             </button>
                         </form>
 
-
+                      
                     </td>
 
                 </tr>
