@@ -47,8 +47,6 @@ public partial class AspNetUser
 
     public int AccessFailedCount { get; set; }
 
-    public string? ProfileImage { get; set; }
-
     public virtual Address? Address { get; set; }
 
     public virtual ICollection<Applicant> Applicants { get; } = new List<Applicant>();
