@@ -1,6 +1,10 @@
-using OpenQA.Selenium;
+
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+
+
+
 namespace JellyFishTest
 {
 	public class Tests1
@@ -194,6 +198,54 @@ namespace JellyFishTest
         }
 
 
+		[Test]
+
+		public void FilterAppliedJobs()
+		{
+			driver.Url = "https://localhost:7143/Identity/Account/Login";
+			loginAsApplicant();
+			GetHref("myjobs");
+			var myJobsFilter = driver.FindElement(By.Id("filterSelect"));
+			var selectElement = new SelectElement(myJobsFilter);
+			selectElement.SelectByText("Applied");
+			var jobsContainer = driver.FindElement(By.Id("container"));
+			var jobs = jobsContainer.FindElements(By.Id("ind-job"));
+			Assert.Greater(jobs.Count(), -1);
+
+		}
+
+
+
+        [Test]
+
+        public void FilterSavedJobs()
+        {
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsApplicant();
+            GetHref("myjobs");
+            var myJobsFilter = driver.FindElement(By.Id("filterSelect"));
+            var selectElement = new SelectElement(myJobsFilter);
+            selectElement.SelectByText("Saved");
+            var jobsContainer = driver.FindElement(By.Id("container"));
+            var jobs = jobsContainer.FindElements(By.Id("ind-job"));
+            Assert.Greater(jobs.Count(), -1);
+        }
+
+        [Test]
+
+        public void FilterAllJobs()
+        {
+            driver.Url = "https://localhost:7143/Identity/Account/Login";
+            loginAsApplicant();
+            GetHref("myjobs");
+            var myJobsFilter = driver.FindElement(By.Id("filterSelect"));
+            var selectElement = new SelectElement(myJobsFilter);
+            selectElement.SelectByText("All");
+            var jobsContainer = driver.FindElement(By.Id("container"));
+            var jobs = jobsContainer.FindElements(By.Id("ind-job"));
+            Assert.Greater(jobs.Count(), -1);
+        }
+
 
 
 
@@ -229,10 +281,8 @@ namespace JellyFishTest
 		{
 			driver.FindElement(By.Id("Input_Email")).SendKeys("ragehsuhaib@gmail.com");
 			WebElement element = (WebElement)driver.FindElement(By.Id("option1"));
-
 			IJavaScriptExecutor executor = (IJavaScriptExecutor)driver;
 			executor.ExecuteScript("arguments[0].click()", element);
-
 			driver.FindElement(By.Id("Input_Password")).SendKeys("Test123@");
 			driver.FindElement(By.Id("Input_ConfirmPassword")).SendKeys("Test123@");
 			driver.FindElement(By.Id("registerSubmit")).Click();
@@ -250,7 +300,7 @@ namespace JellyFishTest
 
 		private void loginAsApplicant()
 		{
-			driver.FindElement(By.Id("Input_Email")).SendKeys("ragehsuhaib@gmail.com");
+			driver.FindElement(By.Id("Input_Email")).SendKeys("d@gmail.com");
 			driver.FindElement(By.Id("Input_Password")).SendKeys("Test123@");
 			driver.FindElement(By.Id("login-submit")).Click();
 		}

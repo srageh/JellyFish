@@ -43,7 +43,7 @@ namespace JellyFish.Controllers
 			{
 
 				var user = await _userManager.GetUserAsync(User);
-				var applicantJobs = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).ToList();
+				var applicantJobs = _context.Jobs.Include(x => x.Category).Include(x => x.JobType).Include(x => x.Level).Include(x => x.Employer.Company).Where(x=> x.IsActive == true && x.IsOpen == true).ToList();
 
 
 				if (!String.IsNullOrEmpty(searchQuery))
@@ -121,21 +121,20 @@ namespace JellyFish.Controllers
 
 					}
 
-					if (searchQuery.Equals("act"))
+					
+
+					if (searchQuery.Equals("opend"))
 					{
-						var jobsz = _context.Jobs.Where(r => r.IsActive == true).Include(x => x.Category);
+						var jobsz = _context.Jobs.Where(r => r.IsOpen == true).Include(x => x.Category);
 
 						// For counting applicants' number on job posting for employer
 
 						try
 						{
-							var jobList = _context.Jobs.Where(r => r.IsActive == true).Select(x => x.JobId).ToList();
+							var jobList = _context.Jobs.Where(r => r.IsOpen == true).Select(x => x.JobId).ToList();
 							var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
 							List<string> applicantCountArray = new List<string>();
 							int count = 0;
-
-
-
 
 							for (int i = 0; i < jobList.Count; i++)
 							{
@@ -146,8 +145,6 @@ namespace JellyFish.Controllers
 										count++;
 									}
 								}
-
-
 
 								applicantCountArray.Add(jobList[i] + " " + count);
 								count = 0;
@@ -162,12 +159,7 @@ namespace JellyFish.Controllers
 								ViewBag.ApplicantCountArray = applicantCountArray;
 							}
 
-
-
-
 							return View("Index_Emp", jobsz.ToList());
-
-
 
 						}
 						catch (Exception ex)
@@ -177,7 +169,52 @@ namespace JellyFish.Controllers
 						}
 
 					}
+					if (searchQuery.Equals("closed"))
+					{
+						var jobsz = _context.Jobs.Where(r => r.IsOpen == false).Include(x => x.Category);
 
+						// For counting applicants' number on job posting for employer
+
+						try
+						{
+							var jobList = _context.Jobs.Where(r => r.IsOpen == false).Select(x => x.JobId).ToList();
+							var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
+							List<string> applicantCountArray = new List<string>();
+							int count = 0;
+
+							for (int i = 0; i < jobList.Count; i++)
+							{
+								for (int j = 0; j < applicantList.Count; j++)
+								{
+									if (applicantList[j] == jobList[i])
+									{
+										count++;
+									}
+								}
+
+								applicantCountArray.Add(jobList[i] + " " + count);
+								count = 0;
+							}
+							if (applicantCountArray.Count > 0)
+							{
+
+								ViewBag.ApplicantCountArray = applicantCountArray;
+							}
+							else
+							{
+								ViewBag.ApplicantCountArray = applicantCountArray;
+							}
+
+							return View("Index_Emp", jobsz.ToList());
+
+						}
+						catch (Exception ex)
+						{
+							//Response.Write("Property: " + ex.Message);
+							return View();
+						}
+
+					}
 
 					if (searchQuery.Equals("all"))
 					{
@@ -239,6 +276,8 @@ namespace JellyFish.Controllers
 						}
 					}
 				}
+
+
 
 
 				var jobs = _context.Jobs.Include(x => x.Category);
@@ -311,11 +350,11 @@ namespace JellyFish.Controllers
 
 			if(acceptA.Equals("Accept"))
 			{
-				Current_Aplicant.IsAccepted = true;
+				Current_Aplicant.IsAccepted = 1;
 			}
 			else
 			{
-				Current_Aplicant.IsAccepted = false;
+				Current_Aplicant.IsAccepted = 2;
 			}
 
 			_context.Applicants.Update(Current_Aplicant);
@@ -356,24 +395,28 @@ namespace JellyFish.Controllers
 
 		public async Task<IActionResult> RadioSelect(string? searchQuery)
 		{
-
 			if (searchQuery.Equals("all"))
 			{
 				return RedirectToAction("Index", "Jobs", new { searchQuery = "all" });
 			}
 
-
-			if (searchQuery.Equals("act"))
-			{
-
-				return RedirectToAction("Index", "Jobs", new { searchQuery = "act" });
-			}
+			
 
 
 			if (searchQuery.Equals("inact"))
 			{
 
 				return RedirectToAction("Index", "Jobs", new { searchQuery = "inact" });
+			}
+			if (searchQuery.Equals("opend"))
+			{
+
+				return RedirectToAction("Index", "Jobs", new { searchQuery = "opend" });
+			}
+			if (searchQuery.Equals("closed"))
+			{
+
+				return RedirectToAction("Index", "Jobs", new { searchQuery = "closed" });
 			}
 			return View();
 		}
@@ -437,7 +480,8 @@ namespace JellyFish.Controllers
 			}
 			if (job.Applicants.Where(x => x.UserId == userid).FirstOrDefault() != null)
 			{
-				ViewBag.already = job.Applicants.Where(x=> x.UserId == userid).FirstOrDefault().IsApplied;
+				ViewBag.applied = job.Applicants.Where(x=> x.UserId == userid).FirstOrDefault().IsApplied;
+				ViewBag.saved = job.Applicants.Where(x => x.UserId == userid).FirstOrDefault().IsSaved;
 			}
 			else
 			{
@@ -611,6 +655,11 @@ namespace JellyFish.Controllers
 				return NotFound();
 			}
 
+			var applicantForJob = _context.Applicants.Where(x=> x.JobId == id).ToList();
+
+			_context.Applicants.RemoveRange(applicantForJob);
+			_context.SaveChanges();
+
 			_unitOfWork.Job.Remove(obj);
 			_unitOfWork.Save();
 			//TempData["success"] = "It's been deleted successfully";
@@ -628,23 +677,89 @@ namespace JellyFish.Controllers
 		{
 			var user = _userManager.GetUserId(User);
 			
-			if (_context.Applicants != null)
+			
+			
+			
+
+			var applicant = _context.Applicants.Where(x => x.UserId == user).Select(x=> x.JobId).ToList();
+
+			if(applicant != null)
 			{
-				var myjobs = await _context.Applicants
-                    .Include(a => a.User)
-                .Include(a => a.Job)
-				.ThenInclude(x=> x.Employer)
-				.ThenInclude(x => x.Company)
-				.Where(x => x.UserId == user)
-				.ToListAsync();
-				return View(myjobs);
-			}
-			return View();
+
+                var applicantJobs = _context.Jobs
+                .Include(x => x.Applicants)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Category)
+                .Include(x => x.JobType)
+                .Include(x => x.Level)
+                .Include(x => x.Employer.Company)
+				.Where(x=> applicant.Contains(x.JobId))
+                .ToList();
+                return View(applicantJobs);
+
+            }
+
+
+            //         var myjobs = await _context.Applicants
+            //             .Include(a => a.User)
+            //         .Include(a => a.Job)
+            //.ThenInclude(x=> x.Employer)
+            //.ThenInclude(x => x.Company)
+            //.Where(x => x.UserId == user)
+            //.ToListAsync();
+
+            return View();
 		}
 
+		[HttpGet]
+		public  IActionResult MyJobsFiltered(string appliedJobs)
+		{
+
+            var user = _userManager.GetUserId(User);
+			List<int> applicant;
 
 
-			[HttpPost]
+            if (appliedJobs == "Applied")
+			{
+                applicant = _context.Applicants.Where(x => x.UserId == user && x.IsApplied == true).Select(x => x.JobId).ToList();
+            }
+			else if(appliedJobs == "Selected")
+			{
+                applicant = _context.Applicants.Where(x => x.UserId == user && x.IsAccepted == 1).Select(x => x.JobId).ToList();
+            }
+			else if (appliedJobs == "Saved")
+			{
+                applicant = _context.Applicants.Where(x => x.UserId == user && x.IsSaved == true).Select(x => x.JobId).ToList();
+            }
+			else
+			{
+                applicant = _context.Applicants.Where(x => x.UserId == user).Select(x => x.JobId).ToList();
+            }
+
+
+            
+
+            if (applicant != null)
+            {
+
+                var applicantJobs = _context.Jobs
+                .Include(x => x.Applicants)
+                .ThenInclude(x => x.User)
+                .Include(x => x.Category)
+                .Include(x => x.JobType)
+                .Include(x => x.Level)
+                .Include(x => x.Employer.Company)
+                .Where(x => applicant.Contains(x.JobId))
+                .ToList();
+                return PartialView("_MyJobsPartial", applicantJobs);
+
+            }
+            return View();
+        }
+
+
+
+            [HttpPost]
 		public IActionResult FilterJobType(JobViewModel types)
 		{
 

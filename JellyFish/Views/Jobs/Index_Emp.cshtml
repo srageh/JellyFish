@@ -99,18 +99,30 @@
 		<div class="form-floating">
 			<div class="btn-group">
 				<input type="radio" name="searchQuery" class="btn-check" id="option1" value="all" checked />
-				<label class="btn btn-primary" for="option1">All Jobs</label>
+				<label class="btn btn-primary" for="option1">All Jobs</label> 
 
-				<input type="radio" name="searchQuery" class="btn-check" id="option2" value="act" />
-				<label class="btn btn-primary" for="option2">Active Jobs</label>
+               @* <input type="radio" name="searchQuery" class="btn-check" id="option2" value="act" /> 
+                <label class="btn btn-primary" for="option2">Active Jobs</label> 
+*@
+				<input type="radio" name="searchQuery" class="btn-check" id="option3" value="inact" /> 
+				<label class="btn btn-primary" for="option3">Inactive</label> 
 
-				<input type="radio" name="searchQuery" class="btn-check" id="option3" value="inact" />
-				<label class="btn btn-primary" for="option3">Inactive Jobs</label>
+                <input type="radio" name="searchQuery" class="btn-check" id="option4" value="opend" />
+				<label class="btn btn-primary" for="option4">Open</label> 
+
+                <input type="radio" name="searchQuery" class="btn-check" id="option5" value="closed" />
+                <label class="btn btn-primary" for="option5">Closed</label>
 
 			</div>
 			<input type="submit" value="Display" />
 		</div>
-
+       @* <select id="selectsearch" name="selectsearch" class="selectsearch">
+            <option selected value="all">All Jobs</option>
+            <option value="act">Active Jobs</option>
+            <option value="inact">Inactive Jobs</option>
+            <option value="opend">Opend Jobs</option>
+            <option value="closed">Closed Jobs</option>                                  
+        </select>*@
 
 	</form>
 
@@ -133,6 +145,9 @@
 <table class="table">
     <thead>
         <tr>
+			<th>
+                Pending
+            </th>
           
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -166,7 +181,19 @@
         {
             <tr>
                 @*<p hidden>@Html.TextBoxFor(model => item.JobId, new { @class = "form-control", id = "jobId" })</p>*@
-                
+                 <td>
+                    
+                    @{
+                        if(item.IsActive == false)
+                        {
+                            <p style="color: red">pending</p>
+                        }
+                        else
+                        {
+                            <p></p>
+                        }
+                    }
+                </td>
                 
                 <td>
                     @Html.DisplayFor(model => item.Title)
@@ -231,6 +258,7 @@
 
 				<td>
 
+				
 
 					@{
 

@@ -29,7 +29,7 @@ namespace JellyFish.Controllers
         }
 
         // GET: Applicants
-        public async Task<IActionResult> Index(string? jobID, string isApplied)
+        public async Task<IActionResult> Index(string? jobID, bool isApplied, bool isSaved )
         {
             var user = await _userManager.GetUserAsync(User);
             string userid = await _userManager.GetUserIdAsync(user);
@@ -45,21 +45,45 @@ namespace JellyFish.Controllers
                     job_title = jobs[0].Title,
                     job_desc = jobs[0].Description
                 };
-                Applicant appl = new Applicant()
-                {
-                    JobId = vm.job_ID,
-                    UserId = vm.user_ID,
-                    IsApplied = isApplied
-                   
-                };
+                Applicant appl = new Applicant();
+
+                var existJob = _context.Applicants.Where(x => x.UserId == userid && x.JobId == Int32.Parse(jobID)).FirstOrDefault();
                 try
                 {
-                    await _context.Applicants.AddAsync(appl);
-                    await _context.SaveChangesAsync();
+                    if (existJob != null)
+                    {
+                        if (isApplied)
+                        {
+                            existJob.IsApplied = isApplied;
+
+                        }
+                        if(isSaved) { 
+                            existJob.IsSaved = isSaved;
+                        }
+                        _context.Update(existJob);
+                        _context.SaveChanges();
+
+                    }
+                    else
+                    {
+                        if (isApplied)
+                        {
+                            appl.IsApplied = isApplied;
+                        }
+                        if (isSaved)
+                        {
+                            appl.IsSaved = isSaved;
+                        }
+
+                        appl.JobId = vm.job_ID;
+                        appl.UserId = vm.user_ID;
+                        _context.Applicants.Add(appl);
+                        _context.SaveChanges();
+                    }
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine(ex.Message);
                 }
                 return RedirectToAction("Details","Jobs", new { id =  vm.job_ID});
                 

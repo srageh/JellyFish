@@ -1,4 +1,4 @@
-﻿@model List<Applicant>
+﻿@model List<Job>
 
 @{
     ViewData["Title"] = "MyJobs";
@@ -8,52 +8,46 @@
 
 <style>
     #job-container {
-        gap: 1em;
+       gap:3em;
         display: flex;
         font-size: 1.2rem;
         padding: 18px 1em;
         border: 1px solid rgba(144,146,148,0.2);
-        position: relative;
         margin-bottom: 8px;
         box-shadow: 1px 1px 2px #ccc;
         background-color: white;
+        align-items:center;
+    
+        
+
+    }
+    p{
+        margin:0;
+        padding:0;
     }
 </style>
 
-<h1 id="jobsTitle">My Jobs</h1>
+<h2 style="color:#3b5e9c; font-weight:700; font-size:3em" id="jobsTitle">My Jobs</h2>
 
 @*<p>
     <a asp-page="Create">Create New</a>
 </p>*@
 
-
 <section id="jobs">
-    @if (Model.Count() > 0)
-    {
-        foreach (var item in Model)
-        {
-            <a id="ind-job" style="text-decoration:none; color:black" asp-controller="Jobs" asp-action="Details" asp-route-id="@item.JobId">
-                <div id="job-container">
-                    <img style="object-fit:contain" height="100" width="100" alt="company Logo" src="@item.Job.Employer.Company.Logo" />
-                    <div>
-                        <h4>@item.Job.Title</h4>
-                        @*<button id="appyBtn">Apply</button>
-                <button id="appyBtn">Save</button>*@
-                        <h5>@item.Job.Employer.Company.Name</h5>
-                        <div style="display:flex; gap:0.5em; margin-top:15px">
-                            @*<p style="font-size:medium; font-weight:600; background-color:#f3f4f6; padding:0.2em 0.5em;">@item.JobType.Name</p>
-                            <p style="font-size:medium; font-weight:600; background-color:#f3f4f6; padding:0.2em 0.5em;">@item.Level.LevelName</p>*@
-                        </div>
-                    </div>
-                </div>
-            </a>
-        }
-    }
-    else
-    {
-        <p>No Jobs Foudn</p>
-    }
+    <label style="font-size: 1.5em" for="filterSelect">Job Filter</label>
+    <select  style="width:auto; border-radius:5px; box-shadow: 1px 1px 2px #ccc; padding:5px 10px; font-size:1.2em; margin: 15px 0" name="filterSelect" id="filterSelect">
+        <option>All</option>
+        <option >Applied</option>
+        <option>Saved</option>
+        <option>Selected</option>
 
+    </select>
+    <div id="container">
+        <partial name="_MyJobsPartial.cshtml" model="@Model" />
+    </div>
+
+
+   
 
 
 
@@ -100,3 +94,19 @@
     </tbody>
 </table>
 *@
+<script>
+    $("#filterSelect").change(function(){
+        console.log($(this).val());
+        $.ajax({
+            type: "Get",
+            url: "/Jobs/MyJobsFiltered?appliedJobs=" + $(this).val(),  //remember change the controller to your owns.
+            success: function (data) {
+                $("#container").html("");
+                $("#container").html(data);
+            },
+            error: function (response) {
+                console.log(response.responseText);
+            }
+        });
+    })
+</script>

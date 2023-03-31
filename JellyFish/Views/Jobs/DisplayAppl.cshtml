@@ -113,7 +113,9 @@
 
 <a asp-action="Index" asp-controller="Home">Back to List</a>
 
-<div style="display:grid; grid-template-columns: 1fr 1fr">
+<h1>Applicants for @Model.Title</h2>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr;">
 	@foreach (var item in myList)
 	{
 		<div>
@@ -151,8 +153,11 @@
 
 																@for (int q = 0; q < myList[myIndex].User.UserSkills.Count; q++)
 																{
-																	@(((List<UserSkill>)myList[myIndex].User.UserSkills)[q].Skill.Name + "  ")
-																	;
+																	<li>
+																		@(((List<UserSkill>)myList[myIndex].User.UserSkills)[q].Skill.Name + "  ")
+																	
+																		</li>
+																	
 																}
 
 
@@ -194,7 +199,7 @@
 
 
 			<th>
-				<h2>Applicants for @Model.Title</h2>
+				@*<h2>Applicants for @Model.Title</h2>*@
 			</th>
 
 
@@ -207,7 +212,7 @@
 		
 
 
-		@if (myList.Count > 2)
+		@*@if (myList.Count > 2)
 			@for (int i = 0; i < (myList.Count / 2) * 2 + myList.Count % 2; i++)
 			{
 				<tr>
@@ -355,7 +360,7 @@
 
 				}
 			</tr>
-		}
+		}*@
 	</tbody>
 </table>
 

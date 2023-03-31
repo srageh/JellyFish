@@ -73,16 +73,10 @@
 						</li>
 					@if (User.IsInRole("JobSeeker"))
 						{
-							<li class="nav-item">
-							<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Companies</a>
-								
-
-						</li>
+							
+							
 							<li>
-								<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Jobs</a>
-							</li>
-							<li>
-								<a class="nav-color nav-link" asp-area=""  asp-action="MyJobs">My Jobs</a>
+								<a id="myjobs" class="nav-color nav-link" asp-area=""  asp-action="MyJobs">My Jobs</a>
 
 							</li>
 						}

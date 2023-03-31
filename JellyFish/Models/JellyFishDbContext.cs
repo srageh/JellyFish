@@ -47,7 +47,10 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-  
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS19;Database=JellyFishDB;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Address>(entity =>
@@ -87,8 +90,11 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.ApplicantId).HasColumnName("applicant_id");
             entity.Property(e => e.IsAccepted).HasColumnName("isAccepted");
             entity.Property(e => e.IsApplied)
-                .HasMaxLength(100)
+                .HasDefaultValueSql("((0))")
                 .HasColumnName("isApplied");
+            entity.Property(e => e.IsSaved)
+                .HasDefaultValueSql("((0))")
+                .HasColumnName("isSaved");
             entity.Property(e => e.JobId).HasColumnName("job_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
