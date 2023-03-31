@@ -101,20 +101,42 @@
 								<h4>@Model.User.FirstName @Model.User.LastName</h4>
 								<p class="text-secondary mb-1">Full Stack Developer</p>
 								<p class="text-muted font-size-sm">@ViewBag.address.User.Address.Street, @ViewBag.address.User.Address.City, @ViewBag.address.User.Address.Province</p>
-								<div class="btn-group">
-									<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
-										<input type="hidden" name="acceptA" value="Accept"/>
-										<input type="hidden" name="Job_ID" value="@Model.JobId" />
-										<input type="hidden" name="A_ID" value="@Model.ApplicantId"/>
-										<button type="submit" class="btn btn-primary">Accept</button>
-									</form>
-									<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
-										<input type="hidden" name="acceptA" value="Decline"/>
-										<input type="hidden" name="Job_ID" value="@Model.JobId" />
-										<input type="hidden" name="A_ID" value="@Model.ApplicantId"/>
-										<button type="submit" class="btn btn-danger">Decline</button>
-									</form>
-								</div>
+								
+								@if(Model.IsAccepted == 0)
+								{
+									<div class="btn-group">
+										<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
+											<input type="hidden" name="acceptA" value="Accept" />
+											<input type="hidden" name="Job_ID" value="@Model.JobId" />
+											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
+											<button type="submit" class="btn btn-primary">Accept</button>
+										</form>
+										<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
+											<input type="hidden" name="acceptA" value="Decline" />
+											<input type="hidden" name="Job_ID" value="@Model.JobId" />
+											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
+											<button type="submit" class="btn btn-danger">Decline</button>
+										</form>
+									</div>
+								}
+								else
+								{
+									<div class="btn-group">
+										<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
+											<input type="hidden" name="acceptA" value="Accept" />
+											<input type="hidden" name="Job_ID" value="@Model.JobId" />
+											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
+											<button disabled type="submit" class="btn btn-primary">Accept</button>
+										</form>
+										<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
+											<input type="hidden" name="acceptA" value="Decline" />
+											<input type="hidden" name="Job_ID" value="@Model.JobId" />
+											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
+											<button disabled type="submit" class="btn btn-danger">Decline</button>
+										</form>
+									</div>
+								}
+
 							</div>
 						</div>
 
