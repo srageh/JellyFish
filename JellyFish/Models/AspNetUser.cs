@@ -14,11 +14,6 @@ public partial class AspNetUser
 
     public string? LastName { get; set; }
 
-    [ValidateNever]
-    public string? ProfileImage { get; set; } = string.Empty!;
-
-    //public IFormFile ProfilePhoto { get; set; }
-
     public DateTime? DateOfBirth { get; set; }
 
     public string? NormalizedUserName { get; set; }
@@ -46,6 +41,12 @@ public partial class AspNetUser
     public bool LockoutEnabled { get; set; }
 
     public int AccessFailedCount { get; set; }
+
+	[ValidateNever]
+	public string? ProfileImage { get; set; }
+
+	[ValidateNever]
+	public string? ResumeFile { get; set; }
 
     public virtual Address? Address { get; set; }
 

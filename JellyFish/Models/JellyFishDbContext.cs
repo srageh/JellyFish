@@ -43,6 +43,8 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<Level> Levels { get; set; }
 
+    public virtual DbSet<Notification> Notifications { get; set; }
+
     public virtual DbSet<Skill> Skills { get; set; }
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
@@ -53,7 +55,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Address>(entity =>
         {
-            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C8DF62F579");
+            entity.HasKey(e => e.AddressId).HasName("PK__Address__CAA247C85B577A6A");
 
             entity.ToTable("Address");
 
@@ -79,7 +81,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Applicant>(entity =>
         {
-            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C1D234FF9B");
+            entity.HasKey(e => e.ApplicantId).HasName("PK__Applican__F49C60C17486041A");
 
             entity.ToTable("Applicant");
 
@@ -138,9 +140,10 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
             entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
             entity.Property(e => e.ProfileImage).HasColumnName("profileImage");
+            entity.Property(e => e.ResumeFile).HasColumnName("resumeFile");
             entity.Property(e => e.UserName).HasMaxLength(256);
 
-			entity.HasMany(d => d.Roles).WithMany(p => p.Users)
+            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
                 .UsingEntity<Dictionary<string, object>>(
                     "AspNetUserRole",
                     r => r.HasOne<AspNetRole>().WithMany().HasForeignKey("RoleId"),
@@ -184,7 +187,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B40EADEC8E");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B4F576CBBE");
 
             entity.ToTable("Category");
 
@@ -196,7 +199,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Company>(entity =>
         {
-            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E2672358BEEE131");
+            entity.HasKey(e => e.CompanyId).HasName("PK__Company__3E267235A68A9029");
 
             entity.ToTable("Company");
 
@@ -214,7 +217,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Employer>(entity =>
         {
-            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E74114CC47");
+            entity.HasKey(e => e.EmployerId).HasName("PK__Employer__365FA4E77C0C34EC");
 
             entity.ToTable("Employer");
 
@@ -237,7 +240,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Job>(entity =>
         {
-            entity.HasKey(e => e.JobId).HasName("PK__tmp_ms_x__6E32B6A56ACDD016");
+            entity.HasKey(e => e.JobId).HasName("PK__Job__6E32B6A5BF920EB9");
 
             entity.ToTable("Job");
 
@@ -288,7 +291,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<JobType>(entity =>
         {
-            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7F5E7301F6");
+            entity.HasKey(e => e.JobTypeId).HasName("PK__JobType__A8136A7FCF3BAD47");
 
             entity.ToTable("JobType");
 
@@ -300,7 +303,7 @@ public partial class JellyFishDbContext : DbContext
 
         modelBuilder.Entity<Level>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC07FA0C4EC0");
+            entity.HasKey(e => e.Id).HasName("PK__Level__3214EC076955E4AF");
 
             entity.ToTable("Level");
 
@@ -309,9 +312,24 @@ public partial class JellyFishDbContext : DbContext
                 .HasColumnName("Level_name");
         });
 
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => e.NotiId).HasName("PK__Notifica__EDC08E925793E1A8");
+
+            entity.ToTable("Notification");
+
+            entity.Property(e => e.NotiId).ValueGeneratedNever();
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.FromUserId).HasMaxLength(450);
+            entity.Property(e => e.NotiBody).IsUnicode(false);
+            entity.Property(e => e.NotiHeader).IsUnicode(false);
+            entity.Property(e => e.ToUserId).HasMaxLength(450);
+            entity.Property(e => e.Url).IsUnicode(false);
+        });
+
         modelBuilder.Entity<Skill>(entity =>
         {
-            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA83793B52092B");
+            entity.HasKey(e => e.SkillId).HasName("PK__Skill__FBBA8379B310597D");
 
             entity.ToTable("Skill");
 
@@ -319,12 +337,11 @@ public partial class JellyFishDbContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(255)
                 .HasColumnName("name");
-            entity.Property(e => e.ResumeFile).HasColumnName("resumeFile");
         });
 
         modelBuilder.Entity<UserSkill>(entity =>
         {
-            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576B30B1279E");
+            entity.HasKey(e => e.UserSkillId).HasName("PK__UserSkil__FD3B576BAECCAF8A");
 
             entity.ToTable("UserSkill");
 

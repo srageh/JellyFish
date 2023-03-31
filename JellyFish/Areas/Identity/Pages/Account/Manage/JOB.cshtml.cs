@@ -108,9 +108,6 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
             Username = userName;
 
-            int skillId = _context.UserSkills.Where(x => x.UserId == user.Id).FirstOrDefault().SkillId;
-
-            Skill _skill = _context.Skills.Where(x => x.SkillId == skillId).FirstOrDefault();
 
             Address? addres = (Address?)_context.Addresses.Where(n => n.AddressId == userId).FirstOrDefault();
             if (addres != null)
@@ -126,7 +123,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
                     Province = addres.Province,
                     DateOfBirth = DateOnly.FromDateTime(_AspUser.DateOfBirth == null ? (DateTime)DateTime.Now : (DateTime)_AspUser.DateOfBirth),
                     ProfileImage = _AspUser.ProfileImage,
-                    ResumeFile = _skill.ResumeFile
+                    ResumeFile = _AspUser.ResumeFile
 
                 };
             }
@@ -221,9 +218,9 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
             var supportedTypes = new[] { "png", "jpeg", "jpg", "gif", "bmp" };
 
 
-            var profileImage = _context.AspNetUsers.Where(x => x.Id == user.Id).FirstOrDefault();
-            int skillId = _context.UserSkills.Where(x => x.UserId == user.Id).FirstOrDefault().SkillId;
-            var resume = _context.Skills.Where(x => x.SkillId == skillId).FirstOrDefault();
+            var _AspUser = _context.AspNetUsers.Where(x => x.Id == user.Id).FirstOrDefault();
+            //int skillId = _context.UserSkills.Where(x => x.UserId == user.Id).FirstOrDefault().SkillId;
+           // var resume = _context.Skills.Where(x => x.SkillId == skillId).FirstOrDefault();
 
             string wwwRootPath = _webHostEnvironment.WebRootPath;
 
@@ -239,7 +236,7 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
 
                     if (supportedTypes.Contains(fileExt))
                     {
-                        if (profileImage.ProfileImage != null || profileImage.ProfileImage != "")
+                        if (_AspUser.ProfileImage != null || _AspUser.ProfileImage != "")
                         {
                             var oldImagePath = wwwRootPath;
                             if (System.IO.File.Exists(oldImagePath))
@@ -251,25 +248,25 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
                                 file.CopyTo(fileStreams);
                             }
 
-                            profileImage.ProfileImage = @"\images\profile\" + fileName + extension;
-                            _context.AspNetUsers.Update(profileImage);
+							_AspUser.ProfileImage = @"\images\profile\" + fileName + extension;
+                            _context.AspNetUsers.Update(_AspUser);
 
                         }
-                        else if (profileImage.ProfileImage == null || profileImage.ProfileImage == "")
+                        else if (_AspUser.ProfileImage == null || _AspUser.ProfileImage == "")
                         {
                             using (var fileStreams = new FileStream(Path.Combine(uploadsForProfile, fileName + extension), FileMode.Create))
                             {
                                 file.CopyTo(fileStreams);
                             }
 
-                            profileImage.ProfileImage = @"\images\profile\" + fileName + extension;
-                            _context.AspNetUsers.Add(profileImage);
+							_AspUser.ProfileImage = @"\images\profile\" + fileName + extension;
+                            _context.AspNetUsers.Add(_AspUser);
 
                         }
                     }
                     else
                     {
-                        if (resume.ResumeFile != null || resume.ResumeFile != "")
+                        if (_AspUser.ResumeFile != null || _AspUser.ResumeFile != "")
                         {
                             var oldImagePath = wwwRootPath;
                             if (System.IO.File.Exists(oldImagePath))
@@ -281,19 +278,19 @@ namespace JellyFish.Areas.Identity.Pages.Account.Manage.JobSeeker
                                 file.CopyTo(fileStreams);
                             }
 
-                            resume.ResumeFile = @"\images\resume\" + fileName + extension;
-                            _context.Skills.Update(resume);
+							_AspUser.ResumeFile = @"\images\resume\" + fileName + extension;
+                            _context.AspNetUsers.Update(_AspUser);
 
                         }
-                        else if (resume.ResumeFile == null || resume.ResumeFile == "")
+                        else if (_AspUser.ResumeFile == null || _AspUser.ResumeFile == "")
                         {
                             using (var fileStreams = new FileStream(Path.Combine(uploadsForResume, fileName + extension), FileMode.Create))
                             {
                                 file.CopyTo(fileStreams);
                             }
 
-                            resume.ResumeFile = @"\images\resume\" + fileName + extension;
-                            _context.Skills.Add(resume);
+							_AspUser.ResumeFile = @"\images\resume\" + fileName + extension;
+                            _context.AspNetUsers.Add(_AspUser);
 
                         }
                     }
