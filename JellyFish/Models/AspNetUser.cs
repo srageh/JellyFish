@@ -45,13 +45,6 @@ public partial class AspNetUser
 	public string? ProfileImage { get; set; }
 	[ValidateNever]
 	public string? ResumeFile { get; set; }
-
-	[ValidateNever]
-	public string? ProfileImage { get; set; }
-
-	[ValidateNever]
-	public string? ResumeFile { get; set; }
-
     public virtual Address? Address { get; set; }
 
     public virtual ICollection<Applicant> Applicants { get; } = new List<Applicant>();
