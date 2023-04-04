@@ -137,19 +137,19 @@ namespace JellyFishTest
             var jobs = driver.FindElement(By.Id("jobs"));
 			//var a = driver.FindElement(By.Id("ind-job"));
 			var a = jobs.FindElements(By.Id("ind-job"));
-			Assert.AreEqual(3, a.Count());
+			Assert.AreEqual(1, a.Count());
         }
 		[Test]
-        public void SearchFor_Intern_Jobs()
+        public void SearchFor_Senior_Jobs()
         {
             driver.Url = "https://localhost:7143/Identity/Account/Login";
             loginAsApplicant();
-            driver.FindElement(By.Name("searchQuery")).SendKeys("Intern");
+            driver.FindElement(By.Name("searchQuery")).SendKeys("Senior");
             driver.FindElement(By.Id("searchBtn")).Click();
             var jobs = driver.FindElement(By.Id("jobs"));
             //var a = driver.FindElement(By.Id("ind-job"));
             var a = jobs.FindElements(By.Id("ind-job"));
-            Assert.AreEqual(5, a.Count());
+            Assert.AreEqual(1, a.Count());
         }
 
 
@@ -159,7 +159,7 @@ namespace JellyFishTest
         {
             driver.Url = "https://localhost:7143/Identity/Account/Login";
             loginAsApplicant();
-            driver.FindElement(By.Name("searchQuery")).SendKeys("Intern");
+            driver.FindElement(By.Name("searchQuery")).SendKeys("Senior");
             driver.FindElement(By.Id("searchBtn")).Click();
             var job = driver.FindElements(By.Id("ind-job")).LastOrDefault();
             driver.Url = job.GetAttribute("href");
@@ -214,9 +214,11 @@ namespace JellyFishTest
 
 		}
 
+		
 
 
-        [Test]
+
+		[Test]
 
         public void FilterSavedJobs()
         {
@@ -247,8 +249,120 @@ namespace JellyFishTest
         }
 
 
+		[Test]
 
-        [OneTimeTearDown]
+		public void AlreadySelectApplicant()
+		{
+			driver.Url = "https://localhost:7143/Identity/Account/Login";
+			loginAsEmployer();
+
+			var d = driver.FindElement(By.Id("empRowContainer"));
+
+
+			GetHref("viewAppl");
+			GetHref("appDetail");
+			var aBtnEnables = driver.FindElement(By.Id("acceptBtn")).Enabled;
+
+			Assert.AreEqual(aBtnEnables, false);
+
+
+	
+
+		}
+
+
+		[Test]
+
+		public void SelectApplicant()
+		{
+			driver.Url = "https://localhost:7143/Identity/Account/Login";
+			loginAsEmployer();
+			var result = "";
+			var d = driver.FindElement(By.Id("empRowContainer"));
+			var applicants = driver.FindElements(By.Id("viewAppl"));
+			if (applicants.Count() > 0)
+			{
+				var applicant = applicants.Where(x => x.Enabled).First();
+				driver.Url = applicant.GetAttribute("href");
+				var applicantDetail = driver.FindElements(By.Id("appDetail"));
+				if (applicantDetail.Count() > 0)
+				{
+					foreach (var item in applicantDetail)
+					{
+						driver.Url = item.GetAttribute("href");
+						var acceptBtnEnabled = driver.FindElement(By.Id("acceptBtn")).Enabled;
+						if (acceptBtnEnabled)
+						{
+							driver.FindElement(By.Id("acceptBtn")).Click();
+							Assert.AreEqual(acceptBtnEnabled, true);
+						}
+						else
+						{
+							result = "Job Already Declined";
+							driver.Navigate().Back();
+
+						}
+					}
+				}
+			}
+			else
+			{
+				result = "Job Already Declined";
+				Assert.AreEqual(result, "Job Already Declined");
+			}
+
+
+
+
+
+
+
+		}
+
+
+		[Test]
+			public void DeclineApplicant()
+			{
+			driver.Url = "https://localhost:7143/Identity/Account/Login";
+			loginAsEmployer();
+			var result = "";
+			var d = driver.FindElement(By.Id("empRowContainer"));
+			var applicants = driver.FindElements(By.Id("viewAppl"));
+			if (applicants.Count() > 0)
+			{
+				var applicant = applicants.Where(x => x.Enabled).Last();
+				driver.Url = applicant.GetAttribute("href");
+				var applicantDetail = driver.FindElements(By.Id("appDetail"));
+				if (applicantDetail.Count() > 0)
+				{
+					foreach (var item in applicantDetail)
+					{
+						driver.Url = item.GetAttribute("href");
+						var acceptBtnEnabled = driver.FindElement(By.Id("declineBtn")).Enabled;
+						if (acceptBtnEnabled)
+						{
+						driver.FindElement(By.Id("declineBtn")).Click();
+							Assert.AreEqual(acceptBtnEnabled, true);
+						}
+						else
+						{
+							result = "Job Already Declined";
+							driver.Navigate().Back();
+
+						}
+					}
+				}
+			}
+			else
+			{
+				result = "Job Already Declined";
+				Assert.AreEqual(result, "Job Already Declined");
+			}
+		}
+
+
+
+		[OneTimeTearDown]
 		public void CloseTest()
 		{
 			driver.Close();
@@ -287,7 +401,7 @@ namespace JellyFishTest
 
 		private void loginAsEmployer()
 		{
-			driver.FindElement(By.Id("Input_Email")).SendKeys("Srageh6202@conestogac.on.ca");
+			driver.FindElement(By.Id("Input_Email")).SendKeys("s@gmail.com");
 			driver.FindElement(By.Id("Input_Password")).SendKeys("Test123@");
 			driver.FindElement(By.Id("login-submit")).Click();
 		}

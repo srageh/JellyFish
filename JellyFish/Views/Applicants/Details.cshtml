@@ -109,13 +109,13 @@
 											<input type="hidden" name="acceptA" value="Accept" />
 											<input type="hidden" name="Job_ID" value="@Model.JobId" />
 											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
-											<button type="submit" class="btn btn-primary">Accept</button>
+											<button id="acceptBtn" type="submit" class="btn btn-primary">Accept</button>
 										</form>
 										<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
 											<input type="hidden" name="acceptA" value="Decline" />
 											<input type="hidden" name="Job_ID" value="@Model.JobId" />
 											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
-											<button type="submit" class="btn btn-danger">Decline</button>
+											<button id="declineBtn" type="submit" class="btn btn-danger">Decline</button>
 										</form>
 									</div>
 								}
@@ -126,13 +126,13 @@
 											<input type="hidden" name="acceptA" value="Accept" />
 											<input type="hidden" name="Job_ID" value="@Model.JobId" />
 											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
-											<button disabled type="submit" class="btn btn-primary">Accept</button>
+											<button id="acceptBtn" disabled type="submit" class="btn btn-primary">Accept</button>
 										</form>
 										<form asp-controller="Jobs" asp-action="AcceptDeclineApplicant">
 											<input type="hidden" name="acceptA" value="Decline" />
 											<input type="hidden" name="Job_ID" value="@Model.JobId" />
 											<input type="hidden" name="A_ID" value="@Model.ApplicantId" />
-											<button disabled type="submit" class="btn btn-danger">Decline</button>
+											<button id="declineBtn" disabled type="submit" class="btn btn-danger">Decline</button>
 										</form>
 									</div>
 								}

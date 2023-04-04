@@ -241,7 +241,7 @@
 
 				}
 
-				<td>
+				<td id="empRowContainer">
 
 				
 
@@ -260,7 +260,7 @@
 
 									if (Int32.Parse(applicantCountList[1]) != 0)
 									{
-										<a style="background-color: #3b5e9c;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
+										<a id="viewAppl" style="background-color: #3b5e9c;padding: 5px 10px;color: white;" class="nav-link" asp-controller="Jobs" asp-action="DisplayApplicents" asp-route-jobID="@item.JobId">@applicantCountList[1] Applicents</a>
 
 									}
 									else
