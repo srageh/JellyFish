@@ -21,18 +21,28 @@ namespace JellyFish.Controllers
 		private readonly JellyFishDbContext _context;
 		private readonly UserManager<JellyFishUser> _userManager;
 		private readonly IUnitOfWork _unitOfWork;
+		private readonly INotificationRepository _notificationRepository;
 
-		public JobsController(JellyFishDbContext context, UserManager<JellyFishUser> userManager, IUnitOfWork unitOfWork)
+		public JobsController(JellyFishDbContext context, UserManager<JellyFishUser> userManager, IUnitOfWork unitOfWork, INotificationRepository notificationRepository)
 		{
 			_userManager = userManager;
 			_context = context;
 			_unitOfWork = unitOfWork;
+			_notificationRepository = notificationRepository;
 		}
 
+		//public JobsController(JellyFishDbContext context, UserManager<JellyFishUser> userManager, IUnitOfWork unitOfWork)
+  //      {
+  //          _userManager = userManager;
+  //          _context = context;
+  //          _unitOfWork = unitOfWork;
+   
+  //      }
 
 
-		// GET: Jobs
-		public async Task<IActionResult> Index(string? searchQuery)
+
+        // GET: Jobs
+        public async Task<IActionResult> Index(string? searchQuery)
 		{
 			ViewData["searchQuery"] = searchQuery;
 
@@ -63,7 +73,15 @@ namespace JellyFish.Controllers
 
 			if (User.IsInRole("Employer"))
 			{
+				var username = _userManager.GetUserName(HttpContext.User);
+				var userId = _userManager.GetUserId(HttpContext.User);
 
+				var notification = new Notifications
+				{
+					Text = $"The {username} job posting is denied."
+				};
+
+				_notificationRepository.Create(notification, userId);
 
 				if (!String.IsNullOrEmpty(searchQuery))
 				{

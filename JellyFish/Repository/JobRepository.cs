@@ -12,6 +12,11 @@ namespace JellyFish.Repository
             _context = context;
         }
 
+        public List<Job> GetWatchlistFromUserId(string userId)
+        {
+            return _context.Jobs.Where(x => x.EmployerId == userId).ToList();
+        }
+
         public void Update(Job obj)
         {
             _context.Jobs.Update(obj);

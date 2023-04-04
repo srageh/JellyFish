@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace JellyFish.Controllers
 {
-	public class NotificationsController : Controller
+	public class NotiController : Controller
 	{
         private readonly JellyFishDbContext _context;
         private readonly UserManager<JellyFishUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
 
-        public NotificationsController(JellyFishDbContext context, UserManager<JellyFishUser> userManager, IUnitOfWork unitOfWork)
+        public NotiController(JellyFishDbContext context, UserManager<JellyFishUser> userManager, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _context = context;
@@ -23,7 +23,7 @@ namespace JellyFish.Controllers
         INotiService _notiService = null;
 		List<Noti> _oNotifications = new List<Noti>();
 
-		public NotificationsController(INotiService notiService)
+		public NotiController(INotiService notiService)
 		{
 			_notiService = notiService;
 		}

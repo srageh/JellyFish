@@ -30,6 +30,8 @@ public partial class Job
 
     public string Description { get; set; } = null!;
 
+    //public virtual ApplicationUser applicationUser { get; set; }
+
     public virtual ICollection<Applicant> Applicants { get; } = new List<Applicant>();
     
     [ValidateNever]

@@ -47,7 +47,11 @@ public partial class JellyFishDbContext : DbContext
 
     public virtual DbSet<UserSkill> UserSkills { get; set; }
 
-    
+    public virtual DbSet<Notifications> Notifications { get; set; }
+
+    public virtual DbSet<NotificationApplicationUser> NotificationApplicationUser { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 

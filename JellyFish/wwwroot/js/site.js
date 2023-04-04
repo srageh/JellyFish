@@ -1,4 +1,83 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover({
+        placement: 'bottom',
+        content: function () {
+            return $("#notification-content").html();
+        },
+        html: true
+    });
 
-// Write your JavaScript code.
+    $('body').append(`<div id="notification-content" class="hide"></div>`)
+
+
+    function getNotification() {
+        var res = "<ul class='list-group'>";
+        $.ajax({
+            url: "/Notification/GetNotification",
+            method: "GET",
+            success: function (result) {
+                $("#notificationCount").html(result.count);
+                if (result.count != 0) {
+                    $("#notificationCount").html(result.count);
+                    $("#notificationCount").show('slow');
+                } else {
+                    $("#notificationCount").html();
+                    $("#notificationCount").hide('slow');
+                    $("#notificationCount").popover('hide');
+                }
+
+                var notifications = result.userNotification;
+                notifications.forEach(element => {
+                    res = res + "<li  class='list-group-item notification-text' id='"+element.notificationId+"'>" + element.notifications.text + "</li>";
+                });
+
+                res = res + "</ul>";
+                //console.log(res);
+
+
+
+                $("#notification-content").html(res);
+
+                //console.log(result);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    
+    $("#269").on('click', function (e) {
+        console.log((e));
+        var target = e.target;
+        var id = $(target).data('id');
+        console.log(id);
+        //readNotification(id, target);
+    })
+
+    function readNotification(id, target) {
+        $.ajax({
+            url: "/Notification/ReadNotification",
+            method: "GET",
+            data: { notificationId: id },
+            success: function (result) {
+                getNotification();
+                $(target).fadeOut('slow');
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+
+    getNotification();
+
+    //let connection = new signalR.HubConnection("/signalServer");
+
+    //connection.on('displayNotification', () => {
+    //    getNotification();
+    //});
+
+    //connection.start();
+
+});

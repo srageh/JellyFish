@@ -33,6 +33,7 @@ namespace JellyFish.Migrations.JellyFishDb
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ProfileImage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -108,12 +109,26 @@ namespace JellyFish.Migrations.JellyFishDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Skill",
                 columns: table => new
                 {
                     skill_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
+                    name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    ResumeFile = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -269,6 +284,27 @@ namespace JellyFish.Migrations.JellyFishDb
                         column: x => x.company_id,
                         principalTable: "Company",
                         principalColumn: "company_id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NotificationApplicationUser",
+                columns: table => new
+                {
+                    NotificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    NotificationsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificationApplicationUser", x => x.NotificationId);
+                    table.ForeignKey(
+                        name: "FK_NotificationApplicationUser_Notifications_Id",
+                        column: x => x.NotificationsId,
+                        principalTable: "Notifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -443,6 +479,11 @@ namespace JellyFish.Migrations.JellyFishDb
                 column: "level_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_NotificationApplicationUser_NotificationsId",
+                table: "NotificationApplicationUser",
+                column: "NotificationsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserSkill_skill_id",
                 table: "UserSkill",
                 column: "skill_id");
@@ -478,6 +519,9 @@ namespace JellyFish.Migrations.JellyFishDb
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "NotificationApplicationUser");
+
+            migrationBuilder.DropTable(
                 name: "UserSkill");
 
             migrationBuilder.DropTable(
@@ -485,6 +529,9 @@ namespace JellyFish.Migrations.JellyFishDb
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Skill");

@@ -7,6 +7,8 @@ using JellyFish.Repository;
 using JellyFish.IService;
 using JellyFish.Common;
 using JellyFish.Service;
+using Microsoft.AspNetCore.Http.Json;
+using JellyFish.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 //var connectionString = builder.
@@ -21,7 +23,20 @@ builder.Services.AddDbContext<JellyFishContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+
 builder.Services.AddScoped<INotiService, NotiService>();
+
+builder.Services.AddSignalR();
+
+builder.Services.AddMvc().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+});
+
+
 
 builder.Services.AddDefaultIdentity<JellyFishUser>(options => options.SignIn.RequireConfirmedAccount = true)
  .AddRoles<IdentityRole>()
@@ -38,6 +53,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles(); app.UseRouting(); app.UseAuthentication();
+
 app.UseAuthorization(); app.MapControllerRoute(
  name: "default",
  pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JellyFish.Migrations.JellyFishDb
 {
     [DbContext(typeof(JellyFishDbContext))]
-    [Migration("20230326193636_MyMigration")]
+    [Migration("20230404005922_MyMigration")]
     partial class MyMigration
     {
         /// <inheritdoc />
@@ -214,6 +214,9 @@ namespace JellyFish.Migrations.JellyFishDb
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -494,6 +497,48 @@ namespace JellyFish.Migrations.JellyFishDb
                     b.ToTable("Level", (string)null);
                 });
 
+            modelBuilder.Entity("JellyFish.Models.NotificationApplicationUser", b =>
+                {
+                    b.Property<int>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NotificationsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("NotificationId");
+
+                    b.HasIndex("NotificationsId");
+
+                    b.ToTable("NotificationApplicationUser");
+                });
+
+            modelBuilder.Entity("JellyFish.Models.Notifications", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("JellyFish.Models.Skill", b =>
                 {
                     b.Property<int>("SkillId")
@@ -507,6 +552,9 @@ namespace JellyFish.Migrations.JellyFishDb
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("name");
+
+                    b.Property<string>("ResumeFile")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SkillId")
                         .HasName("PK__Skill__FBBA8379B8DF27F2");
@@ -686,6 +734,17 @@ namespace JellyFish.Migrations.JellyFishDb
                     b.Navigation("Level");
                 });
 
+            modelBuilder.Entity("JellyFish.Models.NotificationApplicationUser", b =>
+                {
+                    b.HasOne("JellyFish.Models.Notifications", "Notifications")
+                        .WithMany("NotificationApplicationUser")
+                        .HasForeignKey("NotificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notifications");
+                });
+
             modelBuilder.Entity("JellyFish.Models.UserSkill", b =>
                 {
                     b.HasOne("JellyFish.Models.Skill", "Skill")
@@ -755,6 +814,11 @@ namespace JellyFish.Migrations.JellyFishDb
             modelBuilder.Entity("JellyFish.Models.Level", b =>
                 {
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("JellyFish.Models.Notifications", b =>
+                {
+                    b.Navigation("NotificationApplicationUser");
                 });
 
             modelBuilder.Entity("JellyFish.Models.Skill", b =>

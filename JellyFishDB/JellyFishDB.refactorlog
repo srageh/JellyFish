@@ -14,4 +14,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ResumeFile" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="5fffc195-9a4f-4b14-bd4b-ffd092ef0389" ChangeDateTime="04/02/2023 21:58:42">
+    <Property Name="ElementName" Value="[dbo].[NotificationApplicationUser].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[NotificationApplicationUser]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="NotificationId" />
+  </Operation>
 </Operations>

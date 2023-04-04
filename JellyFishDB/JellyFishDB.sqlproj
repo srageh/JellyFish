@@ -81,6 +81,8 @@
     <Build Include="dbo\Tables\JobType.sql" />
     <Build Include="dbo\Tables\Level.sql" />
     <Build Include="dbo\Tables\Notification.sql" />
+    <Build Include="dbo\Tables\NotificationApplicationUser.sql" />
+    <Build Include="dbo\Tables\Notifications.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="JellyFishDB.refactorlog" />

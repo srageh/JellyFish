@@ -19,9 +19,9 @@
                     <li class="nav-item"><a id="manageJobSeeker" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/JOB">J. Manage</a></li>
                 }
                 @if (User.IsInRole("Employer"))
-                {
-                    <li class="nav-item"><a id="manageEmployer" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/EMP">E. Manage</a></li>
+                {                    
 
+                    <li class="nav-item"><a id="manageEmployer" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/EMP">E. Manage</a></li>                        
                 }
 
                 @if (User.IsInRole("Administrator"))

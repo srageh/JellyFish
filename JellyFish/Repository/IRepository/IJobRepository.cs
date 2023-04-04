@@ -7,6 +7,8 @@ namespace JellyFish.Repository.IRepository
     {
         void Add(Job job);
         void Update(Job obj);
+
+        List<Job> GetWatchlistFromUserId(string userId);
         
     }
 }
