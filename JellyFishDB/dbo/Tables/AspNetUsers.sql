@@ -18,7 +18,7 @@
     [LockoutEnabled]       BIT                NOT NULL,
     [AccessFailedCount]    INT                NOT NULL,
     [profileImage] NVARCHAR(MAX) NULL, 
-     [resumeFile] NVARCHAR(MAX) NULL, 
+     [ResumeFile] NVARCHAR(MAX) NULL, 
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
