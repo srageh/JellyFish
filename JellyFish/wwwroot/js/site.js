@@ -47,13 +47,14 @@
         });
     }
     
-    $("#269").on('click', function (e) {
-        console.log((e));
+
+    $("ul").on('click', 'li.notification-text', function (e) {
         var target = e.target;
         var id = $(target).data('id');
         console.log(id);
-        //readNotification(id, target);
+        readNotification(id, target);
     })
+
 
     function readNotification(id, target) {
         $.ajax({
