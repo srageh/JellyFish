@@ -9,7 +9,7 @@ how to get project running and deployment procces
 
 ### Installation
 
-1. navigate to repo and clone locally (https://github.com/srageh/Prototype.git)
+1. navigate to repo and clone locally (https://github.com/srageh/JellyFish.git)
 2. run npm install to get all dependencies
 
 ### Deployment
