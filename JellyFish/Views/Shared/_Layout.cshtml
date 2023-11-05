@@ -67,7 +67,7 @@
 							@if (User.IsInRole("Employer"))
 							{
 								<a class="nav-color nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-								<div id="noti_Container"></div>
+								@*<div id="noti_Container"></div>*@
 
 							}
 							@if (User.IsInRole("Administrator"))
@@ -114,7 +114,7 @@
 	</header>
 	<div class="container">
 		<main role="main" class="p-5">
-			<partial name="_Notification"/>
+			@*<partial name="_Notification"/>*@
 			@RenderBody()
 		</main>
 	</div>

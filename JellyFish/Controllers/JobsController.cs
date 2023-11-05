@@ -37,6 +37,7 @@ namespace JellyFish.Controllers
 			ViewData["searchQuery"] = searchQuery;
 
 
+				var userId = _userManager.GetUserId(User);
 
 
 			if (User.IsInRole("JobSeeker"))
@@ -69,13 +70,13 @@ namespace JellyFish.Controllers
 				{
 					if (searchQuery.Equals("inact"))
 					{
-						var jobsx = _context.Jobs.Where(r => r.IsActive == false).Include(x => x.Category);
+						var jobsx = _context.Jobs.Where(r => r.IsActive == false && r.EmployerId == userId).Include(x => x.Category);
 
 						// For counting applicants' number on job posting for employer
 
 						try
 						{
-							var jobList = _context.Jobs.Where(r => r.IsActive == false).Select(x => x.JobId).ToList();
+							var jobList = _context.Jobs.Where(r => r.IsActive == false && r.EmployerId == userId).Select(x => x.JobId).ToList();
 							var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
 							List<string> applicantCountArray = new List<string>();
 							int count = 0;
@@ -125,13 +126,13 @@ namespace JellyFish.Controllers
 
 					if (searchQuery.Equals("opend"))
 					{
-						var jobsz = _context.Jobs.Where(r => r.IsOpen == true).Include(x => x.Category);
+						var jobsz = _context.Jobs.Where(r => r.IsOpen == true && r.EmployerId == userId).Include(x => x.Category);
 
 						// For counting applicants' number on job posting for employer
 
 						try
 						{
-							var jobList = _context.Jobs.Where(r => r.IsOpen == true).Select(x => x.JobId).ToList();
+							var jobList = _context.Jobs.Where(r => r.IsOpen == true && r.EmployerId == userId).Select(x => x.JobId).ToList();
 							var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
 							List<string> applicantCountArray = new List<string>();
 							int count = 0;
@@ -171,13 +172,13 @@ namespace JellyFish.Controllers
 					}
 					if (searchQuery.Equals("closed"))
 					{
-						var jobsz = _context.Jobs.Where(r => r.IsOpen == false).Include(x => x.Category);
+						var jobsz = _context.Jobs.Where(r => r.IsOpen == false && r.EmployerId == userId).Include(x => x.Category);
 
 						// For counting applicants' number on job posting for employer
 
 						try
 						{
-							var jobList = _context.Jobs.Where(r => r.IsOpen == false).Select(x => x.JobId).ToList();
+							var jobList = _context.Jobs.Where(r => r.IsOpen == false && r.EmployerId == userId).Select(x => x.JobId).ToList();
 							var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
 							List<string> applicantCountArray = new List<string>();
 							int count = 0;
@@ -219,7 +220,7 @@ namespace JellyFish.Controllers
 					if (searchQuery.Equals("all"))
 					{
 
-						var jobsv = _context.Jobs.Include(x => x.Category);
+						var jobsv = _context.Jobs.Where(x=> x.EmployerId == userId).Include(x => x.Category);
 
 						// For counting applicants' number on job posting for employer
 						using (JellyFishDbContext context = new JellyFishDbContext())
@@ -227,7 +228,7 @@ namespace JellyFish.Controllers
 							try
 							{
 								Job job = new Job();
-								var jobList = _context.Jobs.Select(x => x.JobId).ToList();
+								var jobList = _context.Jobs.Where(x=> x.EmployerId == userId).Select(x => x.JobId).ToList();
 								var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
 								List<string> applicantCountArray = new List<string>();
 								int count = 0;
@@ -280,7 +281,7 @@ namespace JellyFish.Controllers
 
 
 
-				var jobs = _context.Jobs.Include(x => x.Category);
+				var jobs = _context.Jobs.Where(x=> x.EmployerId == userId).Include(x => x.Category);
 
 				// For counting applicants' number on job posting for employer
 				using (JellyFishDbContext context = new JellyFishDbContext())
@@ -288,7 +289,7 @@ namespace JellyFish.Controllers
 					try
 					{
 						Job job = new Job();
-						var jobList = _context.Jobs.Select(x => x.JobId).ToList();
+						var jobList = _context.Jobs.Where(x=> x.EmployerId == userId).Select(x => x.JobId).ToList();
 						var applicantList = _context.Applicants.Select(x => x.JobId).ToList();
 						List<string> applicantCountArray = new List<string>();
 						int count = 0;

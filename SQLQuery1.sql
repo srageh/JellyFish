@@ -21,6 +21,7 @@ INSERT INTO Job  ([title]
            ,[category_id]
            ,[job_type_id]
            ,[level_id]
+		   ,[isRemote]
            ,[employer_id]
            ,[description])
 select 'Software Engineer', 80000.00, GETDATE(),'Location 1', 0, 0, 1, 1, 1, ee.employer_id, 'We are looking for a skilled software engineer to join our team.' from Employer ee;
