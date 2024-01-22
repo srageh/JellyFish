@@ -2,6 +2,9 @@
 
 Our platform is designed for job seakers and employers in the IT industry. The following is how to get started
 
+# Home Page
+![image](https://github.com/srageh/JellyFish/assets/59398977/48a923ee-181c-4a0c-99e0-d517bdd308ec)
+
 
 ## For Developers
 
